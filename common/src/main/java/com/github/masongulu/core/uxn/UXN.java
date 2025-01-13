@@ -26,6 +26,7 @@ public class UXN {
     private final Queue<UXNEvent> eventQueue = new LinkedList<>();
 
     public boolean _enable_debug = false;
+    public static final int MAX_QUEUE = 256;
 
     public String toString() {
         return wst + "\n" + rst;
@@ -57,7 +58,9 @@ public class UXN {
     }
 
     public void queueEvent(UXNEvent event) {
-        eventQueue.add(event);
+        if (eventQueue.size() < MAX_QUEUE) {
+            eventQueue.add(event);
+        }
     }
 
     private void set(int x, int y, int x2, int y2) {
