@@ -3,7 +3,7 @@ package com.github.masongulu.serial.block.entity;
 import com.github.masongulu.devices.block.entities.GenericDeviceBlockEntity;
 import com.github.masongulu.serial.ISerialPeer;
 import com.github.masongulu.core.uxn.UXNBus;
-import com.github.masongulu.core.uxn.UXNEvent;
+import com.github.masongulu.core.uxn.KeyEvent;
 import com.github.masongulu.core.uxn.devices.IDevice;
 import com.github.masongulu.serial.SerialType;
 import net.minecraft.core.BlockPos;
@@ -18,6 +18,8 @@ public class SerialDeviceBlockEntity extends GenericDeviceBlockEntity implements
     private ISerialPeer peer;
     private UXNBus bus;
     private boolean conflicting = false;
+    private boolean argumentMode = false;
+    public static final String ARGUMENT_MODE_SEQUENCE = "\0\n\nARGS?>\5";
     public SerialDeviceBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(SERIAL_DEVICE_BLOCK_ENTITY.get(), blockPos, blockState);
         deviceNumber = 1;
@@ -39,8 +41,7 @@ public class SerialDeviceBlockEntity extends GenericDeviceBlockEntity implements
         int port = address & 0x0F;
         switch (port) {
             case 0x08 -> {
-                if (this.peer != null)
-                    this.peer.write((char) data);
+                writePeer((char) data);
             }
             case 0x09 -> {
                 // TODO fix this
@@ -81,6 +82,63 @@ public class SerialDeviceBlockEntity extends GenericDeviceBlockEntity implements
         peer = null;
     }
 
+
+    ArgumentParseState parseState;
+    private enum ArgumentParseState {
+        ARGUMENT,
+        QUOTE_SEARCHING,
+        WHITESPACE_SKIPPING
+    }
+    private void setParseState(ArgumentParseState state) {
+        if (parseState == ArgumentParseState.WHITESPACE_SKIPPING && state != parseState) {
+            rawWrite('\0', SerialType.ARGUMENT_SPACER);
+        }
+        parseState = state;
+    }
+    private void parseArguments(char ch) {
+        switch (parseState) {
+            case ARGUMENT -> {
+                if (ch == ' ') {
+                    setParseState(ArgumentParseState.WHITESPACE_SKIPPING);
+                } else if (ch == '"') {
+                    setParseState(ArgumentParseState.QUOTE_SEARCHING);
+                } else {
+                    rawWrite(ch, SerialType.ARGUMENT);
+                }
+            }
+            case QUOTE_SEARCHING -> {
+                if (ch == '"') {
+                    setParseState(ArgumentParseState.WHITESPACE_SKIPPING);
+                } else {
+                    rawWrite(ch, SerialType.ARGUMENT);
+                }
+            }
+            case WHITESPACE_SKIPPING -> {
+                if (ch == '"') {
+                    setParseState(ArgumentParseState.QUOTE_SEARCHING);
+                } else if (ch != ' ') {
+                    setParseState(ArgumentParseState.ARGUMENT);
+                    rawWrite(ch, SerialType.ARGUMENT);
+                }
+            }
+        }
+    }
+
+
+    private void writePeer(char data) {
+        if (this.peer != null) {
+            this.peer.write(data);
+        }
+    }
+
+    private void rawWrite(char ch, SerialType type) {
+        if (bus != null) {
+            byte typeB = (byte) type.value;
+            int deviceB = deviceNumber << 4;
+            bus.queueEvent(new KeyEvent(ch, typeB, deviceB));
+        }
+    }
+
     @Override
     public void write(char ch) {
         write(ch, SerialType.STDIN);
@@ -88,8 +146,25 @@ public class SerialDeviceBlockEntity extends GenericDeviceBlockEntity implements
 
     @Override
     public void write(char ch, SerialType type) {
-        if (bus != null) {
-            bus.queueEvent(new KeyEvent(ch, (byte) type.value, (byte) (deviceNumber << 4)));
+        if (argumentMode) {
+            if (ch == '\n') {
+                argumentMode = false;
+                rawWrite('\0', SerialType.ARGUMENT_END);
+            } else {
+                parseArguments(ch);
+            }
+        } else {
+            rawWrite(ch, type);
+        }
+    }
+
+    public void requestArgument() {
+        argumentMode = true;
+        parseState = ArgumentParseState.ARGUMENT;
+        if (peer != null) {
+            for (char ch : ARGUMENT_MODE_SEQUENCE.toCharArray()) {
+                peer.write(ch);
+            }
         }
     }
 
@@ -108,32 +183,3 @@ public class SerialDeviceBlockEntity extends GenericDeviceBlockEntity implements
     }
 }
 
-
-class KeyEvent implements UXNEvent {
-    char ch;
-    byte type;
-    byte device;
-
-    public KeyEvent(char ch, byte type, byte device) {
-        this.ch = ch;
-        this.type = type;
-        this.device = device;
-    }
-    public KeyEvent(char ch) {
-        this.ch = ch;
-        this.type = 0x01; //stdin key
-        this.device = 0x10; // this is where the device is on varvara
-    }
-
-    @Override
-    public void handle(UXNBus bus) {
-        bus.uxn.pc = (bus.readDev(device) << 8) | bus.readDev(device+1); //get the vector for PC at the time the event is handled
-        bus.writeDev(device + 0x02, (byte) ch);
-        bus.writeDev(device + 0x07, type);
-    }
-
-    @Override
-    public String toString() {
-        return "key: '%s' type: %02X".formatted(ch,type);
-    }
-}

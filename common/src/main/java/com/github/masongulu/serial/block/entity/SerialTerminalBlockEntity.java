@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 import static com.github.masongulu.ModBlockEntities.SERIAL_TERMINAL_BLOCK_ENTITY;
+import static com.github.masongulu.serial.block.entity.SerialDeviceBlockEntity.ARGUMENT_MODE_SEQUENCE;
 
 public class SerialTerminalBlockEntity extends SerialPeerBlockEntity implements MenuProvider {
     // Terminal Width = 240
@@ -31,9 +32,7 @@ public class SerialTerminalBlockEntity extends SerialPeerBlockEntity implements 
     private final ContainerData data = new SerialTerminalContainerData(this);
     public TerminalBuffer buffer = new TerminalBuffer();
     private boolean argumentMode = false;
-    private StringBuilder lineBuffer = new StringBuilder();
 
-    public static final String ARGUMENT_MODE_SEQUENCE = "\0\n\nARGS?> ";
     private int argumentModeIndex = 0;
 
     public void setFont(TerminalFont font) {
@@ -79,6 +78,7 @@ public class SerialTerminalBlockEntity extends SerialPeerBlockEntity implements 
                 argumentModeIndex = 0;
             }
         } else {
+            argumentMode = false;
             argumentModeIndex = 0;
         }
         buffer.write(ch);
@@ -124,68 +124,15 @@ public class SerialTerminalBlockEntity extends SerialPeerBlockEntity implements 
 
     }
 
-    ArgumentParseState parseState;
-    private enum ArgumentParseState {
-        ARGUMENT,
-        QUOTE_SEARCHING,
-        WHITESPACE_SKIPPING
-    }
-    private void setParseState(ArgumentParseState state) {
-        if (parseState == ArgumentParseState.WHITESPACE_SKIPPING && state != parseState) {
-            peer.write('\0', SerialType.ARGUMENT_SPACER);
-        }
-        parseState = state;
-    }
-    private void parseArguments(char ch) {
-        switch (parseState) {
-            case ARGUMENT -> {
-                if (ch == ' ') {
-                    setParseState(ArgumentParseState.WHITESPACE_SKIPPING);
-                } else if (ch == '"') {
-                    setParseState(ArgumentParseState.QUOTE_SEARCHING);
-                } else {
-                    peer.write(ch, SerialType.ARGUMENT);
-                }
-            }
-            case QUOTE_SEARCHING -> {
-                if (ch == '"') {
-                    setParseState(ArgumentParseState.WHITESPACE_SKIPPING);
-                } else {
-                    peer.write(ch, SerialType.ARGUMENT);
-                }
-            }
-            case WHITESPACE_SKIPPING -> {
-                if (ch == '"') {
-                    setParseState(ArgumentParseState.QUOTE_SEARCHING);
-                } else if (ch != ' ') {
-                    setParseState(ArgumentParseState.ARGUMENT);
-                    peer.write(ch, SerialType.ARGUMENT);
-                }
-            }
-        }
-    }
-    private void onLineEnd(String line) {
-        if (argumentMode && peer != null) {
-            parseState = ArgumentParseState.ARGUMENT;
-            for (char ch : line.toCharArray()) {
-                parseArguments(ch);
-            }
-            peer.write('\0', SerialType.ARGUMENT_END);
-        }
+    private void onLineEnd() {
         argumentMode = false;
     }
 
     public void keyPress(char i) {
         if (echo || argumentMode) write(i);
-        if (peer != null && !argumentMode) peer.write(i);
+        if (peer != null) peer.write(i);
         if (i == '\n') {
-            onLineEnd(lineBuffer.toString());
-            lineBuffer = new StringBuilder();
-        } else if (i == 127) { // backspace??
-            if (!lineBuffer.isEmpty()) lineBuffer.deleteCharAt(lineBuffer.length() - 1);
-            if (argumentMode) buffer.write('*'); // backspace indication
-        } else {
-            lineBuffer.append(i);
+            onLineEnd();
         }
     }
 }

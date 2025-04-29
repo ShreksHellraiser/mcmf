@@ -19,7 +19,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.github.masongulu.ModBlocks.DEVICE_CABLE;
-import static com.github.masongulu.serial.block.entity.SerialTerminalBlockEntity.ARGUMENT_MODE_SEQUENCE;
 
 public class UXNBus {
     public UXN uxn;
@@ -29,6 +28,7 @@ public class UXNBus {
     private boolean conflicting = false;
     private boolean paused = false;
     private boolean argumentMode = false;
+    private boolean expectingArgument = false;
 
     private final ComputerBlockEntity computerEntity;
     private final byte[] deviceMemory = new byte[256];
@@ -145,22 +145,19 @@ public class UXNBus {
             refresh(this.computerEntity.getLevel(), this.computerEntity.getBlockPos());
             executing = true;
             new UXN(this, memory);
-            uxn.paused = paused;
+            uxn.paused = paused || argumentMode;    
             uxn.queueEvent(new BootEvent());
-            ComputerMod.UXN_EXECUTOR.addUXN(uxn);
             if (argumentMode) {
-                for (IDevice device : devices) {
+                for (int dev = 0x1; dev <= 0xf; dev++) {
+                    IDevice device = devices[dev];
                     if (device instanceof SerialDeviceBlockEntity sDevice && sDevice.getPeer() != null) {
-                        // Spaghetti yay
-                        ISerialPeer peer = sDevice.getPeer();
-                        for (char ch : ARGUMENT_MODE_SEQUENCE.toCharArray()) {
-                            peer.write(ch);
-                        }
+                        sDevice.requestArgument();
+                        expectingArgument = true;
                         break;
                     }
                 }
             }
-            argumentMode = false;
+            ComputerMod.UXN_EXECUTOR.addUXN(uxn);
         }
     }
 
@@ -227,6 +224,11 @@ public class UXNBus {
 
     public void queueEvent(UXNEvent event) {
         if (uxn != null) {
+            if (event instanceof KeyEvent ke && expectingArgument) {
+                // If this is the last byte of an argument unpause the computer!
+                if (ke.type == 0x04) uxn.paused = paused;
+                // of course as long as the user isn't asking for it to be paused.
+            }
             uxn.queueEvent(event);
         }
     }
@@ -244,10 +246,7 @@ public class UXNBus {
     }
 
     public boolean isPaused() {
-        if (uxn == null) {
-            return paused;
-        }
-        return uxn.paused;
+        return paused;
     }
 
     public int getEventCount() {
