@@ -1,7 +1,9 @@
 package com.github.masongulu;
 
 import com.github.masongulu.computer.block.entity.ComputerBlockEntity;
+import com.github.masongulu.computer.block.entity.IBusProvider;
 import com.github.masongulu.devices.block.entities.FlasherDeviceBlockEntity;
+import com.github.masongulu.devices.block.entities.MultiplexerDeviceBlockEntity;
 import com.github.masongulu.devices.block.entities.RedstoneDeviceBlockEntity;
 import com.github.masongulu.serial.block.entity.SerialDeviceBlockEntity;
 import com.github.masongulu.serial.block.entity.SerialTerminalBlockEntity;
@@ -27,6 +29,7 @@ public class ModBlockEntities {
     public static RegistrySupplier<BlockEntityType<RedstoneDeviceBlockEntity>> REDSTONE_DEVICE_BLOCK_ENTITY;
     public static RegistrySupplier<BlockEntityType<SerialDeviceBlockEntity>> SERIAL_DEVICE_BLOCK_ENTITY;
     public static RegistrySupplier<BlockEntityType<FlasherDeviceBlockEntity>> FLASHER_DEVICE_BLOCK_ENTITY;
+    public static RegistrySupplier<BlockEntityType<MultiplexerDeviceBlockEntity>> MULTIPLEXER_DEVICE_BLOCK_ENTITY;
 
 
     // Serial Devices
@@ -45,6 +48,8 @@ public class ModBlockEntities {
                 new BlockEntityType<>(SerialDeviceBlockEntity::new, Set.of(SERIAL_DEVICE_BLOCK.get()), null));
         FLASHER_DEVICE_BLOCK_ENTITY = BLOCK_ENTITIES.register("flasher_device", () ->
                 new BlockEntityType<>(FlasherDeviceBlockEntity::new, Set.of(FLASHER_DEVICE_BLOCK.get()), null));
+        MULTIPLEXER_DEVICE_BLOCK_ENTITY = BLOCK_ENTITIES.register("multiplexer_device", () ->
+                new BlockEntityType<>(MultiplexerDeviceBlockEntity::new, Set.of(MULTIPLEXER_DEVICE_BLOCK.get()), null));
 
 
         // Serial Devices

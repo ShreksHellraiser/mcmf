@@ -23,7 +23,7 @@ public class UXN {
     private boolean running = false;
     public boolean paused = false;
     public boolean doStep = false;
-    private final Queue<UXNEvent> eventQueue = new LinkedList<>();
+    private final Queue<QueuedEvent> eventQueue = new LinkedList<>();
 
     public boolean _enable_debug = false;
     public static final int MAX_QUEUE = 256;
@@ -57,10 +57,13 @@ public class UXN {
         new SystemDevice().attach(bus);
     }
 
-    public void queueEvent(UXNEvent event) {
+    public void queueEvent(UXNEvent event, UXNBus bus) {
         if (eventQueue.size() < MAX_QUEUE) {
-            eventQueue.add(event);
+            eventQueue.add(new QueuedEvent(event, bus));
         }
+    }
+    public void queueEvent(UXNEvent event) {
+        queueEvent(event, bus);
     }
 
     private void set(int x, int y, int x2, int y2) {
@@ -396,7 +399,8 @@ public class UXN {
             if (!running) {
                 // check for vector in the queue
                 if (eventQueue.isEmpty()) return;
-                eventQueue.poll().handle(bus);
+                var event = eventQueue.poll();
+                event.event.handle(event.bus);
                 running = true;
             }
             step();
@@ -418,6 +422,7 @@ class SystemDevice extends Device {
     }
     @Override
     public void write(int address) {
+        UXN uxn = bus.getUxn();
         int port = address & 0x0F;
         switch (port) {
         case 0x00: case 0x01: // Reset vector*
@@ -426,19 +431,19 @@ class SystemDevice extends Device {
             break;
         case 0x03: // expansion*`
             int addr = bus.readDev(address - 1) << 8 | bus.readDev(address);
-            int operation = bus.uxn.memory.readByte(addr);
-            int length = bus.uxn.memory.readShort(addr+1);
-            int sbank = bus.uxn.memory.readShort(addr+3);
-            int saddr = bus.uxn.memory.readShort(addr+5);
+            int operation = uxn.memory.readByte(addr);
+            int length = uxn.memory.readShort(addr+1);
+            int sbank = uxn.memory.readShort(addr+3);
+            int saddr = uxn.memory.readShort(addr+5);
             if (operation == 0) {
-                MemoryRegion source = bus.uxn.getRegion(sbank);
-                int value = bus.uxn.memory.readByte(addr+7);
+                MemoryRegion source = uxn.getRegion(sbank);
+                int value = uxn.memory.readByte(addr+7);
                 source.fill(saddr, length, value);
             } else if (operation == 1 || operation == 2) {
-                int dbank = bus.uxn.memory.readShort(addr+7);
-                int daddr = bus.uxn.memory.readShort(addr+9);
-                MemoryRegion source = bus.uxn.getRegion(sbank);
-                MemoryRegion destination = bus.uxn.getRegion(dbank);
+                int dbank = uxn.memory.readShort(addr+7);
+                int daddr = uxn.memory.readShort(addr+9);
+                MemoryRegion source = uxn.getRegion(sbank);
+                MemoryRegion destination = uxn.getRegion(dbank);
                 if (operation == 1) {
                     source.copyTo(destination, saddr, daddr, length);
                 } else {
@@ -447,9 +452,9 @@ class SystemDevice extends Device {
             }
             break;
         case 0x04:
-            bus.uxn.wst.setPtr(bus.readDev(address)); break;
+            uxn.wst.setPtr(bus.readDev(address)); break;
         case 0x05:
-            bus.uxn.rst.setPtr(bus.readDev(address)); break;
+            uxn.rst.setPtr(bus.readDev(address)); break;
         case 0x08: case 0x09: // red*
         case 0x0a: case 0x0b: // green*
         case 0x0c: case 0x0d: // blue*
@@ -458,8 +463,8 @@ class SystemDevice extends Device {
         case 0x0e: // debug
             int data = bus.readDev(address);
             if (data == 0x01) {
-                System.out.println(bus.uxn.wst);
-                System.out.println(bus.uxn.rst);
+                System.out.println(uxn.wst);
+                System.out.println(uxn.rst);
             }
             break;
         case 0x0f: // state
@@ -469,6 +474,7 @@ class SystemDevice extends Device {
 
     @Override
     public void read(int address) {
+        UXN uxn = bus.getUxn();
         int port = address & 0x0F;
         switch (port) {
         case 0x00: case 0x01: // Reset vector*
@@ -476,9 +482,9 @@ class SystemDevice extends Device {
         case 0x02: case 0x03: // expansion*
             break;
         case 0x04:
-            bus.writeDev(address, (byte)bus.uxn.wst.getPtr()); break;
+            bus.writeDev(address, (byte)uxn.wst.getPtr()); break;
         case 0x05:
-            bus.writeDev(address, (byte)bus.uxn.rst.getPtr()); break;
+            bus.writeDev(address, (byte)uxn.rst.getPtr()); break;
         case 0x08: case 0x09: // red*
         case 0x0a: case 0x0b: // green*
         case 0x0c: case 0x0d: // blue*
@@ -494,5 +500,15 @@ class SystemDevice extends Device {
     @Override
     public String getLabel() {
         return "System";
+    }
+}
+
+class QueuedEvent {
+    public final UXNEvent event;
+    public final UXNBus bus;
+
+    QueuedEvent(UXNEvent event, UXNBus bus) {
+        this.event = event;
+        this.bus = bus;
     }
 }

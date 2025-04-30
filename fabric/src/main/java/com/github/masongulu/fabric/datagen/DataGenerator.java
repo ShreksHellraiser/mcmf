@@ -31,6 +31,15 @@ public class DataGenerator implements DataGeneratorEntrypoint {
                     .add(SERIAL_CABLE_BLOCK.get())
                     .add(SERIAL_TERMINAL_BLOCK.get())
                     .add(SERIAL_DEVICE_BLOCK.get());
+            getOrCreateTagBuilder(UXN_DEVICE)
+                    .add(COMPUTER_BLOCK.get())
+                    .add(SERIAL_DEVICE_BLOCK.get())
+                    .add(FLASHER_DEVICE_BLOCK.get())
+                    .add(MULTIPLEXER_DEVICE_BLOCK.get())
+                    .add(REDSTONE_DEVICE_BLOCK.get());
+            getOrCreateTagBuilder(SERIAL_DEVICE)
+                    .add(SERIAL_DEVICE_BLOCK.get())
+                    .add(SERIAL_TERMINAL_BLOCK.get());
         }
     }
 

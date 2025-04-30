@@ -1,5 +1,6 @@
 package com.github.masongulu.devices.block.entities;
 
+import com.github.masongulu.core.uxn.UXN;
 import com.github.masongulu.core.uxn.UXNBus;
 import com.github.masongulu.core.uxn.UXNEvent;
 import com.github.masongulu.core.uxn.devices.IDevice;
@@ -43,9 +44,10 @@ public class RedstoneDeviceBlockEntity extends GenericDeviceBlockEntity implemen
 
     public void updateRedstone(Map<Direction,Integer> redstone) {
         if (bus == null) return;
-        if (bus.uxn == null) return;
+        UXN uxn = bus.getUxn();
+        if (uxn == null) return;
         redstoneInputs = redstone;
-        bus.uxn.queueEvent(new RedstoneEvent(deviceNumber));
+        bus.queueEvent(new RedstoneEvent(deviceNumber));
     }
 
     @Override
@@ -110,13 +112,13 @@ public class RedstoneDeviceBlockEntity extends GenericDeviceBlockEntity implemen
     }
 
     @Override
-    public IDevice getDevice(Direction attachSide) {
-        return this;
+    protected Component getDefaultName() {
+        return new TextComponent("Redstone Device");
     }
 
     @Override
-    protected Component getDefaultName() {
-        return new TextComponent("Redstone Device");
+    public void attemptAttach(UXNBus bus, Direction attachSide) {
+        attach(bus);
     }
 }
 
@@ -128,7 +130,6 @@ class RedstoneEvent implements UXNEvent {
     @Override
     public void handle(UXNBus bus) {
         int vectorAddress = deviceNumber << 4;
-        int vector = (bus.readDev(vectorAddress) << 8) | bus.readDev(vectorAddress + 1);
-        bus.uxn.pc = vector;
+        bus.getUxn().pc = (bus.readDev(vectorAddress) << 8) | bus.readDev(vectorAddress + 1);
     }
 }

@@ -2,16 +2,15 @@
 * ~~UXN expansion memory slots~~
   * Put these slots in the UI
 * Remove computers from execution when unloaded
-* Add event queue limit
 
 # Less Important
 * Actually implement device sided-ness
 * Serial device sided-ness
 * Serial Terminal
   * Escape code support (in progress)
-* Replace hardcoded strings with translatable ones!
 * Set block device
 * Serial terminal pasting
+* Replace hardcoded strings with translatable ones!
 
 # Ideas
 * Work "Magic Smoke Demon: a mob that is spawned whenever a computer block is blown up or destroy by unconventional means. This mob drops captured magic smoke: an item used to craft capacitors which can be thrown and explode on impact.

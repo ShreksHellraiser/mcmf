@@ -1,8 +1,12 @@
 package com.github.masongulu.computer.block.entity;
 
+import com.github.masongulu.computer.block.ComputerBlock;
 import com.github.masongulu.computer.screen.ComputerMenu;
+import com.github.masongulu.core.uxn.UXN;
 import com.github.masongulu.core.uxn.UXNBus;
+import com.github.masongulu.devices.block.MultiplexerDeviceBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -23,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.github.masongulu.ModBlockEntities.COMPUTER_BLOCK_ENTITY;
 
-public class ComputerBlockEntity extends BaseContainerBlockEntity implements MenuProvider {
+public class ComputerBlockEntity extends BaseContainerBlockEntity implements MenuProvider, IBusProvider {
     public static final int STRING_LENGTH = "WST 00 00 00 00 00 00 00 00 <".length(); // 29 characters
     public static final int DATA_START = STRING_LENGTH * 2;
     public static final int DATA_LENGTH = DATA_START + 5;
@@ -33,11 +37,12 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
         private String wst = "WST 00 00 00 00 00 00 00 00|<";
         @Override
         public int get(int i) {
-            if (bus.uxn != null) {
+            UXN uxn = bus.getUxn();
+            if (uxn != null) {
                 if (i == 0) {
-                    rst = bus.uxn.rst.toString();
+                    rst = uxn.rst.toString();
                 } else if (i == STRING_LENGTH) {
-                    wst = bus.uxn.wst.toString();
+                    wst = uxn.wst.toString();
                 }
             }
             if (i < STRING_LENGTH) {
@@ -47,8 +52,8 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
             } else if (i == DATA_START) {
                 return (bus.isExecuting()) ? 1 : 0;
             } else if (i == DATA_START + 1) {
-                if (bus.uxn != null) {
-                    return bus.uxn.pc;
+                if (uxn != null) {
+                    return uxn.pc;
                 }
             } else if (i == DATA_START + 2) {
                 return (bus.isPaused()) ? 1 : 0;
@@ -73,8 +78,20 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
     public static final int CONTAINER_SIZE = 1;
     private NonNullList<ItemStack> items;
 
-    public UXNBus getBus() {
+    @Override
+    public UXNBus getBus(Direction dir) {
         return bus;
+    }
+
+    @Override
+    public BlockPos getScanRoot() {
+        Direction facing = this.getBlockState().getValue(ComputerBlock.FACING);
+        return getBlockPos().relative(facing.getOpposite());
+    }
+
+    @Override
+    public Direction getScanStartDir() {
+        return this.getBlockState().getValue(ComputerBlock.FACING);
     }
 
     private void updateString(int o, String s) {
@@ -84,7 +101,7 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
     }
 
     public void startup() {
-        if (bus.uxn == null) {
+        if (bus.getUxn() == null) {
             // this will register the bus on this computer
             bus.startup();
         }
@@ -144,8 +161,8 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
     }
 
     public void step() {
-        if (bus.uxn == null) return;
-        bus.uxn.doStep = true;
+        if (bus.getUxn() == null) return;
+        bus.getUxn().doStep = true;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.github.masongulu.devices.block.entities;
 
+import com.github.masongulu.core.uxn.UXNBus;
 import com.github.masongulu.devices.screen.FlasherDeviceMenu;
 import com.github.masongulu.core.uxn.devices.IDevice;
 import net.minecraft.core.BlockPos;
@@ -58,11 +59,6 @@ public class FlasherDeviceBlockEntity extends GenericDeviceBlockEntity {
     @Override
     public String getLabel() {
         return "Flasher Device";
-    }
-
-    @Override
-    public IDevice getDevice(Direction attachSide) {
-        return this;
     }
 
     @Override
@@ -136,5 +132,10 @@ public class FlasherDeviceBlockEntity extends GenericDeviceBlockEntity {
     protected void saveAdditional(CompoundTag compoundTag) {
         super.saveAdditional(compoundTag);
         ContainerHelper.saveAllItems(compoundTag, this.items);
+    }
+
+    @Override
+    public void attemptAttach(UXNBus bus, Direction attachSide) {
+        attach(bus);
     }
 }

@@ -6,6 +6,7 @@ import com.github.masongulu.core.uxn.UXNBus;
 import com.github.masongulu.core.uxn.KeyEvent;
 import com.github.masongulu.core.uxn.devices.IDevice;
 import com.github.masongulu.serial.SerialType;
+import com.github.masongulu.serial.block.SerialDeviceBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -16,7 +17,6 @@ import static com.github.masongulu.ModBlockEntities.SERIAL_DEVICE_BLOCK_ENTITY;
 
 public class SerialDeviceBlockEntity extends GenericDeviceBlockEntity implements ISerialPeer {
     private ISerialPeer peer;
-    private UXNBus bus;
     private boolean conflicting = false;
     private boolean argumentMode = false;
     public static final String ARGUMENT_MODE_SEQUENCE = "\0\n\nARGS?>\5";
@@ -26,8 +26,12 @@ public class SerialDeviceBlockEntity extends GenericDeviceBlockEntity implements
     }
 
     @Override
-    public IDevice getDevice(Direction attachSide) {
-        return this;
+    public void attemptAttach(UXNBus bus, Direction attachSide) {
+        Direction facing = this.getBlockState().getValue(SerialDeviceBlock.FACING);
+        if (!facing.getOpposite().equals(attachSide)) {
+            return;
+        }
+        attach(bus);
     }
 
     @Override

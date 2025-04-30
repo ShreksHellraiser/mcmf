@@ -3,6 +3,7 @@ package com.github.masongulu;
 import com.github.masongulu.computer.block.CableBlock;
 import com.github.masongulu.computer.block.ComputerBlock;
 import com.github.masongulu.devices.block.FlasherDeviceBlock;
+import com.github.masongulu.devices.block.MultiplexerDeviceBlock;
 import com.github.masongulu.devices.block.RedstoneDeviceBlock;
 import com.github.masongulu.serial.block.SerialCableBlock;
 import com.github.masongulu.serial.block.SerialDeviceBlock;
@@ -35,6 +36,8 @@ public class ModBlocks {
     public static RegistrySupplier<Item> FLASHER_DEVICE_ITEM;
     public static RegistrySupplier<Block> SERIAL_DEVICE_BLOCK;
     public static RegistrySupplier<BlockItem> SERIAL_DEVICE_ITEM;
+    public static RegistrySupplier<Block> MULTIPLEXER_DEVICE_BLOCK;
+    public static RegistrySupplier<BlockItem> MULTIPLEXER_DEVICE_ITEM;
 
     // Serial Devices
     public static RegistrySupplier<Block> SERIAL_CABLE_BLOCK;
@@ -44,6 +47,8 @@ public class ModBlocks {
 
     public static TagKey<Block> DEVICE_CABLE;
     public static TagKey<Block> SERIAL_CABLE;
+    public static TagKey<Block> UXN_DEVICE;
+    public static TagKey<Block> SERIAL_DEVICE;
 
     private static TagKey<Block> tag(String name) {
         return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MOD_ID, name));
@@ -52,6 +57,8 @@ public class ModBlocks {
     public static void register() {
         DEVICE_CABLE = tag("device_cable");
         SERIAL_CABLE = tag("serial_cable");
+        UXN_DEVICE = tag("uxn_device");
+        SERIAL_DEVICE = tag("serial_device");
 
         COMPUTER_BLOCK = BLOCKS.register("computer", ComputerBlock::new);
         COMPUTER_ITEM = BLOCK_ITEMS.register("computer", () -> new BlockItem(COMPUTER_BLOCK.get(),
@@ -70,6 +77,9 @@ public class ModBlocks {
                 new Item.Properties().tab(MOD_TAB)));
         SERIAL_DEVICE_BLOCK = BLOCKS.register("serial_device", SerialDeviceBlock::new);
         SERIAL_DEVICE_ITEM = BLOCK_ITEMS.register("serial_device", () -> new BlockItem(SERIAL_DEVICE_BLOCK.get(),
+                new Item.Properties().tab(MOD_TAB)));
+        MULTIPLEXER_DEVICE_BLOCK = BLOCKS.register("multiplexer_device", MultiplexerDeviceBlock::new);
+        MULTIPLEXER_DEVICE_ITEM = BLOCK_ITEMS.register("multiplexer_device", () -> new BlockItem(MULTIPLEXER_DEVICE_BLOCK.get(),
                 new Item.Properties().tab(MOD_TAB)));
 
 

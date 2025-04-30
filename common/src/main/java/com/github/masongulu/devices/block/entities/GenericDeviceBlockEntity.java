@@ -1,9 +1,9 @@
 package com.github.masongulu.devices.block.entities;
 
+import com.github.masongulu.core.uxn.devices.IAttachableDevice;
 import com.github.masongulu.devices.screen.GenericDeviceMenu;
 import com.github.masongulu.core.uxn.UXNBus;
 import com.github.masongulu.core.uxn.devices.IDevice;
-import com.github.masongulu.core.uxn.devices.IDeviceProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.MenuProvider;
@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class GenericDeviceBlockEntity extends BaseContainerBlockEntity implements MenuProvider, IDeviceProvider, IDevice {
+public abstract class GenericDeviceBlockEntity extends BaseContainerBlockEntity implements MenuProvider, IAttachableDevice, IDevice {
     public int deviceNumber;
     private final static String DEVICE_NUMBER_TAG = "mcmf.device_number";
 
@@ -110,7 +110,7 @@ public abstract class GenericDeviceBlockEntity extends BaseContainerBlockEntity 
         }
         deviceNumber = i;
         if (bus != null) {
-            attach(bus);
+            bus.refresh();
         }
     }
 

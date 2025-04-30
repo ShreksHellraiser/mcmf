@@ -1,5 +1,7 @@
 package com.github.masongulu.core.uxn.devices;
 
+import com.github.masongulu.core.uxn.UXN;
+
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.Objects;
@@ -14,6 +16,7 @@ public class FileDev extends Device {
         int data = bus.readDev(address);
         int devid = address & 0xF0;
         int port = address & 0x0F;
+        UXN uxn = bus.getUxn();
         switch (port) {
             case 0x06 -> { // File/delete
                 if (file != null) {
@@ -22,12 +25,12 @@ public class FileDev extends Device {
             }
             case 0x09 -> { // File/name
                 short addr = (short) ((bus.readDev(devid + 0x08) << 8) | (data & 0xFF));
-                byte last = (byte)bus.uxn.memory.readByte(addr);
+                byte last = (byte)uxn.memory.readByte(addr);
                 short offset = 1;
                 StringBuilder builder = new StringBuilder();
                 while (last != 0x00) {
                     builder.append((char)last);
-                    last = (byte) (bus.uxn.memory.readByte(addr + offset) & 0xff);
+                    last = (byte) (uxn.memory.readByte(addr + offset) & 0xff);
                     offset++;
                 }
                 String result = builder.toString();
@@ -87,7 +90,7 @@ public class FileDev extends Device {
                         if (length - fmt.length() < 0) {break;}
                         int idx = 0;
                         for (byte ch: fmt.getBytes(Charset.forName("IBM437"))) {
-                            bus.uxn.memory.writeByte(addr+idx,ch);
+                            uxn.memory.writeByte(addr+idx,ch);
                             idx++;
                             success++;
                         }
@@ -100,7 +103,7 @@ public class FileDev extends Device {
                         byte[] bytes = new byte[length];
                         int read = fis.read(bytes);
                         for (int i = 0; i < read; i++) {
-                            bus.uxn.memory.writeByte(addr + i, bytes[i]);
+                            uxn.memory.writeByte(addr + i, bytes[i]);
                         }
                         bytes_read += read;
                         bus.writeDev(0x03, (byte) ((read >> 8) & 0xFF));
@@ -123,7 +126,7 @@ public class FileDev extends Device {
                 int append = bus.readDev(devid + 0x07);
                 byte[] bytes = new byte[length];
                 for (int i = 0; i < length; i++) {
-                    bytes[i] = (byte) bus.uxn.memory.readByte(addr + i);
+                    bytes[i] = (byte) uxn.memory.readByte(addr + i);
                 }
                 try (FileOutputStream fw = new FileOutputStream(file,append != 0x00)) {
                     fw.write(bytes);

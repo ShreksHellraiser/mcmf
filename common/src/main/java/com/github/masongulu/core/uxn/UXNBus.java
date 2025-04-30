@@ -2,17 +2,24 @@ package com.github.masongulu.core.uxn;
 
 import com.github.masongulu.ComputerMod;
 import com.github.masongulu.computer.block.entity.ComputerBlockEntity;
+import com.github.masongulu.computer.block.entity.IBusProvider;
+import com.github.masongulu.core.uxn.devices.IAttachableDevice;
 import com.github.masongulu.item.memory.MemoryItem;
 import com.github.masongulu.core.uxn.devices.IDevice;
-import com.github.masongulu.core.uxn.devices.IDeviceProvider;
-import com.github.masongulu.serial.ISerialPeer;
 import com.github.masongulu.serial.block.entity.SerialDeviceBlockEntity;
+import net.minecraft.client.particle.FlameParticle;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,7 +28,7 @@ import java.util.Set;
 import static com.github.masongulu.ModBlocks.DEVICE_CABLE;
 
 public class UXNBus {
-    public UXN uxn;
+    private UXN uxn;
     private final IDevice[] devices = new IDevice[16];
     private final Set<IDevice> deviceSet = new HashSet<>();
     private boolean executing = false;
@@ -30,95 +37,116 @@ public class UXNBus {
     private boolean argumentMode = false;
     private boolean expectingArgument = false;
 
-    private final ComputerBlockEntity computerEntity;
+    private final BlockEntity blockEntity;
+    private UXNBus parent;
     private final byte[] deviceMemory = new byte[256];
 
-    public UXNBus(ComputerBlockEntity computerEntity) {
-        this.computerEntity = computerEntity;
+    public UXNBus(BlockEntity blockEntity) {
+        this.blockEntity = blockEntity;
+    }
+
+    public void setParent(UXNBus bus) {
+        if (bus == this) return;
+        parent = bus;
+    }
+
+    public UXNBus getParent() {
+        return parent;
     }
 
     /*
     This returns a list of all blocks around the starting position
     plus all blocks around any blocks tagged DEVICE_CABLE
      */
-    public static ArrayList<BlockPos> traverse(Level level, BlockPos blockPos, BlockPos ignore) {
+    private static ArrayList<TraversedBlock> traverse(Level level, BlockPos blockPos, Direction start, BlockPos ignore) {
         java.util.Stack<BlockPos> toSearch = new java.util.Stack<>();
         toSearch.push(blockPos);
         ArrayList<BlockPos> visited = new ArrayList<>();
+        ArrayList<TraversedBlock> traversed = new ArrayList<>();
+        if (start != null) {
+            // Allow directly attaching devices to the computer
+            traversed.add(new TraversedBlock(blockPos, start));
+        }
         while (!toSearch.isEmpty()) {
             BlockPos pos = toSearch.pop();
             // Add surrounding blocks to search
             for (Direction direction : Direction.values()) {
                 BlockPos newPos = pos.relative(direction);
+                double d = (double)newPos.getX() + 0.5;
+                double e = (double)newPos.getY() + 0.5;
+                double f = (double)newPos.getZ() + 0.5;
                 if (visited.contains(newPos)) continue;
-                if (newPos.equals(ignore)) continue;
+                if (newPos.equals(ignore)) {
+                    if (level instanceof ServerLevel sLevel) {
+                        sLevel.sendParticles(ParticleTypes.ANGRY_VILLAGER, d,e,f, 0, 0.0,0.0,0.0, 0.0);
+                    }
+                    level.addAlwaysVisibleParticle(ParticleTypes.ANGRY_VILLAGER, d,e,f, 0.0,0.0,0.0);
+                    continue;
+                }
                 visited.add(newPos);
                 BlockState state = level.getBlockState(newPos);
                 if (state.is(DEVICE_CABLE)) {
                     toSearch.push(newPos);
+                    continue;
                 }
+                if (level instanceof ServerLevel sLevel) {
+                    sLevel.sendParticles(ParticleTypes.HEART, d,e,f, 0, 0.0,0.0,0.0, 0.0);
+                }
+                level.addAlwaysVisibleParticle(ParticleTypes.SMOKE, d,e,f, 0.0,0.0,0.0);
+                traversed.add(new TraversedBlock(newPos, direction.getOpposite()));
             }
         }
-        return visited;
+        return traversed;
     }
-    public static ArrayList<BlockPos> traverse(Level level, BlockPos blockPos) {
-        return traverse(level, blockPos, null);
+    private static ArrayList<TraversedBlock> traverse(Level level, BlockPos blockPos) {
+        return traverse(level, blockPos, null, null);
     }
 
-    public static UXNBus findBus(Level level, BlockPos blockPos) {
-        ArrayList<BlockPos> traversed = traverse(level, blockPos);
-        for (BlockPos pos : traversed) {
-            BlockEntity entity = level.getBlockEntity(pos);
+    public static @Nullable UXNBus findBus(Level level, BlockPos blockPos) {
+        ArrayList<TraversedBlock> traversed = traverse(level, blockPos);
+        for (TraversedBlock block : traversed) {
+            BlockEntity entity = level.getBlockEntity(block.pos);
             if (entity == null)
                 continue;
-            if (entity instanceof ComputerBlockEntity computerBlockEntity) {
-                return computerBlockEntity.getBus();
+            if (entity instanceof IBusProvider IBusProvider) {
+                var bus = IBusProvider.getBus(block.dir);
+                if (bus != null) return bus;
             }
         }
         return null;
     }
 
-    public void refresh(Level level, BlockPos blockPos, BlockPos ignore) {
-        ArrayList<BlockPos> traversed = traverse(level, blockPos, ignore);
-        Set<IDevice> foundDevices = new HashSet<>();
+    private void refresh(Level level, BlockPos blockPos, Direction startDir, BlockPos ignore) {
+        ArrayList<TraversedBlock> traversed = traverse(level, blockPos, startDir, ignore);
         this.conflicting = false;
-        for (BlockPos pos : traversed) {
-            BlockEntity entity = level.getBlockEntity(pos);
-            if (entity == null)
-                continue;
-            if (entity instanceof ComputerBlockEntity computerBlockEntity) {
-                if (computerEntity != computerBlockEntity) {
-                    this.conflicting = true;
-                    // TODO flesh out this conflicting thing more
-                }
-            } else if (entity instanceof IDeviceProvider deviceProvider) {
-                IDevice device = deviceProvider.getDevice(null); // TODO figure out how to get direction here
-                if (device != null) {
-                    foundDevices.add(device);
-                }
-            }
-        }
-        var newDevices = new HashSet<>(foundDevices);
-        newDevices.removeAll(this.deviceSet);
-        var oldDevices = new HashSet<>(this.deviceSet);
-        oldDevices.removeAll(foundDevices);
-        for (IDevice device : newDevices) {
-            this.deviceSet.add(device);
-            device.attach(this);
-        }
-        for (IDevice device : oldDevices) {
-            this.deviceSet.remove(device);
+        for (IDevice device : deviceSet) {
+            deviceSet.remove(device);
             device.detach(this);
         }
+        // clean up remaining devices
+        deviceSet.clear();
+        for (int i = 1; i < 16; i++) {
+            devices[i] = null;
+        }
+        this.uxn = null;
+        for (TraversedBlock block : traversed) {
+            BlockEntity entity = level.getBlockEntity(block.pos);
+            if (entity == null)
+                continue;
+            if (entity instanceof IAttachableDevice attachableDevice) {
+                attachableDevice.attemptAttach(this, block.dir);
+            }
+        }
     }
-    public void refresh(Level level, BlockPos blockPos) {
-        refresh(level, blockPos, null);
+    private void refresh(Level level, BlockPos blockPos, Direction startDir) {
+        refresh(level, blockPos, startDir, null);
     }
     public void refresh() {
-        refresh(this.computerEntity.getLevel(), this.computerEntity.getBlockPos());
+        refresh(null);
     }
     public void refresh(BlockPos ignore) {
-        refresh(this.computerEntity.getLevel(), this.computerEntity.getBlockPos(), ignore);
+        IBusProvider provider = (IBusProvider) this.blockEntity;
+        refresh(this.blockEntity.getLevel(), provider.getScanRoot(), provider.getScanStartDir(), ignore);
     }
 
     public void writeDev(int address, int data) {
@@ -135,33 +163,50 @@ public class UXNBus {
         this.uxn = uxn;
     }
 
+    public UXN getUxn() {
+        if (parent != null) {
+            return parent.getUxn();
+        }
+        return uxn;
+    }
+
     public void startup() {
+        if (parent != null) {
+            parent.startup();
+            return;
+        }
         if (executing || conflicting) {
             return;
         }
-        ItemStack stack = this.computerEntity.getItem(0);
-        if (stack.getItem() instanceof MemoryItem item) {
-            MemoryRegion memory = item.getMemory(stack);
-            refresh(this.computerEntity.getLevel(), this.computerEntity.getBlockPos());
-            executing = true;
-            new UXN(this, memory);
-            uxn.paused = paused || argumentMode;    
-            uxn.queueEvent(new BootEvent());
-            if (argumentMode) {
-                for (int dev = 0x1; dev <= 0xf; dev++) {
-                    IDevice device = devices[dev];
-                    if (device instanceof SerialDeviceBlockEntity sDevice && sDevice.getPeer() != null) {
-                        sDevice.requestArgument();
-                        expectingArgument = true;
-                        break;
+        if (blockEntity instanceof ComputerBlockEntity ce) {
+            ItemStack stack = ce.getItem(0);
+            if (stack.getItem() instanceof MemoryItem item) {
+                MemoryRegion memory = item.getMemory(stack);
+                refresh();
+                executing = true;
+                new UXN(this, memory);
+                uxn.paused = paused || argumentMode;
+                uxn.queueEvent(new BootEvent());
+                if (argumentMode) {
+                    for (int dev = 0x1; dev <= 0xf; dev++) {
+                        IDevice device = devices[dev];
+                        if (device instanceof SerialDeviceBlockEntity sDevice && sDevice.getPeer() != null) {
+                            sDevice.requestArgument();
+                            expectingArgument = true;
+                            break;
+                        }
                     }
                 }
+                ComputerMod.UXN_EXECUTOR.addUXN(uxn);
             }
-            ComputerMod.UXN_EXECUTOR.addUXN(uxn);
         }
     }
 
     public void pause(boolean state) {
+        if (parent != null) {
+            parent.pause(state);
+            return;
+        }
         this.paused = state;
         if (uxn != null) {
             uxn.paused = state;
@@ -172,6 +217,10 @@ public class UXNBus {
     }
 
     public void shutdown() {
+        if (parent != null) {
+            parent.shutdown();
+            return;
+        }
         ComputerMod.UXN_EXECUTOR.removeUXN(uxn);
         executing = false;
         uxn = null;
@@ -222,34 +271,57 @@ public class UXNBus {
 //        deviceEntities.clear();
     }
 
-    public void queueEvent(UXNEvent event) {
+    public void queueEvent(UXNEvent event, UXNBus bus) {
+        if (parent != null) {
+            parent.queueEvent(event, this);
+            return;
+        }
         if (uxn != null) {
             if (event instanceof KeyEvent ke && expectingArgument) {
                 // If this is the last byte of an argument unpause the computer!
                 if (ke.type == 0x04) uxn.paused = paused;
                 // of course as long as the user isn't asking for it to be paused.
             }
-            uxn.queueEvent(event);
+            uxn.queueEvent(event, bus);
         }
+    }
+    public void queueEvent(UXNEvent event) {
+        queueEvent(event, this);
     }
 
     public boolean isExecuting() {
+        if (parent != null) {
+            return parent.isExecuting();
+        }
         return executing;
     }
 
     public boolean isArgumentMode() {
+        if (parent != null) {
+            return parent.isArgumentMode();
+        }
         return argumentMode;
     }
 
     public void setArgumentMode(boolean state) {
+        if (parent != null) {
+            parent.setArgumentMode(state);
+            return;
+        }
         argumentMode = state;
     }
 
     public boolean isPaused() {
+        if (parent != null) {
+            return parent.isPaused();
+        }
         return paused;
     }
 
     public int getEventCount() {
+        if (parent != null) {
+            return parent.getEventCount();
+        }
         if (uxn == null) {
             return 0;
         }
@@ -272,6 +344,16 @@ public class UXNBus {
 class BootEvent implements UXNEvent {
     @Override
     public void handle(UXNBus bus) {
-        bus.uxn.pc = 0x100;
+        bus.getUxn().pc = 0x100;
+    }
+}
+
+class TraversedBlock {
+    public final BlockPos pos;
+    public final Direction dir;
+
+    TraversedBlock(BlockPos pos, Direction dir) {
+        this.pos = pos;
+        this.dir = dir;
     }
 }
