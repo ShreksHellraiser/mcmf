@@ -5,17 +5,13 @@ import com.github.masongulu.network.ModPackets;
 import com.github.masongulu.serial.ISerialPeer;
 import com.github.masongulu.serial.block.entity.SerialPeerBlockEntity;
 import com.github.masongulu.core.uxn.UXNBus;
-import com.github.masongulu.core.uxn.UXNExecutor;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.BlockEvent;
-import dev.architectury.event.events.common.TickEvent;
 
 import static com.github.masongulu.ModBlocks.*;
 
 public final class ComputerMod {
     public static final String MOD_ID = "mcmf";
-
-    public static UXNExecutor UXN_EXECUTOR = new UXNExecutor();
 
     public static void registerEvents() {
         BlockEvent.BREAK.register(((level, pos, state, player, xp) -> {
@@ -48,7 +44,6 @@ public final class ComputerMod {
             }
             return EventResult.pass();
         }));
-        TickEvent.SERVER_POST.register((level) -> UXN_EXECUTOR.tick());
     }
 
     public static void init() {

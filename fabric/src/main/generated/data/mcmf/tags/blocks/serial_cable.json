@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "mcmf:serial_cable"
+    "mcmf:serial_cable",
+    "mcmf:serial_terminal",
+    "mcmf:serial_device"
   ]
 }

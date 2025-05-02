@@ -154,6 +154,7 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
     }
 
     private void tick(Level level, BlockPos pos, BlockState state) {
+        bus.tick();
     }
 
     public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T t) {

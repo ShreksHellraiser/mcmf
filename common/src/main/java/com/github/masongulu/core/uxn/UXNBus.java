@@ -197,8 +197,13 @@ public class UXNBus {
                         }
                     }
                 }
-                ComputerMod.UXN_EXECUTOR.addUXN(uxn);
             }
+        }
+    }
+
+    public void tick() {
+        if (uxn != null) {
+            uxn.runLimited(1024);
         }
     }
 
@@ -221,7 +226,6 @@ public class UXNBus {
             parent.shutdown();
             return;
         }
-        ComputerMod.UXN_EXECUTOR.removeUXN(uxn);
         executing = false;
         uxn = null;
     }

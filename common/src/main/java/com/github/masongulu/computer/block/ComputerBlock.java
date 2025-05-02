@@ -83,7 +83,7 @@ public class ComputerBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        if (blockEntityType == ModBlockEntities.COMPUTER_BLOCK_ENTITY) {
+        if (blockEntityType == ModBlockEntities.COMPUTER_BLOCK_ENTITY.get()) {
             return ComputerBlockEntity::tick;
         }
         return null;
