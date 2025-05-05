@@ -1,3 +1,5 @@
+ef010ed6e274abf3570b56ff626aca58c67c9d9a data/mcmf/tags/blocks/uxn_device.json
 8cddd387740db40f627feb883838bdb5960465bc data/mcmf/tags/blocks/device_cable.json
-7a7475df864ab85fa07a035e990b799b97dca082 data/mcmf/tags/blocks/serial_cable.json
+d3ed255b647efe52bbc2dde26acb2e0cb32c0242 data/mcmf/tags/blocks/serial_device.json
+042904fe9c1bed2618ba887196bde12d2d32b525 data/mcmf/tags/blocks/serial_cable.json
 d28a8e49d2d64f712fae524dcadcfd9b274474df assets/mcmf/models/item/srom.json

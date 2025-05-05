@@ -6,6 +6,9 @@
 /fabric/.gradle
 /common/build
 /common/.gradle
-.gradle
+*/.gradle
 /assets/
 .idea
+/fabric/.gradle/
+/forge/.gradle/
+/common/.gradle/

@@ -16,13 +16,13 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.github.masongulu.fabric.ComputerModFabric"
+      "com.github.shrekshellraiser.fabric.ComputerModFabric"
     ],
     "client": [
-      "com.github.masongulu.fabric.client.ComputerModFabricClient"
+      "com.github.shrekshellraiser.fabric.client.ComputerModFabricClient"
     ],
     "fabric-datagen": [
-      "com.github.masongulu.fabric.datagen.DataGenerator"
+      "com.github.shrekshellraiser.fabric.datagen.DataGenerator"
     ]
   },
   "mixins": [

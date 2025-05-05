@@ -49,3 +49,4 @@ state of the network by use of the network debug stick.
 this will be changed in the future.
 * The redstone device queues multiple redstone vectors for a single redstone update,
 this will eventually get fixed (hopefully).
+* When computers get unloaded their execution is not stopped. This is a **major** leak, and will be fixed eventually.
