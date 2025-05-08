@@ -2,23 +2,19 @@ package com.github.shrekshellraiser.devices.screen;
 
 import com.github.shrekshellraiser.gui.DevicePianoButtons;
 import com.github.shrekshellraiser.gui.PianoButtonGroup;
+import com.github.shrekshellraiser.network.FileUploadPacket;
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.architectury.networking.NetworkManager;
-import io.netty.buffer.Unpooled;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
 import static com.github.shrekshellraiser.ComputerMod.MOD_ID;
-import static com.github.shrekshellraiser.network.ModPackets.FILE_UPLOAD_ID;
 
 public class FlasherDeviceScreen extends GenericDeviceScreen<FlasherDeviceMenu> implements PianoButtonGroup.ModifiableScreen {
 
@@ -56,16 +52,9 @@ public class FlasherDeviceScreen extends GenericDeviceScreen<FlasherDeviceMenu> 
             Path p = list.get(0);
             byte[] data = Files.readAllBytes(p);
             String fn = p.getFileName().toString();
-            if (data.length > 0xFFFF) {
-                // TOO LARGE
+            if (!FileUploadPacket.send(fn, data)) {
                 this.minecraft.player.sendMessage(new TextComponent(String.format("File %s is too large!", fn)), this.minecraft.player.getUUID());
-                return;
             }
-            FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
-            byte[] fnBytes = fn.getBytes(StandardCharsets.UTF_8);
-            buf.writeByteArray(fnBytes);
-            buf.writeByteArray(data);
-            NetworkManager.sendToServer(FILE_UPLOAD_ID, buf);
         } catch (IOException e) {
             this.minecraft.player.sendMessage(new TextComponent("File Upload Failed!"), this.minecraft.player.getUUID());
         }

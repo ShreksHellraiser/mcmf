@@ -61,6 +61,7 @@ public class MultiplexerDeviceBlockEntity extends GenericDeviceBlockEntity imple
         super.attach(manager);
         bus.setParent(manager);
         bus.refresh();
+        bus.erase();
     }
 
     @Override

@@ -1,16 +1,12 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" factoryName="Application" name="Minecraft Client (:fabric)" type="Application">
-    <option name="MAIN_CLASS_NAME" value="dev.architectury.transformer.TransformerRuntime"/>
-    <module name="mcmf.fabric.main"/>
-    <option name="PROGRAM_PARAMETERS" value=""/>
-    <option name="VM_PARAMETERS" value="-Dfabric.dli.config=/home/mason/Documents/Code/Minecraft@@0020Mainframes/fabric/.gradle/loom-cache/launch.cfg -Dfabric.dli.env=client -Dfabric.dli.main=net.fabricmc.loader.impl.launch.knot.KnotClient &quot;-Darchitectury.main.class=/home/mason/Documents/Code/Minecraft Mainframes/fabric/.gradle/architectury/.main_class&quot; &quot;-Darchitectury.runtime.transformer=/home/mason/Documents/Code/Minecraft Mainframes/fabric/.gradle/architectury/.transforms&quot; &quot;-Darchitectury.properties=/home/mason/Documents/Code/Minecraft Mainframes/fabric/.gradle/architectury/.properties&quot; -Djdk.attach.allowAttachSelf=true &quot;-javaagent:/home/mason/Documents/Code/Minecraft Mainframes/.gradle/architectury/architectury-transformer-agent.jar&quot;"/>
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/fabric/run/"/>
+  <configuration default="false" name="Minecraft Client (:fabric)" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="dev.architectury.transformer.TransformerRuntime" />
+    <module name="mcmf.fabric.main" />
+    <shortenClasspath name="ARGS_FILE" />
+    <option name="VM_PARAMETERS" value="-Dfabric.dli.config=$PROJECT_DIR$/../Minecraft@@0020Mainframes/fabric/.gradle/loom-cache/launch.cfg -Dfabric.dli.env=client -Dfabric.dli.main=net.fabricmc.loader.impl.launch.knot.KnotClient &quot;-Darchitectury.main.class=$PROJECT_DIR$/fabric/.gradle/architectury/.main_class&quot; &quot;-Darchitectury.runtime.transformer=$PROJECT_DIR$/fabric/.gradle/architectury/.transforms&quot; &quot;-Darchitectury.properties=$PROJECT_DIR$/fabric/.gradle/architectury/.properties&quot; -Djdk.attach.allowAttachSelf=true &quot;-javaagent:$PROJECT_DIR$/.gradle/architectury/architectury-transformer-agent.jar&quot;" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/fabric/run/" />
     <method v="2">
-      <option enabled="true" name="Make"/>
+      <option name="Make" enabled="true" />
     </method>
-    <envs>
-      
-    </envs>
-    <shortenClasspath name="ARGS_FILE"/>
-  <classpathModifications/></configuration>
+  </configuration>
 </component>

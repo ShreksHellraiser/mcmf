@@ -1,14 +1,18 @@
 package com.github.shrekshellraiser.core.uxn;
 
+import com.github.shrekshellraiser.computer.block.ComputerBlock;
 import com.github.shrekshellraiser.computer.block.entity.ComputerBlockEntity;
 import com.github.shrekshellraiser.computer.block.entity.IBusProvider;
 import com.github.shrekshellraiser.core.uxn.devices.IAttachableDevice;
+import com.github.shrekshellraiser.devices.block.entities.ScreenDeviceBlockEntity;
 import com.github.shrekshellraiser.item.memory.MemoryItem;
 import com.github.shrekshellraiser.core.uxn.devices.IDevice;
 import com.github.shrekshellraiser.serial.block.entity.SerialDeviceBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -148,10 +152,17 @@ public class UXNBus {
         address %= 256;
         deviceMemory[address] = (byte)data;
     }
+    public void writeDevWord(int address, int data) {
+        writeDev(address, data >> 8);
+        writeDev(address + 1, data & 0xFF);
+    }
 
     public int readDev(int address) {
         address %= 256;
         return deviceMemory[address] & 0xFF;
+    }
+    public int readDevWord(int address) {
+        return (readDev(address) << 8) | readDev(address + 1);
     }
 
     public void setUxn(UXN uxn) {
@@ -165,7 +176,36 @@ public class UXNBus {
         return uxn;
     }
 
+    public void updateColors() {
+        int red = readDevWord(0x08);
+        int green = readDevWord(0x0A);
+        int blue = readDevWord(0x0C);
+
+        int[] colors = new int[4];
+        for (int i = 3; i >= 0; i--) {
+            int r = red & 0b1111;
+            int g = green & 0b1111;
+            int b = blue & 0b1111;
+            r |= r << 4;
+            g |= g << 4;
+            b |= b << 4;
+            red >>= 4;
+            green >>= 4;
+            blue >>= 4;
+            colors[i] = (r << 16) | (g << 8) | b;
+        }
+        if (devices[0x2] instanceof ScreenDeviceBlockEntity screen) {
+            screen.setColors(colors);
+        }
+    }
+
+    public void erase() {
+        for (int i = 0; i < 256; i++) {
+            deviceMemory[i] = 0;
+        }
+    }
     public void startup() {
+        erase();
         if (parent != null) {
             parent.startup();
             return;
@@ -198,7 +238,7 @@ public class UXNBus {
 
     public void tick() {
         if (uxn != null) {
-            uxn.runLimited(1024);
+            uxn.runLimited(256000);
         }
     }
 
@@ -281,7 +321,16 @@ public class UXNBus {
                 if (ke.type == 0x04) uxn.paused = paused;
                 // of course as long as the user isn't asking for it to be paused.
             }
-            uxn.queueEvent(event, bus);
+            SimpleParticleType particleType = uxn.queueEvent(event, bus) ? ParticleTypes.ELECTRIC_SPARK : ParticleTypes.SMOKE;
+            if (blockEntity.getLevel() instanceof ServerLevel sLevel) {
+                BlockPos pos = blockEntity.getBlockPos();
+                Direction facing = blockEntity.getBlockState().getValue(ComputerBlock.FACING);
+                float offset = 0.6f;
+                float x = pos.getX() + 0.5f + facing.getStepX() * offset;
+                float y = pos.getY() + 0.5f + facing.getStepY() * offset;
+                float z = pos.getZ() + 0.5f + facing.getStepZ() * offset;
+                sLevel.sendParticles(particleType, x, y, z, 0, 0.0,0.0,0.0, 0.0);
+            }
         }
     }
     public void queueEvent(UXNEvent event) {

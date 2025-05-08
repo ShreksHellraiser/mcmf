@@ -1,6 +1,8 @@
 package com.github.shrekshellraiser.serial.screen;
 
 import com.github.shrekshellraiser.ModMenus;
+import com.github.shrekshellraiser.network.KeyInputHandler;
+import com.github.shrekshellraiser.network.MouseInputHandler;
 import com.github.shrekshellraiser.serial.block.entity.SerialTerminalBlockEntity;
 import com.github.shrekshellraiser.serial.block.entity.SerialTerminalContainerData;
 import net.minecraft.world.entity.player.Inventory;
@@ -8,7 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 
-public class SerialTerminalMenu extends AbstractContainerMenu {
+public class SerialTerminalMenu extends AbstractContainerMenu implements KeyInputHandler {
     public SerialTerminalBlockEntity blockEntity;
     public ContainerData data;
 
@@ -68,7 +70,11 @@ public class SerialTerminalMenu extends AbstractContainerMenu {
             blockEntity.buffer.reset();
             return true;
         }
-        blockEntity.keyPress((char) (i - 3));
-        return true;
+        return false;
+    }
+
+    @Override
+    public void handleKey(char ch) {
+        blockEntity.handleKey(ch);
     }
 }

@@ -2,6 +2,7 @@ package com.github.shrekshellraiser.serial.screen;
 
 import com.github.shrekshellraiser.gui.ToggleSwitchButton;
 import com.github.shrekshellraiser.gui.ToggleSwitchType;
+import com.github.shrekshellraiser.network.KeyInputPacket;
 import com.github.shrekshellraiser.serial.TerminalFont;
 import com.github.shrekshellraiser.serial.block.entity.SerialTerminalContainerData;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -69,9 +70,7 @@ public class SerialTerminalScreen extends AbstractContainerScreen<SerialTerminal
     }
 
     private void sendKey(char ch) {
-        assert minecraft != null;
-        assert minecraft.gameMode != null;
-        minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, 3 + ch);
+        KeyInputPacket.send(ch);
     }
 
     @Override

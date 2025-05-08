@@ -57,13 +57,15 @@ public class UXN {
         new SystemDevice().attach(bus);
     }
 
-    public void queueEvent(UXNEvent event, UXNBus bus) {
+    public boolean queueEvent(UXNEvent event, UXNBus bus) {
         if (eventQueue.size() < MAX_QUEUE) {
             eventQueue.add(new QueuedEvent(event, bus));
+            return true;
         }
+        return false;
     }
-    public void queueEvent(UXNEvent event) {
-        queueEvent(event, bus);
+    public boolean queueEvent(UXNEvent event) {
+        return queueEvent(event, bus);
     }
 
     private void set(int x, int y, int x2, int y2) {
@@ -458,7 +460,7 @@ class SystemDevice extends Device {
         case 0x08: case 0x09: // red*
         case 0x0a: case 0x0b: // green*
         case 0x0c: case 0x0d: // blue*
-            // TODO
+            bus.updateColors();
             break;
         case 0x0e: // debug
             int data = bus.readDev(address);

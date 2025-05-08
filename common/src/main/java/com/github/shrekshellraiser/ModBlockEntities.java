@@ -1,9 +1,7 @@
 package com.github.shrekshellraiser;
 
 import com.github.shrekshellraiser.computer.block.entity.ComputerBlockEntity;
-import com.github.shrekshellraiser.devices.block.entities.FlasherDeviceBlockEntity;
-import com.github.shrekshellraiser.devices.block.entities.MultiplexerDeviceBlockEntity;
-import com.github.shrekshellraiser.devices.block.entities.RedstoneDeviceBlockEntity;
+import com.github.shrekshellraiser.devices.block.entities.*;
 import com.github.shrekshellraiser.serial.block.entity.SerialDeviceBlockEntity;
 import com.github.shrekshellraiser.serial.block.entity.SerialTerminalBlockEntity;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -29,6 +27,8 @@ public class ModBlockEntities {
     public static RegistrySupplier<BlockEntityType<SerialDeviceBlockEntity>> SERIAL_DEVICE_BLOCK_ENTITY;
     public static RegistrySupplier<BlockEntityType<FlasherDeviceBlockEntity>> FLASHER_DEVICE_BLOCK_ENTITY;
     public static RegistrySupplier<BlockEntityType<MultiplexerDeviceBlockEntity>> MULTIPLEXER_DEVICE_BLOCK_ENTITY;
+    public static RegistrySupplier<BlockEntityType<DatetimeDeviceBlockEntity>> DATETIME_DEVICE_BLOCK_ENTITY;
+    public static RegistrySupplier<BlockEntityType<ScreenDeviceBlockEntity>> SCREEN_DEVICE_BLOCK_ENTITY;
 
 
     // Serial Devices
@@ -49,6 +49,10 @@ public class ModBlockEntities {
                 new BlockEntityType<>(FlasherDeviceBlockEntity::new, Set.of(FLASHER_DEVICE_BLOCK.get()), null));
         MULTIPLEXER_DEVICE_BLOCK_ENTITY = BLOCK_ENTITIES.register("multiplexer_device", () ->
                 new BlockEntityType<>(MultiplexerDeviceBlockEntity::new, Set.of(MULTIPLEXER_DEVICE_BLOCK.get()), null));
+        DATETIME_DEVICE_BLOCK_ENTITY = BLOCK_ENTITIES.register("datetime_device", () ->
+                new BlockEntityType<>(DatetimeDeviceBlockEntity::new, Set.of(DATETIME_DEVICE_BLOCK.get()), null));
+        SCREEN_DEVICE_BLOCK_ENTITY = BLOCK_ENTITIES.register("screen_device", () ->
+                new BlockEntityType<>(ScreenDeviceBlockEntity::new, Set.of(SCREEN_DEVICE_BLOCK.get()), null));
 
 
         // Serial Devices

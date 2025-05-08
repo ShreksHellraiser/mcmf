@@ -2,9 +2,7 @@ package com.github.shrekshellraiser;
 
 import com.github.shrekshellraiser.computer.block.CableBlock;
 import com.github.shrekshellraiser.computer.block.ComputerBlock;
-import com.github.shrekshellraiser.devices.block.FlasherDeviceBlock;
-import com.github.shrekshellraiser.devices.block.MultiplexerDeviceBlock;
-import com.github.shrekshellraiser.devices.block.RedstoneDeviceBlock;
+import com.github.shrekshellraiser.devices.block.*;
 import com.github.shrekshellraiser.serial.block.SerialCableBlock;
 import com.github.shrekshellraiser.serial.block.SerialDeviceBlock;
 import com.github.shrekshellraiser.serial.block.SerialTerminalBlock;
@@ -38,6 +36,10 @@ public class ModBlocks {
     public static RegistrySupplier<BlockItem> SERIAL_DEVICE_ITEM;
     public static RegistrySupplier<Block> MULTIPLEXER_DEVICE_BLOCK;
     public static RegistrySupplier<BlockItem> MULTIPLEXER_DEVICE_ITEM;
+    public static RegistrySupplier<Block> DATETIME_DEVICE_BLOCK;
+    public static RegistrySupplier<BlockItem> DATETIME_DEVICE_ITEM;
+    public static RegistrySupplier<Block> SCREEN_DEVICE_BLOCK;
+    public static RegistrySupplier<BlockItem> SCREEN_DEVICE_ITEM;
 
     // Serial Devices
     public static RegistrySupplier<Block> SERIAL_CABLE_BLOCK;
@@ -80,6 +82,12 @@ public class ModBlocks {
                 new Item.Properties().tab(MOD_TAB)));
         MULTIPLEXER_DEVICE_BLOCK = BLOCKS.register("multiplexer_device", MultiplexerDeviceBlock::new);
         MULTIPLEXER_DEVICE_ITEM = BLOCK_ITEMS.register("multiplexer_device", () -> new BlockItem(MULTIPLEXER_DEVICE_BLOCK.get(),
+                new Item.Properties().tab(MOD_TAB)));
+        DATETIME_DEVICE_BLOCK = BLOCKS.register("datetime_device", DatetimeDeviceBlock::new);
+        DATETIME_DEVICE_ITEM = BLOCK_ITEMS.register("datetime_device", () -> new BlockItem(DATETIME_DEVICE_BLOCK.get(),
+                new Item.Properties().tab(MOD_TAB)));
+        SCREEN_DEVICE_BLOCK = BLOCKS.register("screen_device", ScreenDeviceBlock::new);
+        SCREEN_DEVICE_ITEM = BLOCK_ITEMS.register("screen_device", () -> new BlockItem(SCREEN_DEVICE_BLOCK.get(),
                 new Item.Properties().tab(MOD_TAB)));
 
 

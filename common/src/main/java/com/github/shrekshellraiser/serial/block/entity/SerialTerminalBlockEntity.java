@@ -1,5 +1,7 @@
 package com.github.shrekshellraiser.serial.block.entity;
 
+import com.github.shrekshellraiser.network.KeyInputHandler;
+import com.github.shrekshellraiser.network.MouseInputHandler;
 import com.github.shrekshellraiser.serial.SerialType;
 import com.github.shrekshellraiser.serial.TerminalFont;
 import com.github.shrekshellraiser.serial.screen.SerialTerminalMenu;
@@ -19,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import static com.github.shrekshellraiser.ModBlockEntities.SERIAL_TERMINAL_BLOCK_ENTITY;
 import static com.github.shrekshellraiser.serial.block.entity.SerialDeviceBlockEntity.ARGUMENT_MODE_SEQUENCE;
 
-public class SerialTerminalBlockEntity extends SerialPeerBlockEntity implements MenuProvider {
+public class SerialTerminalBlockEntity extends SerialPeerBlockEntity implements MenuProvider, KeyInputHandler {
     // Terminal Width = 240
     // Terminal Height = 180
     public final static int TERM_WIDTH = 240;
@@ -129,9 +131,13 @@ public class SerialTerminalBlockEntity extends SerialPeerBlockEntity implements 
     }
 
     public void keyPress(char i) {
-        if (echo || argumentMode) write(i);
-        if (peer != null) peer.write(i);
-        if (i == '\n') {
+    }
+
+    @Override
+    public void handleKey(char ch) {
+        if (echo || argumentMode) write(ch);
+        if (peer != null) peer.write(ch);
+        if (ch == '\n') {
             onLineEnd();
         }
     }
