@@ -1,6 +1,8 @@
 package com.github.shrekshellraiser.network;
 
 import dev.architectury.networking.NetworkManager;
+import dev.architectury.platform.Platform;
+import net.fabricmc.api.EnvType;
 import net.minecraft.resources.ResourceLocation;
 
 import static com.github.shrekshellraiser.ComputerMod.MOD_ID;
@@ -10,17 +12,23 @@ public class ModPackets {
     public static final ResourceLocation KEY_INPUT_ID = new ResourceLocation(MOD_ID, "key_input");
     public static final ResourceLocation MOUSE_CLICK_ID = new ResourceLocation(MOD_ID, "mouse_click");
     public static final ResourceLocation MOUSE_MOVE_ID = new ResourceLocation(MOD_ID, "mouse_move");
+    public static final ResourceLocation SCREEN_UPDATE_ID = new ResourceLocation(MOD_ID, "screen_update");
 
     public static void register() {
-//        if (Platform.getEnv() == EnvType.SERVER) {
-            registerServer();
-//        }
+        registerCommon();
+        if (Platform.getEnv() == EnvType.CLIENT) {
+            registerClient();
+        }
     }
 
-    private static void registerServer() {
+    private static void registerCommon() {
         NetworkManager.registerReceiver(NetworkManager.Side.C2S, FILE_UPLOAD_ID, FileUploadPacket::receive);
         NetworkManager.registerReceiver(NetworkManager.Side.C2S, KEY_INPUT_ID, KeyInputPacket::handle);
         NetworkManager.registerReceiver(NetworkManager.Side.C2S, MOUSE_CLICK_ID, MouseInputPacket::handleClick);
         NetworkManager.registerReceiver(NetworkManager.Side.C2S, MOUSE_MOVE_ID, MouseInputPacket::handleMove);
+    }
+
+    private static void registerClient() {
+        NetworkManager.registerReceiver(NetworkManager.Side.S2C, SCREEN_UPDATE_ID, ScreenUpdatePacket::handle);
     }
 }

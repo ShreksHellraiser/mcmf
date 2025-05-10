@@ -1,63 +1,198 @@
 package com.github.shrekshellraiser.devices.screen;
 
+import com.github.shrekshellraiser.ComputerMod;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.network.FriendlyByteBuf;
 
-public class ScreenBuffer implements ContainerData {
-    private static final int BUFFER_PAD = 4;
-    public static final int width = 300;
-    public static final int height = 300;
-    public static final int AREA = width * height;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.github.shrekshellraiser.ComputerMod.LOGGER;
+
+public class ScreenBuffer {
+    private static final int BUFFER_PAD = 6;
+    public static final int MAX_WIDTH = 640;
+    public static final int MAX_HEIGHT = 480;
+    private int width = 300;
+    private int height = 300;
+    public static final int MAX_AREA = MAX_WIDTH * MAX_HEIGHT;
     private static final int BIT_DEPTH = 16; // # of pixels stored per int (compression for network)
-    private static final int DISPLAY_BUFFER_SIZE = (AREA / BIT_DEPTH);
+    private static final int DISPLAY_BUFFER_SIZE = (MAX_AREA / BIT_DEPTH);
     public static final int BUFFER_SIZE = BUFFER_PAD + DISPLAY_BUFFER_SIZE;
     private final byte[] layer0;
     private final byte[] layer1; // Foreground
     private final byte[][] layers;
     private int[] colors = {0xffffff, 0x000000, 0x77ddbb, 0xff6622};
     public static final float scale = 0.6f;
-    private ContainerData data = this;
-    public ScreenBuffer(ContainerData data) {
-        this.data = data;
-        layer0 = null;
-        layer1 = null;
-        layers = null;
-    }
     public ScreenBuffer() {
-        layer0 = new byte[AREA];
-        layer1 = new byte[AREA]; // Foreground
+        layer0 = new byte[MAX_AREA];
+        layer1 = new byte[MAX_AREA]; // Foreground
         layers = new byte[][]{layer0, layer1};
     }
-    @Override
-    public int get(int i) {
-        if (i < BUFFER_PAD) {
-            return colors[i];
+
+    public void decode(FriendlyByteBuf buf) {
+        width = buf.readInt();
+        height = buf.readInt();
+        colors = buf.readVarIntArray(4);
+        int[] buffer = buf.readVarIntArray(BUFFER_SIZE);
+        decode(buffer);
+    }
+    public int getWidth() {
+        return width;
+    }
+    public void setWidth(int width) {
+        if (width > MAX_WIDTH) {
+            width = MAX_WIDTH;
         }
-        i -= BUFFER_PAD;
-        i *= BIT_DEPTH;
-        int v = 0;
-        assert layer1 != null;
-        assert layer0 != null;
-        for (int d = 0; d < BIT_DEPTH; d++) {
-            byte fg = layer1[i+d];
-            v = (v << 2) | ((fg == 0) ? layer0[i+d] : fg);
+        this.width = width;
+    }
+    public void setHeight(int height) {
+        if (height > MAX_HEIGHT) {
+            height = MAX_HEIGHT;
         }
-        return v;
+        this.height = height;
+    }
+    public int getHeight() {
+        return height;
+    }
+    private int getPixelColor(int idx) {
+        if (idx < 0 || idx >= MAX_AREA) return 0;
+        byte fg = layer1[idx];
+        return (fg == 0) ? layer0[idx] : fg;
+    }
+    private int[] encode() {
+        List<Integer> buffer = new ArrayList<>(BUFFER_SIZE);
+        int bufIndex = 0;
+        int pixelIndex = 0;
+        int area = width * height;
+        while (pixelIndex <= area - 15) {  // Check for 15 pixels worth of space
+            // Read first 15 pixels
+            int[] pixels = new int[15];
+            boolean allSame = true;
+            pixels[0] = getPixelColor(pixelIndex++);
+
+            for (int i = 1; i < 15; i++) {
+                pixels[i] = getPixelColor(pixelIndex++);
+                if (pixels[i] != pixels[0]) allSame = false;
+            }
+
+            int data;
+            if (allSame) {
+                // RLE mode
+                data = 0x80000000 | (pixels[0] << 28);
+                int repeats = 15;
+                while (getPixelColor(pixelIndex++) == pixels[0]) {
+                    repeats++;
+                    if (repeats >= 0x0EFFFFFF) {
+                        pixelIndex++;
+                        break;
+                    };
+                    if (pixelIndex >= area) break;
+                }
+                pixelIndex--;
+                data |= repeats;
+            } else {
+                // Pack 15 pixels, 2 bits each
+                data = 0;
+                for (int i = 0; i < 15; i++) {
+                    data |= (pixels[i] << (28 - i * 2));
+                }
+            }
+            bufIndex++;
+            buffer.add(data);
+        }
+
+        // Handle remaining pixels if any
+        if (pixelIndex < area) {
+            int data = 0;
+            int remaining = Math.min(15, area - pixelIndex);
+            for (int i = 0; i < remaining; i++) {
+                data |= (getPixelColor(pixelIndex++) << (30 - i * 2));
+            }
+            buffer.add(data);
+        }
+        if (bufIndex >= BUFFER_SIZE) {
+            buffer = buffer.subList(0, BUFFER_SIZE);
+            LOGGER.warn("Screen buffer size exceeded ({} of allowed {})", bufIndex, BUFFER_SIZE);
+        }
+        return buffer.stream().mapToInt(Integer::intValue).toArray();
+    }
+    public void encode(FriendlyByteBuf buf) {
+        buf.writeInt(width);
+        buf.writeInt(height);
+        buf.writeVarIntArray(colors);
+        int area = width * height;
+        int bufferSize = (area + BIT_DEPTH - 1) / BIT_DEPTH; // Round up division
+        int[] buffer = new int[bufferSize];
+
+        for (int i = 0; i < bufferSize; i++) {
+            int val = 0;
+            for (int di = 0; di < BIT_DEPTH; di++) {
+                int index = i * BIT_DEPTH + di;
+                if (index < area) {
+                    val <<= 2;
+                    val |= (getPixelColor(index) & 0x3);
+                }
+            }
+            buffer[i] = val;
+        }
+        buf.writeVarIntArray(buffer);
     }
 
-    @Override
-    public void set(int i, int j) {
+    private void decode(int[] buffer) {
+        int width = getWidth();
+        int height = getHeight();
+        int area = width * height;
+        for (int i = 0; i < buffer.length; i++) {
+            int pix = buffer[i];
+            for (int di = 0; di < BIT_DEPTH; di++) {
+                int index = i * BIT_DEPTH + (BIT_DEPTH - 1 - di);
+                if (index >= area) return;
+                layer0[index] = (byte) ((pix >> (di * 2)) & 0x3);
+            }
+        }  // Stop if we've written all pixels
     }
+
+    private void decodeFancy(int[] buffer) {
+        int bufIndex = 0;
+        int pixelIndex = 0;
+        int width = getWidth();
+        int height = getHeight();
+        int area = width * height;
+        while (pixelIndex < area) {
+            if (bufIndex >= buffer.length) break;
+            int v = buffer[bufIndex++];
+
+            if ((v & 0x80000000) == 0x80000000) {
+                // RLE mode
+                int color = (v & 0x30000000) >> 28;
+                int length = v & 0x0FFFFFFF;
+                if (pixelIndex + length > area) {
+                    length = area - pixelIndex;
+                }
+                for (int i = 0; i < length; i++) {
+                    layer0[pixelIndex++] = (byte) color;
+                }
+            } else {
+                // Unpack 15 pixels
+                int remainingPixels = Math.min(15, area - pixelIndex);
+                for (int i = 0; i < remainingPixels; i++) {
+                    int pixel = (v >> (30 - i * 2)) & 0b11;
+                    layer0[pixelIndex++] = (byte) pixel;
+                }
+            }
+        }
+    }
+
 
     public void setPixel(int layer, int x, int y, byte val) {
         if (x < 0 || x >= width || y < 0 || y >= height) {
             return;
         }
         int i = y * width + x;
-        assert layers != null;
         layers[layer][i] = val;
     }
 
@@ -66,16 +201,11 @@ public class ScreenBuffer implements ContainerData {
     }
 
     private int[] getColors() {
-        return new int[]{data.get(0), data.get(1), data.get(2), data.get(3)};
-    }
-
-    @Override
-    public int getCount() {
-        return BUFFER_SIZE;
+        return colors;
     }
 
     public int getPixel(int i) {
-        return data.get(i + BUFFER_PAD);
+        return layer0[i];
     }
 
     public void render(Matrix4f matrix4f, int k, int l) {
@@ -85,25 +215,21 @@ public class ScreenBuffer implements ContainerData {
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        width = getWidth();
+        height = getHeight();
         int[] colorList = this.getColors();
-        for (int i = 0; i < DISPLAY_BUFFER_SIZE; i++) {
-            int pixels = this.getPixel(i);
-            for (int di = BIT_DEPTH-1; di >= 0; di--) {
-                int pixelIdx = i * BIT_DEPTH + di;
-                int x = pixelIdx % width;
-                int y = pixelIdx / width;
-                int pixel = pixels & 0b11;
-                pixels >>= 2;
-                int color = colorList[pixel] | 0xff000000;
-                float minX = k + (x * scale);
-                float maxX = minX + scale;
-                float minY = l + (y * scale);
-                float maxY = minY + scale;
-                bufferBuilder.vertex(matrix4f, minX,  maxY, 0.0F).color(color).endVertex();
-                bufferBuilder.vertex(matrix4f, maxX,  maxY, 0.0F).color(color).endVertex();
-                bufferBuilder.vertex(matrix4f, maxX,  minY, 0.0F).color(color).endVertex();
-                bufferBuilder.vertex(matrix4f, minX,  minY, 0.0F).color(color).endVertex();
-            }
+        for (int i = 0; i < width * height; i++) {
+            int x = i % width;
+            int y = i / width;
+            int color = colorList[this.getPixel(i)] | 0xff000000;
+            float minX = k + (x * scale);
+            float maxX = minX + scale;
+            float minY = l + (y * scale);
+            float maxY = minY + scale;
+            bufferBuilder.vertex(matrix4f, minX,  maxY, 0.0F).color(color).endVertex();
+            bufferBuilder.vertex(matrix4f, maxX,  maxY, 0.0F).color(color).endVertex();
+            bufferBuilder.vertex(matrix4f, maxX,  minY, 0.0F).color(color).endVertex();
+            bufferBuilder.vertex(matrix4f, minX,  minY, 0.0F).color(color).endVertex();
         }
         bufferBuilder.end();
         BufferUploader.end(bufferBuilder);

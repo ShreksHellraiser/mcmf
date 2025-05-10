@@ -17,6 +17,7 @@ public class DatetimeDeviceBlockEntity extends GenericDeviceBlockEntity {
     static final Calendar cal = Calendar.getInstance();
     public DatetimeDeviceBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(DATETIME_DEVICE_BLOCK_ENTITY.get(), blockPos, blockState);
+        deviceNumber = 0xc;
     }
 
     @Override

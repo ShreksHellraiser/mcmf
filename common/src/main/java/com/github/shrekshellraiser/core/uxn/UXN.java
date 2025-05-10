@@ -400,8 +400,8 @@ public class UXN {
         for (int i = 0; i < limit; i++) {
             if (!running) {
                 // check for vector in the queue
-                if (eventQueue.isEmpty()) return;
                 var event = eventQueue.poll();
+                if (event == null) return;
                 event.event.handle(event.bus);
                 running = true;
             }

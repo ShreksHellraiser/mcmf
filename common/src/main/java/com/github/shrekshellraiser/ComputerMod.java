@@ -7,11 +7,14 @@ import com.github.shrekshellraiser.serial.block.entity.SerialPeerBlockEntity;
 import com.github.shrekshellraiser.core.uxn.UXNBus;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.BlockEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import static com.github.shrekshellraiser.ModBlocks.*;
 
 public final class ComputerMod {
     public static final String MOD_ID = "mcmf";
+    public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     public static void registerEvents() {
         BlockEvent.BREAK.register(((level, pos, state, player, xp) -> {

@@ -1,18 +1,36 @@
 [Architectury Transformer DEBUG] 
 [Architectury Transformer DEBUG] ============================
-[Architectury Transformer DEBUG] Transforming from /home/mason/Documents/Code/Minecraft Mainframes/common/build/devlibs/mcmf-common-0.0.0-indev0-dev.jar to /home/mason/Documents/Code/Minecraft Mainframes/common/build/libs/mcmf-common-0.0.0-indev0-transformProductionFabric.jar
+[Architectury Transformer DEBUG] Transforming from /home/mason/Documents/Minecraft Mainframes/common/build/devlibs/mcmf-common-0.0.0-indev0-dev.jar to /home/mason/Documents/Minecraft Mainframes/common/build/libs/mcmf-common-0.0.0-indev0-transformProductionFabric.jar
 [Architectury Transformer DEBUG] ============================
 [Architectury Transformer DEBUG] 
-[Architectury Transformer DEBUG] Transforming 5 transformer(s) from /home/mason/Documents/Code/Minecraft Mainframes/common/build/devlibs/mcmf-common-0.0.0-indev0-dev.jar to /home/mason/Documents/Code/Minecraft Mainframes/common/build/libs/mcmf-common-0.0.0-indev0-transformProductionFabric.jar: 
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.RemapMixinVariables@4a80fc91
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformExpectPlatform@4d60577e
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.RemapInjectables@7063266b
+[Architectury Transformer DEBUG] Transforming 5 transformer(s) from /home/mason/Documents/Minecraft Mainframes/common/build/devlibs/mcmf-common-0.0.0-indev0-dev.jar to /home/mason/Documents/Minecraft Mainframes/common/build/libs/mcmf-common-0.0.0-indev0-transformProductionFabric.jar: 
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.RemapMixinVariables@50c6e021
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformExpectPlatform@3716f19f
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.RemapInjectables@56bc2ccc
 [Architectury Transformer DEBUG]  - AddRefmapName(enabled=() -> kotlin.Boolean)
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformPlatformOnly@4214ac2e
-[Architectury Transformer DEBUG] Transforming from /home/mason/Documents/Code/Minecraft Mainframes/common/build/devlibs/mcmf-common-0.0.0-indev0-dev.jar to /home/mason/Documents/Code/Minecraft Mainframes/common/build/libs/mcmf-common-0.0.0-indev0-transformProductionFabric.jar with 5 transformer(s) on dev.architectury.transformer.handler.SimpleTransformerHandler
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformPlatformOnly@5e5dc443
+[Architectury Transformer DEBUG] Transforming from /home/mason/Documents/Minecraft Mainframes/common/build/devlibs/mcmf-common-0.0.0-indev0-dev.jar to /home/mason/Documents/Minecraft Mainframes/common/build/libs/mcmf-common-0.0.0-indev0-transformProductionFabric.jar with 5 transformer(s) on dev.architectury.transformer.handler.SimpleTransformerHandler
 [Architectury Transformer DEBUG] Found class transformer
-[Architectury Transformer DEBUG] Writing com/github/masongulu/ModMenus with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/network/ModPackets with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/Commands with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/ModMenus with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/item/NetworkDebugItem with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/item/ModItems with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/item/memory/FileManager with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/item/memory/SROMItem with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/item/memory/MemoryItem with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/item/memory/RAMItem with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/DevicePianoButtons with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/PianoButtonGroup with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/PianoButtonGroup$ModifiableScreen with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/PianoButtonGroup$PianoButtonCallback with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/PianoButtonGroup$PianoButtonEntry with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/ToggleSwitchType with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/ToggleSwitchButton with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/ToggleSwitchButton$1 with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/ToggleSwitchButton$LabelPosition with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/network/MouseInputPacket with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/network/KeyInputPacket with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/network/FileUploadPacket with maxs=true frames=true
 [Architectury Transformer DEBUG] Provided 48 classpath jar(s):
 [Architectury Transformer DEBUG]  - /home/mason/.gradle/caches/modules-2/files-2.1/dev.architectury/architectury-injectables/1.0.10/62db2a366d662606d1b23ad02ccc3212ed37ec3/architectury-injectables-1.0.10.jar
 [Architectury Transformer DEBUG]  - /home/mason/.gradle/caches/modules-2/files-2.1/net.fabricmc/fabric-loader/0.16.14/5778d47f536bf2c63ed2abc1a56f5a1c129e34a/fabric-loader-0.16.14.jar
@@ -60,107 +78,120 @@
 [Architectury Transformer DEBUG]  - /home/mason/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.2.2/3b8e6ebc5851dd3d17e37e5cadce2eff2a429f0f/lwjgl-stb-3.2.2.jar
 [Architectury Transformer DEBUG]  - /home/mason/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-tinyfd/3.2.2/fcbe606c8f8da6f8f9a05e2c540eb1ee8632b0e9/lwjgl-tinyfd-3.2.2.jar
 [Architectury Transformer DEBUG]  - /home/mason/.gradle/caches/modules-2/files-2.1/com.mojang/text2speech/1.12.4/1f618f522dbdd93218c270bcfd8f8dd84be31717/text2speech-1.12.4.jar
-[Architectury Transformer DEBUG]  - /home/mason/Documents/Code/Minecraft Mainframes/.gradle/loom-cache/minecraftMaven/net/minecraft/minecraft-merged-81875dc825/1.18.2-loom.mappings.1_18_2.layered+hash.40545-v2/minecraft-merged-81875dc825-1.18.2-loom.mappings.1_18_2.layered+hash.40545-v2.jar
-[Architectury Transformer DEBUG]  - /home/mason/Documents/Code/Minecraft Mainframes/.gradle/loom-cache/remapped_mods/loom_mappings_1_18_2_layered_hash_40545_v2/dev/architectury/architectury/4.12.94/architectury-4.12.94.jar
-[Architectury Transformer] Read classpath in 1.564 s
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/DevicePianoButtons with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/PianoButtonGroup with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/PianoButtonGroup$ModifiableScreen with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/PianoButtonGroup$PianoButtonCallback with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/PianoButtonGroup$PianoButtonEntry with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/ToggleSwitchType with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/ToggleSwitchButton with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/ToggleSwitchButton$1 with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/ToggleSwitchButton$LabelPosition with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/screen/FlashableMemorySlot with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/screen/MemorySlot with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/screen/ComputerScreen with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/screen/ComputerMenu with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/block/ComputerBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/block/CableBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/block/entity/IBusProvider with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/block/entity/ComputerBlockEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/block/entity/ComputerBlockEntity$1 with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/screen/FlasherDeviceScreen with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/screen/GenericDeviceScreen with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/screen/FlasherDeviceMenu with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/screen/GenericDeviceMenu with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/MultiplexerDeviceBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/RedstoneDeviceBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/FlasherDeviceBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/GenericDeviceBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/entities/RedstoneEvent with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/entities/MultiplexerDeviceBlockEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/entities/FlasherDeviceBlockEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/entities/RedstoneDeviceBlockEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/entities/GenericDeviceBlockEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/entities/GenericDeviceBlockEntity$1 with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/SerialType with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/screen/SerialTerminalScreen with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/screen/SerialTerminalMenu with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/screen/TerminalBuffer with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/screen/TerminalBuffer$1 with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/screen/TerminalBuffer$ParseState with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/TerminalFont with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/ISerialPeer with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/SerialPeerBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/SerialTerminalBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/SerialDeviceBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/SerialCableBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/entity/SerialTerminalContainerData with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/entity/SerialPeerBlockEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/entity/SerialTerminalBlockEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/entity/SerialDeviceBlockEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/entity/SerialDeviceBlockEntity$1 with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/entity/SerialDeviceBlockEntity$ArgumentParseState with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/ModBlockEntities with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/Commands with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/KeyEvent with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/SystemDevice with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/BootEvent with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/TraversedBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/UXNEvent with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/QueuedEvent with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/devices/CalendarDev with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/devices/FileDev with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/devices/IAttachableDevice with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/devices/IDevice with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/devices/Device with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/UXNBus with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/Stack with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/MemoryRegion with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/UXN with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/UXNExecutor with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/item/NetworkDebugItem with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/item/memory/FileManager with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/item/memory/RAMItem with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/item/memory/SROMItem with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/item/memory/MemoryItem with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/item/ModItems with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/ComputerMod with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/ModBlocks with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/ModCreativeTab with maxs=true frames=true
+[Architectury Transformer DEBUG]  - /home/mason/Documents/Minecraft Mainframes/.gradle/loom-cache/minecraftMaven/net/minecraft/minecraft-merged-81875dc825/1.18.2-loom.mappings.1_18_2.layered+hash.40545-v2/minecraft-merged-81875dc825-1.18.2-loom.mappings.1_18_2.layered+hash.40545-v2.jar
+[Architectury Transformer DEBUG]  - /home/mason/Documents/Minecraft Mainframes/.gradle/loom-cache/remapped_mods/loom_mappings_1_18_2_layered_hash_40545_v2/dev/architectury/architectury/4.12.94/architectury-4.12.94.jar
+[Architectury Transformer] Read classpath in 1.190 s
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/network/ModPackets with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/network/MouseInputHandler with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/network/KeyInputHandler with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/SerialType with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/screen/SerialTerminalMenu with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/screen/SerialTerminalScreen with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/screen/TerminalBuffer with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/screen/TerminalBuffer$1 with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/screen/TerminalBuffer$ParseState with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/TerminalFont with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/ISerialPeer with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/SerialDeviceBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/SerialTerminalBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/SerialCableBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/SerialPeerBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/entity/SerialTerminalContainerData with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/entity/SerialPeerBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/entity/SerialTerminalBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/entity/SerialDeviceBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/entity/SerialDeviceBlockEntity$1 with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/entity/SerialDeviceBlockEntity$ArgumentParseState with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/screen/ScreenDeviceScreen with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/screen/ScreenDeviceMenu with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/screen/FlasherDeviceMenu with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/screen/GenericDeviceScreen with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/screen/FlasherDeviceScreen with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/screen/GenericDeviceMenu with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/screen/ScreenBuffer with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/ScreenDeviceBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/DatetimeDeviceBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/MultiplexerDeviceBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/RedstoneDeviceBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/FlasherDeviceBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/GenericDeviceBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/MouseClickEvent with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/MouseMoveEvent with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/ScreenEvent with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/RedstoneEvent with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/ScreenDeviceBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/DatetimeDeviceBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/MultiplexerDeviceBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/FlasherDeviceBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/GenericDeviceBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/GenericDeviceBlockEntity$1 with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/RedstoneDeviceBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/ModBlockEntities with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/block/ComputerBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/block/CableBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/block/entity/IBusProvider with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/block/entity/ComputerBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/block/entity/ComputerBlockEntity$1 with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/screen/ComputerScreen with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/screen/ComputerMenu with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/screen/FlashableMemorySlot with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/screen/MemorySlot with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/ModBlocks with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/ModCreativeTab with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/ComputerMod with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/BootEvent with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/KeyEvent with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/SystemDevice with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/QueuedEvent with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/Stack with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/MemoryRegion with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/UXNEvent with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/TraversedBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/UXN with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/UXNBus with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/devices/FileDev with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/devices/IAttachableDevice with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/devices/IDevice with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/devices/Device with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/devices/CalendarDev with maxs=true frames=true
 [Architectury Transformer DEBUG] Checking whether /mcmf.mixins.json is a mixin config.
 [Architectury Transformer DEBUG] Found mixin config(s): /mcmf.mixins.json
 [Architectury Transformer DEBUG] Injecting mcmf-common-common-refmap.json to /mcmf.mixins.json
-[Architectury Transformer DEBUG] Closed File Systems for /home/mason/Documents/Code/Minecraft Mainframes/common/build/libs/mcmf-common-0.0.0-indev0-transformProductionFabric.jar
-[Architectury Transformer] Transformed jar with 5 transformer(s) in 1.748 s
+[Architectury Transformer DEBUG] Closed File Systems for /home/mason/Documents/Minecraft Mainframes/common/build/libs/mcmf-common-0.0.0-indev0-transformProductionFabric.jar
+[Architectury Transformer] Transformed jar with 5 transformer(s) in 1.382 s
 [Architectury Transformer DEBUG] 
 [Architectury Transformer DEBUG] ============================
-[Architectury Transformer DEBUG] Transforming from /home/mason/Documents/Code/Minecraft Mainframes/common/build/devlibs/mcmf-common-0.0.0-indev0-dev.jar to /home/mason/Documents/Code/Minecraft Mainframes/common/build/libs/mcmf-common-0.0.0-indev0-transformProductionForge.jar
+[Architectury Transformer DEBUG] Transforming from /home/mason/Documents/Minecraft Mainframes/common/build/devlibs/mcmf-common-0.0.0-indev0-dev.jar to /home/mason/Documents/Minecraft Mainframes/common/build/libs/mcmf-common-0.0.0-indev0-transformProductionFabric.jar
 [Architectury Transformer DEBUG] ============================
 [Architectury Transformer DEBUG] 
-[Architectury Transformer DEBUG] Transforming 7 transformer(s) from /home/mason/Documents/Code/Minecraft Mainframes/common/build/devlibs/mcmf-common-0.0.0-indev0-dev.jar to /home/mason/Documents/Code/Minecraft Mainframes/common/build/libs/mcmf-common-0.0.0-indev0-transformProductionForge.jar: 
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformExpectPlatform@252e8348
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.RemapInjectables@26c2fb3b
+[Architectury Transformer DEBUG] Transforming 5 transformer(s) from /home/mason/Documents/Minecraft Mainframes/common/build/devlibs/mcmf-common-0.0.0-indev0-dev.jar to /home/mason/Documents/Minecraft Mainframes/common/build/libs/mcmf-common-0.0.0-indev0-transformProductionFabric.jar: 
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.RemapMixinVariables@7f6350fa
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformExpectPlatform@6bb6603a
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.RemapInjectables@579aac10
 [Architectury Transformer DEBUG]  - AddRefmapName(enabled=() -> kotlin.Boolean)
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformPlatformOnly@2190f2ef
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeAnnotations@3868e133
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment@418ab178
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.FixForgeMixin@70269611
-[Architectury Transformer DEBUG] Transforming from /home/mason/Documents/Code/Minecraft Mainframes/common/build/devlibs/mcmf-common-0.0.0-indev0-dev.jar to /home/mason/Documents/Code/Minecraft Mainframes/common/build/libs/mcmf-common-0.0.0-indev0-transformProductionForge.jar with 7 transformer(s) on dev.architectury.transformer.handler.SimpleTransformerHandler
-[Architectury Transformer DEBUG] Remapping with 1 mapping provider(s):
-[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformForgeEnvironment$$Lambda$3368/0x00007f19290a5120@250a1710
+[Architectury Transformer DEBUG]  - dev.architectury.transformer.transformers.TransformPlatformOnly@6a3f158
+[Architectury Transformer DEBUG] Transforming from /home/mason/Documents/Minecraft Mainframes/common/build/devlibs/mcmf-common-0.0.0-indev0-dev.jar to /home/mason/Documents/Minecraft Mainframes/common/build/libs/mcmf-common-0.0.0-indev0-transformProductionFabric.jar with 5 transformer(s) on dev.architectury.transformer.handler.SimpleTransformerHandler
+[Architectury Transformer DEBUG] Found class transformer
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/Commands with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/ModMenus with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/item/NetworkDebugItem with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/item/ModItems with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/item/memory/FileManager with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/item/memory/SROMItem with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/item/memory/MemoryItem with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/item/memory/RAMItem with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/DevicePianoButtons with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/PianoButtonGroup with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/PianoButtonGroup$ModifiableScreen with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/PianoButtonGroup$PianoButtonCallback with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/PianoButtonGroup$PianoButtonEntry with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/ToggleSwitchType with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/ToggleSwitchButton with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/ToggleSwitchButton$1 with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/gui/ToggleSwitchButton$LabelPosition with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/network/MouseInputPacket with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/network/KeyInputPacket with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/network/FileUploadPacket with maxs=true frames=true
 [Architectury Transformer DEBUG] Provided 48 classpath jar(s):
 [Architectury Transformer DEBUG]  - /home/mason/.gradle/caches/modules-2/files-2.1/dev.architectury/architectury-injectables/1.0.10/62db2a366d662606d1b23ad02ccc3212ed37ec3/architectury-injectables-1.0.10.jar
 [Architectury Transformer DEBUG]  - /home/mason/.gradle/caches/modules-2/files-2.1/net.fabricmc/fabric-loader/0.16.14/5778d47f536bf2c63ed2abc1a56f5a1c129e34a/fabric-loader-0.16.14.jar
@@ -208,99 +239,84 @@
 [Architectury Transformer DEBUG]  - /home/mason/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-stb/3.2.2/3b8e6ebc5851dd3d17e37e5cadce2eff2a429f0f/lwjgl-stb-3.2.2.jar
 [Architectury Transformer DEBUG]  - /home/mason/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-tinyfd/3.2.2/fcbe606c8f8da6f8f9a05e2c540eb1ee8632b0e9/lwjgl-tinyfd-3.2.2.jar
 [Architectury Transformer DEBUG]  - /home/mason/.gradle/caches/modules-2/files-2.1/com.mojang/text2speech/1.12.4/1f618f522dbdd93218c270bcfd8f8dd84be31717/text2speech-1.12.4.jar
-[Architectury Transformer DEBUG]  - /home/mason/Documents/Code/Minecraft Mainframes/.gradle/loom-cache/minecraftMaven/net/minecraft/minecraft-merged-81875dc825/1.18.2-loom.mappings.1_18_2.layered+hash.40545-v2/minecraft-merged-81875dc825-1.18.2-loom.mappings.1_18_2.layered+hash.40545-v2.jar
-[Architectury Transformer DEBUG]  - /home/mason/Documents/Code/Minecraft Mainframes/.gradle/loom-cache/remapped_mods/loom_mappings_1_18_2_layered_hash_40545_v2/dev/architectury/architectury/4.12.94/architectury-4.12.94.jar
-[Architectury Transformer] Read classpath in 1.554 s
-[Architectury Transformer DEBUG] Remapping Classes:
-[Architectury Transformer DEBUG] net/fabricmc/api/EnvType -> net/minecraftforge/api/distmarker/Dist
-[Architectury Transformer DEBUG] net/fabricmc/api/Environment -> net/minecraftforge/api/distmarker/OnlyIn
-[Architectury Transformer DEBUG] Found class transformer
-[Architectury Transformer DEBUG] Writing com/github/masongulu/ModBlocks with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/ModBlockEntities with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/ModCreativeTab with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/ModMenus with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/Commands with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/ComputerMod with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/network/ModPackets with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/PianoButtonGroup$ModifiableScreen with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/DevicePianoButtons with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/ToggleSwitchButton$LabelPosition with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/ToggleSwitchButton$1 with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/PianoButtonGroup$PianoButtonCallback with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/ToggleSwitchButton with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/PianoButtonGroup with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/ToggleSwitchType with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/gui/PianoButtonGroup$PianoButtonEntry with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/screen/ComputerScreen with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/screen/MemorySlot with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/screen/FlashableMemorySlot with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/screen/ComputerMenu with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/block/CableBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/block/ComputerBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/block/entity/ComputerBlockEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/block/entity/ComputerBlockEntity$1 with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/computer/block/entity/IBusProvider with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/screen/FlasherDeviceScreen with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/screen/GenericDeviceScreen with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/screen/FlasherDeviceMenu with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/screen/GenericDeviceMenu with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/MultiplexerDeviceBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/FlasherDeviceBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/RedstoneDeviceBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/GenericDeviceBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/entities/FlasherDeviceBlockEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/entities/GenericDeviceBlockEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/entities/MultiplexerDeviceBlockEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/entities/RedstoneEvent with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/entities/RedstoneDeviceBlockEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/devices/block/entities/GenericDeviceBlockEntity$1 with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/TerminalFont with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/SerialType with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/ISerialPeer with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/screen/SerialTerminalMenu with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/screen/TerminalBuffer with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/screen/SerialTerminalScreen with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/screen/TerminalBuffer$1 with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/screen/TerminalBuffer$ParseState with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/SerialDeviceBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/SerialCableBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/SerialTerminalBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/SerialPeerBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/entity/SerialDeviceBlockEntity$ArgumentParseState with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/entity/SerialDeviceBlockEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/entity/SerialTerminalContainerData with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/entity/SerialPeerBlockEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/entity/SerialTerminalBlockEntity with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/serial/block/entity/SerialDeviceBlockEntity$1 with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/UXN with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/UXNBus with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/UXNExecutor with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/Stack with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/MemoryRegion with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/KeyEvent with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/TraversedBlock with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/SystemDevice with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/BootEvent with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/QueuedEvent with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/UXNEvent with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/devices/FileDev with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/devices/IAttachableDevice with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/devices/IDevice with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/devices/Device with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/core/uxn/devices/CalendarDev with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/item/NetworkDebugItem with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/item/ModItems with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/item/memory/MemoryItem with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/item/memory/SROMItem with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/item/memory/RAMItem with maxs=true frames=true
-[Architectury Transformer DEBUG] Writing com/github/masongulu/item/memory/FileManager with maxs=true frames=true
+[Architectury Transformer DEBUG]  - /home/mason/Documents/Minecraft Mainframes/.gradle/loom-cache/minecraftMaven/net/minecraft/minecraft-merged-81875dc825/1.18.2-loom.mappings.1_18_2.layered+hash.40545-v2/minecraft-merged-81875dc825-1.18.2-loom.mappings.1_18_2.layered+hash.40545-v2.jar
+[Architectury Transformer DEBUG]  - /home/mason/Documents/Minecraft Mainframes/.gradle/loom-cache/remapped_mods/loom_mappings_1_18_2_layered_hash_40545_v2/dev/architectury/architectury/4.12.94/architectury-4.12.94.jar
+[Architectury Transformer] Read classpath in 1.136 s
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/network/ModPackets with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/network/MouseInputHandler with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/network/KeyInputHandler with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/SerialType with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/screen/SerialTerminalMenu with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/screen/SerialTerminalScreen with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/screen/TerminalBuffer with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/screen/TerminalBuffer$1 with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/screen/TerminalBuffer$ParseState with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/TerminalFont with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/ISerialPeer with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/SerialDeviceBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/SerialTerminalBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/SerialCableBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/SerialPeerBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/entity/SerialTerminalContainerData with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/entity/SerialPeerBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/entity/SerialTerminalBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/entity/SerialDeviceBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/entity/SerialDeviceBlockEntity$1 with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/serial/block/entity/SerialDeviceBlockEntity$ArgumentParseState with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/screen/ScreenDeviceScreen with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/screen/ScreenDeviceMenu with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/screen/FlasherDeviceMenu with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/screen/GenericDeviceScreen with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/screen/FlasherDeviceScreen with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/screen/GenericDeviceMenu with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/screen/ScreenBuffer with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/ScreenDeviceBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/DatetimeDeviceBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/MultiplexerDeviceBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/RedstoneDeviceBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/FlasherDeviceBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/GenericDeviceBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/MouseClickEvent with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/MouseMoveEvent with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/ScreenEvent with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/RedstoneEvent with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/ScreenDeviceBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/DatetimeDeviceBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/MultiplexerDeviceBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/FlasherDeviceBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/GenericDeviceBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/GenericDeviceBlockEntity$1 with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/devices/block/entities/RedstoneDeviceBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/ModBlockEntities with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/block/ComputerBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/block/CableBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/block/entity/IBusProvider with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/block/entity/ComputerBlockEntity with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/block/entity/ComputerBlockEntity$1 with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/screen/ComputerScreen with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/screen/ComputerMenu with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/screen/FlashableMemorySlot with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/computer/screen/MemorySlot with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/ModBlocks with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/ModCreativeTab with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/ComputerMod with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/BootEvent with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/KeyEvent with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/SystemDevice with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/QueuedEvent with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/Stack with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/MemoryRegion with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/UXNEvent with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/TraversedBlock with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/UXN with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/UXNBus with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/devices/FileDev with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/devices/IAttachableDevice with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/devices/IDevice with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/devices/Device with maxs=true frames=true
+[Architectury Transformer DEBUG] Writing com/github/shrekshellraiser/core/uxn/devices/CalendarDev with maxs=true frames=true
 [Architectury Transformer DEBUG] Checking whether /mcmf.mixins.json is a mixin config.
 [Architectury Transformer DEBUG] Found mixin config(s): /mcmf.mixins.json
 [Architectury Transformer DEBUG] Injecting mcmf-common-common-refmap.json to /mcmf.mixins.json
-[Architectury Transformer DEBUG] Checking whether /mcmf.mixins.json is a mixin config.
-[Architectury Transformer DEBUG] Found mixin config(s): mcmf.mixins.json
-[Architectury Transformer DEBUG] Injecting MixinConfigs into /META-INF/MANIFEST.MF
-[Architectury Transformer DEBUG] Remapping refmap from intermediary to srg: mcmf-common-common-refmap.json
-[Architectury Transformer DEBUG] Closed File Systems for /home/mason/Documents/Code/Minecraft Mainframes/common/build/libs/mcmf-common-0.0.0-indev0-transformProductionForge.jar
-[Architectury Transformer] Transformed jar with 7 transformer(s) in 2.399 s
-[Architectury Transformer DEBUG] Closed File Systems for /home/mason/Documents/Code/Minecraft Mainframes/common/build/libs/mcmf-common-0.0.0-indev0.jar
+[Architectury Transformer DEBUG] Closed File Systems for /home/mason/Documents/Minecraft Mainframes/common/build/libs/mcmf-common-0.0.0-indev0-transformProductionFabric.jar
+[Architectury Transformer] Transformed jar with 5 transformer(s) in 1.231 s

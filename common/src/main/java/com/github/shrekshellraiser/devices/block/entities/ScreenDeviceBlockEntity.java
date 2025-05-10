@@ -11,11 +11,16 @@ import com.github.shrekshellraiser.devices.screen.ScreenBuffer;
 import com.github.shrekshellraiser.devices.screen.ScreenDeviceMenu;
 import com.github.shrekshellraiser.network.KeyInputHandler;
 import com.github.shrekshellraiser.network.MouseInputHandler;
+import com.github.shrekshellraiser.network.ScreenBufferHandler;
+import com.github.shrekshellraiser.network.ScreenUpdatePacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -25,6 +30,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
 
 import static com.github.shrekshellraiser.ModBlockEntities.SCREEN_DEVICE_BLOCK_ENTITY;
 
@@ -46,6 +53,7 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
     private boolean autoX = false;
     private boolean autoY = false;
     private boolean autoAddr = false;
+    protected boolean runningScreenVector = false;
 
     private void writeWord(int address, int data) {
         bus.writeDev(address, data >> 8);
@@ -58,8 +66,6 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
     private void readState() {
         x = readWord(0x28);
         y = readWord(0x2A);
-        x %= ScreenBuffer.width;
-        y %= ScreenBuffer.height;
         spriteAddr = readWord(0x2c);
         int autoData = bus.readDev(0x26);
         autoX = (autoData & 0b1) > 0;
@@ -67,30 +73,14 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
         autoAddr = (autoData & 0b100) > 0;
     }
 
-    private void auto(boolean pixel, boolean twoBpp, boolean flipX, boolean flipY) {
-
-        if (pixel) {
-            if (autoX) {
-                writeWord(0x28, x + 1);
-            }
-            if (autoY) {
-                writeWord(0x2A, y + 1);
-            }
-
-            readState();
-            return;
-        }
+    private void auto(boolean flipX, boolean flipY) {
         if (autoX) {
-            int sign = flipX ? -8 : 8;
-            writeWord(0x28, x + sign);
+            writeWord(0x28, x + 1);
         }
         if (autoY) {
-            int sign = flipY ? -8 : 8;
-            writeWord(0x2A, y + sign);
+            writeWord(0x2A, y + 1);
         }
-        if (autoAddr) {
-            writeWord(0x2C, spriteAddr + (twoBpp ? 16 : 8));
-        }
+
         readState();
     }
 
@@ -115,7 +105,7 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
-        return new ScreenDeviceMenu(i, inventory, this, buffer);
+        return new ScreenDeviceMenu(i, inventory, this, null);
     }
 
     @Override
@@ -127,13 +117,14 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
         buffer.setColors(colors);
     }
 
+    private boolean screenDirty = false;
     private void writePixel(boolean fill, int layer, boolean flipY, boolean flipX, byte color) {
         readState();
         if (fill) {
             int minX = flipX ? 0 : this.x;
-            int maxX = flipX ? this.x : ScreenBuffer.width;
+            int maxX = flipX ? this.x : buffer.getWidth();
             int minY = flipY ? 0 : this.y;
-            int maxY = flipY ? this.y : ScreenBuffer.height;
+            int maxY = flipY ? this.y : buffer.getHeight();
             for (int x = minX; x < maxX; x++) {
                 for (int y = minY; y < maxY; y++) {
                     buffer.setPixel(layer, x, y, color);
@@ -141,8 +132,9 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
             }
         } else {
             buffer.setPixel(layer, x, y, color);
-            auto(true, false, flipX, flipY);
+            auto(flipX, flipY);
         }
+        screenDirty = true;
     }
     private void writePixel(int v) {
         boolean fill  = (v & 0b10000000) > 0;
@@ -210,6 +202,7 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
         if (autoX) writeWord(0x28, x + dx * fx);
         if (autoY) writeWord(0x2A, y + dy * fy);
         if (autoAddr) writeWord(0x2C, address);
+        screenDirty = true;
     }
     private void writeSprite(int v) {
         boolean twoBpp    = (v & 0b10000000) > 0;
@@ -222,6 +215,8 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
     private void writeScreen(int address) {
         int v = bus.readDev(address);
         switch (address) {
+            case 0x23 -> buffer.setWidth(bus.readDevWord(0x22));
+            case 0x25 -> buffer.setHeight(bus.readDevWord(0x24));
             case 0x2e -> writePixel(v);
             case 0x2f -> writeSprite(v);
         }
@@ -239,10 +234,10 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
     private void readScreen(int address) {
         switch (address) {
             case 0x22, 0x23 -> {
-                writeWord(0x22, ScreenBuffer.width);
+                writeWord(0x22, buffer.getWidth());
             }
             case 0x24, 0x25 -> {
-                writeWord(0x24, ScreenBuffer.height);
+                writeWord(0x24, buffer.getHeight());
             }
         }
     }
@@ -277,12 +272,22 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
 
 
     public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T t) {
-        ((ScreenDeviceBlockEntity)t).tick(level, blockPos, blockState);
+        if (!(level instanceof ServerLevel)) return;
+        ((ScreenDeviceBlockEntity)t).tick((ServerLevel) level, blockPos, blockState);
     }
-    private void tick(Level level, BlockPos pos, BlockState state) {
+    private void tick(ServerLevel level, BlockPos pos, BlockState state) {
         if (this.bus != null && !this.bus.isPaused()) {
             for (int i = 0; i < 3; i++) {
                 this.bus.queueEvent(new ScreenEvent(readWord(0x20)));
+            }
+            if (screenDirty && !runningScreenVector) {
+                ArrayList<ServerPlayer> players = new ArrayList<>();
+                for (ServerPlayer p : level.players()) {
+                    if (p.containerMenu instanceof ScreenDeviceMenu m && m.getBlockEntity() == this) {
+                        players.add(p);
+                    }
+                }
+                ScreenUpdatePacket.send(players, buffer);
             }
         }
     }
@@ -304,6 +309,7 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
         if (this.bus == null) return;
         this.bus.queueEvent(new MouseClickEvent(x, y, i, false));
     }
+
 }
 
 class ScreenEvent implements UXNEvent {

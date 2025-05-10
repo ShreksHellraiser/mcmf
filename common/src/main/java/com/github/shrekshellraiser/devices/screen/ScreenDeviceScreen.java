@@ -17,8 +17,9 @@ public class ScreenDeviceScreen extends AbstractContainerScreen<ScreenDeviceMenu
     public ScreenDeviceScreen(ScreenDeviceMenu abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
         menu = abstractContainerMenu;
-        this.width = 320;
-        this.height = 200;
+        this.imageWidth = (int) (menu.buffer.getWidth() * ScreenBuffer.scale);
+        this.imageHeight = (int) (menu.buffer.getHeight() * ScreenBuffer.scale);
+        init();
     }
 
     @Override
@@ -31,6 +32,9 @@ public class ScreenDeviceScreen extends AbstractContainerScreen<ScreenDeviceMenu
 //        RenderSystem.setShader(GameRenderer::getPositionTexShader);
 //        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 //        RenderSystem.setShaderTexture(0, this.texture);
+        this.imageWidth = (int) (menu.buffer.getWidth() * ScreenBuffer.scale);
+        this.imageHeight = (int) (menu.buffer.getHeight() * ScreenBuffer.scale);
+        init();
         int k = this.leftPos;
         int l = this.topPos;
 //        assert minecraft != null;
@@ -64,7 +68,7 @@ public class ScreenDeviceScreen extends AbstractContainerScreen<ScreenDeviceMenu
     public void mouseMoved(double d, double e) {
         int x = (int) ((d - this.leftPos) / ScreenBuffer.scale);
         int y = (int) ((e - this.topPos) / ScreenBuffer.scale);
-        if (x < 0 || y < 0 || x >= ScreenBuffer.width || y >= ScreenBuffer.height) return;
+        if (x < 0 || y < 0 || x >= menu.buffer.getWidth() || y >= menu.buffer.getHeight()) return;
         MouseInputPacket.sendMove(x, y);
     }
 
@@ -72,7 +76,7 @@ public class ScreenDeviceScreen extends AbstractContainerScreen<ScreenDeviceMenu
     public boolean mouseClicked(double d, double e, int i) {
         int x = (int) ((d - this.leftPos) / ScreenBuffer.scale);
         int y = (int) ((e - this.topPos) / ScreenBuffer.scale);
-        if (x < 0 || y < 0 || x >= ScreenBuffer.width || y >= ScreenBuffer.height) return false;
+        if (x < 0 || y < 0 || x >= menu.buffer.getWidth() || y >= menu.buffer.getHeight()) return false;
         MouseInputPacket.sendClick(x, y, i, true);
         return true;
     }
@@ -81,7 +85,7 @@ public class ScreenDeviceScreen extends AbstractContainerScreen<ScreenDeviceMenu
     public boolean mouseReleased(double d, double e, int i) {
         int x = (int) ((d - this.leftPos) / ScreenBuffer.scale);
         int y = (int) ((e - this.topPos) / ScreenBuffer.scale);
-        if (x < 0 || y < 0 || x >= ScreenBuffer.width || y >= ScreenBuffer.height) return false;
+        if (x < 0 || y < 0 || x >= menu.buffer.getWidth() || y >= menu.buffer.getHeight()) return false;
         MouseInputPacket.sendClick(x, y, i, false);
         return true;
     }
