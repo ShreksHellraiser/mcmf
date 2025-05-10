@@ -38,7 +38,7 @@ public class ScreenBuffer {
         height = buf.readInt();
         colors = buf.readVarIntArray(4);
         int[] buffer = buf.readVarIntArray(BUFFER_SIZE);
-        decode(buffer);
+        decodeRLE(buffer);
     }
     public int getWidth() {
         return width;
@@ -63,7 +63,7 @@ public class ScreenBuffer {
         byte fg = layer1[idx];
         return (fg == 0) ? layer0[idx] : fg;
     }
-    private int[] encode() {
+    private int[] encodeRLE() {
         List<Integer> buffer = new ArrayList<>(BUFFER_SIZE);
         int bufIndex = 0;
         int pixelIndex = 0;
@@ -120,10 +120,7 @@ public class ScreenBuffer {
         }
         return buffer.stream().mapToInt(Integer::intValue).toArray();
     }
-    public void encode(FriendlyByteBuf buf) {
-        buf.writeInt(width);
-        buf.writeInt(height);
-        buf.writeVarIntArray(colors);
+    private int[] encodePack() {
         int area = width * height;
         int bufferSize = (area + BIT_DEPTH - 1) / BIT_DEPTH; // Round up division
         int[] buffer = new int[bufferSize];
@@ -139,10 +136,16 @@ public class ScreenBuffer {
             }
             buffer[i] = val;
         }
-        buf.writeVarIntArray(buffer);
+        return buffer;
+    }
+    public void encode(FriendlyByteBuf buf) {
+        buf.writeInt(width);
+        buf.writeInt(height);
+        buf.writeVarIntArray(colors);
+        buf.writeVarIntArray(encodeRLE());
     }
 
-    private void decode(int[] buffer) {
+    private void decodePack(int[] buffer) {
         int width = getWidth();
         int height = getHeight();
         int area = width * height;
@@ -156,7 +159,7 @@ public class ScreenBuffer {
         }  // Stop if we've written all pixels
     }
 
-    private void decodeFancy(int[] buffer) {
+    private void decodeRLE(int[] buffer) {
         int bufIndex = 0;
         int pixelIndex = 0;
         int width = getWidth();
@@ -180,7 +183,7 @@ public class ScreenBuffer {
                 // Unpack 15 pixels
                 int remainingPixels = Math.min(15, area - pixelIndex);
                 for (int i = 0; i < remainingPixels; i++) {
-                    int pixel = (v >> (30 - i * 2)) & 0b11;
+                    int pixel = (v >> (28 - i * 2)) & 0b11;
                     layer0[pixelIndex++] = (byte) pixel;
                 }
             }
