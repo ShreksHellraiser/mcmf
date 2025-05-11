@@ -1,5 +1,6 @@
 package com.github.shrekshellraiser.devices.block.entities;
 
+import com.github.shrekshellraiser.core.uxn.BasicUXNEvent;
 import com.github.shrekshellraiser.core.uxn.UXN;
 import com.github.shrekshellraiser.core.uxn.UXNBus;
 import com.github.shrekshellraiser.core.uxn.UXNEvent;
@@ -122,7 +123,7 @@ public class RedstoneDeviceBlockEntity extends GenericDeviceBlockEntity implemen
     }
 }
 
-class RedstoneEvent implements UXNEvent {
+class RedstoneEvent extends BasicUXNEvent {
     int deviceNumber;
     RedstoneEvent(int deviceNumber) {
         this.deviceNumber = deviceNumber;

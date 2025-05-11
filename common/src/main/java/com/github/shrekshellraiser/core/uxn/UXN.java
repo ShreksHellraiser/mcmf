@@ -28,6 +28,8 @@ public class UXN {
     public boolean _enable_debug = false;
     public static final int MAX_QUEUE = 256;
 
+    private QueuedEvent runningVector;
+
     public String toString() {
         return wst + "\n" + rst;
     }
@@ -92,11 +94,18 @@ public class UXN {
         return eventQueue.size();
     }
 
+    private void stopVector() {
+        if (runningVector != null) {
+            runningVector.event.post(runningVector.bus);
+            runningVector = null;
+        }
+        running = false;
+    }
     // execute 1 instruction
     private void step() {
         cycles++;
         if (pc == 0) {
-            running = false;
+            stopVector();
             return;
         }
         int r, t, n, l;
@@ -111,7 +120,7 @@ public class UXN {
         case 0x00: case 0x20:
             switch(ins) {
             case 0x00: // BRK
-                running = false;
+                stopVector();
                 return;
             case 0x20: // JCI
                 t = s.getT(false);
@@ -402,6 +411,7 @@ public class UXN {
                 // check for vector in the queue
                 var event = eventQueue.poll();
                 if (event == null) return;
+                runningVector = event;
                 event.event.handle(event.bus);
                 running = true;
             }

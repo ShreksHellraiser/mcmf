@@ -311,7 +311,7 @@ public class UXNBus {
     }
 
     private void spawnEventParticle(boolean success) {
-        SimpleParticleType particleType = success ? ParticleTypes.ELECTRIC_SPARK : ParticleTypes.SMOKE;
+        SimpleParticleType particleType = success ? ParticleTypes.ENCHANT : ParticleTypes.SMOKE;
         if (blockEntity.getLevel() instanceof ServerLevel sLevel) {
             BlockPos pos = blockEntity.getBlockPos();
             Direction facing = blockEntity.getBlockState().getValue(ComputerBlock.FACING);
@@ -401,7 +401,7 @@ public class UXNBus {
     }
 }
 
-class BootEvent implements UXNEvent {
+class BootEvent extends BasicUXNEvent {
     @Override
     public void handle(UXNBus bus) {
         bus.getUxn().pc = 0x100;

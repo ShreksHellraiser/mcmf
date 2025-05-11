@@ -1,17 +1,12 @@
 package com.github.shrekshellraiser.devices.block.entities;
 
-import com.github.shrekshellraiser.computer.block.entity.ComputerBlockEntity;
-import com.github.shrekshellraiser.core.uxn.KeyEvent;
-import com.github.shrekshellraiser.core.uxn.MemoryRegion;
-import com.github.shrekshellraiser.core.uxn.UXNBus;
-import com.github.shrekshellraiser.core.uxn.UXNEvent;
+import com.github.shrekshellraiser.core.uxn.*;
 import com.github.shrekshellraiser.core.uxn.devices.IAttachableDevice;
 import com.github.shrekshellraiser.core.uxn.devices.IDevice;
 import com.github.shrekshellraiser.devices.screen.ScreenBuffer;
 import com.github.shrekshellraiser.devices.screen.ScreenDeviceMenu;
 import com.github.shrekshellraiser.network.KeyInputHandler;
 import com.github.shrekshellraiser.network.MouseInputHandler;
-import com.github.shrekshellraiser.network.ScreenBufferHandler;
 import com.github.shrekshellraiser.network.ScreenUpdatePacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,12 +15,10 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -86,6 +79,7 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
 
     private UXNBus bus;
     private final ScreenBuffer buffer = new ScreenBuffer();
+    private final ScreenUpdatePacket packet = new ScreenUpdatePacket(buffer);
 
     public ScreenDeviceBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(SCREEN_DEVICE_BLOCK_ENTITY.get(), blockPos, blockState);
@@ -105,6 +99,7 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
+        screenRefreshed = true; // send packet to newly opened screen
         return new ScreenDeviceMenu(i, inventory, this, null);
     }
 
@@ -270,6 +265,13 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
         return "Screen Device";
     }
 
+    private boolean screenRefreshed = false;
+    public void refresh() {
+        packet.refresh();
+        screenDirty = false;
+        screenRefreshed = true;
+    }
+
 
     public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T t) {
         if (!(level instanceof ServerLevel)) return;
@@ -278,16 +280,18 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
     private void tick(ServerLevel level, BlockPos pos, BlockState state) {
         if (this.bus != null && !this.bus.isPaused()) {
             for (int i = 0; i < 3; i++) {
-                this.bus.queueEvent(new ScreenEvent(readWord(0x20)));
+                this.bus.queueEvent(new ScreenEvent(readWord(0x20), this));
             }
-            if (screenDirty && !runningScreenVector) {
+            if (screenDirty & !runningScreenVector) refresh();
+            if (screenRefreshed) {
                 ArrayList<ServerPlayer> players = new ArrayList<>();
                 for (ServerPlayer p : level.players()) {
                     if (p.containerMenu instanceof ScreenDeviceMenu m && m.getBlockEntity() == this) {
                         players.add(p);
                     }
                 }
-                ScreenUpdatePacket.send(players, buffer);
+                packet.send(players);
+                screenRefreshed = false;
             }
         }
     }
@@ -314,16 +318,25 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
 
 class ScreenEvent implements UXNEvent {
     private final int address;
-    public ScreenEvent(int address) {
+    private final ScreenDeviceBlockEntity blockEntity;
+    public ScreenEvent(int address, ScreenDeviceBlockEntity blockEntity) {
         this.address = address;
+        this.blockEntity = blockEntity;
     }
     @Override
     public void handle(UXNBus bus) {
         bus.getUxn().pc = address;
+        this.blockEntity.runningScreenVector = true;
+    }
+
+    @Override
+    public void post(UXNBus bus) {
+        this.blockEntity.runningScreenVector = false;
+        this.blockEntity.refresh();
     }
 }
 
-class MouseMoveEvent implements UXNEvent {
+class MouseMoveEvent extends BasicUXNEvent {
     private final int x;
     private final int y;
 
@@ -340,7 +353,7 @@ class MouseMoveEvent implements UXNEvent {
     }
 }
 
-class MouseClickEvent implements UXNEvent {
+class MouseClickEvent extends BasicUXNEvent {
     private final int x;
     private final int y;
     private final int button;

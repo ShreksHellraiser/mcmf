@@ -1,7 +1,7 @@
 package com.github.shrekshellraiser.core.uxn;
 
 
-public class KeyEvent implements UXNEvent {
+public class KeyEvent extends BasicUXNEvent {
     char ch;
     byte type;
     int device;

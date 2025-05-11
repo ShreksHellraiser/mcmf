@@ -156,7 +156,7 @@ public class ScreenBuffer {
                 if (index >= area) return;
                 layer0[index] = (byte) ((pix >> (di * 2)) & 0x3);
             }
-        }  // Stop if we've written all pixels
+        }
     }
 
     private void decodeRLE(int[] buffer) {
