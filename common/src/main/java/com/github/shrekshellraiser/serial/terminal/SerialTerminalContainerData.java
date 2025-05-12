@@ -1,4 +1,4 @@
-package com.github.shrekshellraiser.serial.block.entity;
+package com.github.shrekshellraiser.serial.terminal;
 
 import net.minecraft.world.inventory.ContainerData;
 

@@ -1,6 +1,6 @@
-package com.github.shrekshellraiser.serial.block;
+package com.github.shrekshellraiser.serial.terminal;
 
-import com.github.shrekshellraiser.serial.block.entity.SerialTerminalBlockEntity;
+import com.github.shrekshellraiser.api.serial.SerialPeerBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;

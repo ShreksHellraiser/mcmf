@@ -2,7 +2,7 @@ package com.github.shrekshellraiser.computer.screen;
 
 import com.github.shrekshellraiser.gui.ToggleSwitchButton;
 import com.github.shrekshellraiser.gui.ToggleSwitchType;
-import com.github.shrekshellraiser.serial.TerminalFont;
+import com.github.shrekshellraiser.serial.terminal.TerminalFont;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;

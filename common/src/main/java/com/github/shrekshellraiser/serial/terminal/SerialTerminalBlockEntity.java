@@ -1,11 +1,8 @@
-package com.github.shrekshellraiser.serial.block.entity;
+package com.github.shrekshellraiser.serial.terminal;
 
 import com.github.shrekshellraiser.network.KeyInputHandler;
-import com.github.shrekshellraiser.network.MouseInputHandler;
-import com.github.shrekshellraiser.serial.SerialType;
-import com.github.shrekshellraiser.serial.TerminalFont;
-import com.github.shrekshellraiser.serial.screen.SerialTerminalMenu;
-import com.github.shrekshellraiser.serial.screen.TerminalBuffer;
+import com.github.shrekshellraiser.api.serial.SerialType;
+import com.github.shrekshellraiser.api.serial.SerialPeerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -19,7 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 import static com.github.shrekshellraiser.ModBlockEntities.SERIAL_TERMINAL_BLOCK_ENTITY;
-import static com.github.shrekshellraiser.serial.block.entity.SerialDeviceBlockEntity.ARGUMENT_MODE_SEQUENCE;
+import static com.github.shrekshellraiser.devices.serial.SerialDeviceBlockEntity.ARGUMENT_MODE_SEQUENCE;
 
 public class SerialTerminalBlockEntity extends SerialPeerBlockEntity implements MenuProvider, KeyInputHandler {
     // Terminal Width = 240

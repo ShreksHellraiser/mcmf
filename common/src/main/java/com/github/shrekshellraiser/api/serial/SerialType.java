@@ -1,4 +1,4 @@
-package com.github.shrekshellraiser.serial;
+package com.github.shrekshellraiser.api.serial;
 
 public enum SerialType {
     NO_QUEUE(0),

@@ -2,13 +2,12 @@ package com.github.shrekshellraiser;
 
 import com.github.shrekshellraiser.item.ModItems;
 import com.github.shrekshellraiser.network.ModPackets;
-import com.github.shrekshellraiser.serial.ISerialPeer;
-import com.github.shrekshellraiser.serial.block.entity.SerialPeerBlockEntity;
+import com.github.shrekshellraiser.api.serial.ISerialPeer;
+import com.github.shrekshellraiser.api.serial.SerialPeerBlockEntity;
 import com.github.shrekshellraiser.core.uxn.UXNBus;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.BlockEvent;
 import dev.architectury.platform.Platform;
-import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
 import net.fabricmc.api.EnvType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

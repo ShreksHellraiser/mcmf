@@ -1,10 +1,7 @@
-package com.github.shrekshellraiser.serial.screen;
+package com.github.shrekshellraiser.serial.terminal;
 
 import com.github.shrekshellraiser.ModMenus;
 import com.github.shrekshellraiser.network.KeyInputHandler;
-import com.github.shrekshellraiser.network.MouseInputHandler;
-import com.github.shrekshellraiser.serial.block.entity.SerialTerminalBlockEntity;
-import com.github.shrekshellraiser.serial.block.entity.SerialTerminalContainerData;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;

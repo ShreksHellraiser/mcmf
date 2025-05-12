@@ -1,6 +1,4 @@
-package com.github.shrekshellraiser.serial.screen;
-
-import com.github.shrekshellraiser.serial.block.entity.SerialTerminalContainerData;
+package com.github.shrekshellraiser.serial.terminal;
 
 import java.util.ArrayList;
 import java.util.Arrays;

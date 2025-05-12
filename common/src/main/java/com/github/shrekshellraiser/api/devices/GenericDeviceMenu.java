@@ -1,4 +1,4 @@
-package com.github.shrekshellraiser.devices.api;
+package com.github.shrekshellraiser.api.devices;
 
 import com.github.shrekshellraiser.ModMenus;
 import net.minecraft.world.Container;

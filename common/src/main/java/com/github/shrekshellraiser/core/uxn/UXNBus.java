@@ -6,7 +6,7 @@ import com.github.shrekshellraiser.core.uxn.devices.IAttachableDevice;
 import com.github.shrekshellraiser.devices.screen.ScreenDeviceBlockEntity;
 import com.github.shrekshellraiser.item.memory.MemoryItem;
 import com.github.shrekshellraiser.core.uxn.devices.IDevice;
-import com.github.shrekshellraiser.serial.block.entity.SerialDeviceBlockEntity;
+import com.github.shrekshellraiser.devices.serial.SerialDeviceBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;

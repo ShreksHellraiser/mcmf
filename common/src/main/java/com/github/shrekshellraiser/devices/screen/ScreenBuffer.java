@@ -122,74 +122,12 @@ public class ScreenBuffer {
         }
         return buffer.stream().mapToInt(Integer::intValue).toArray();
     }
-    private int[] encodePack() {
-        int area = width * height;
-        int bufferSize = (area + BIT_DEPTH - 1) / BIT_DEPTH; // Round up division
-        int[] buffer = new int[bufferSize];
 
-        for (int i = 0; i < bufferSize; i++) {
-            int val = 0;
-            for (int di = 0; di < BIT_DEPTH; di++) {
-                int index = i * BIT_DEPTH + di;
-                if (index < area) {
-                    val <<= 2;
-                    val |= (getPixelColor(index) & 0x3);
-                }
-            }
-            buffer[i] = val;
-        }
-        return buffer;
-    }
     public void encode(FriendlyByteBuf buf) {
         buf.writeInt(width);
         buf.writeInt(height);
         buf.writeVarIntArray(colors);
         buf.writeVarIntArray(encodeRLE());
-    }
-
-    private void decodePack(int[] buffer) {
-        int width = getWidth();
-        int height = getHeight();
-        int area = width * height;
-        for (int i = 0; i < buffer.length; i++) {
-            int pix = buffer[i];
-            for (int di = 0; di < BIT_DEPTH; di++) {
-                int index = i * BIT_DEPTH + (BIT_DEPTH - 1 - di);
-                if (index >= area) return;
-                layer0[index] = (byte) ((pix >> (di * 2)) & 0x3);
-            }
-        }
-    }
-
-    private void decodeRLE(int[] buffer) {
-        int bufIndex = 0;
-        int pixelIndex = 0;
-        int width = getWidth();
-        int height = getHeight();
-        int area = width * height;
-        while (pixelIndex < area) {
-            if (bufIndex >= buffer.length) break;
-            int v = buffer[bufIndex++];
-
-            if ((v & 0x80000000) == 0x80000000) {
-                // RLE mode
-                int color = (v & 0x30000000) >> 28;
-                int length = v & 0x0FFFFFFF;
-                if (pixelIndex + length > area) {
-                    length = area - pixelIndex;
-                }
-                for (int i = 0; i < length; i++) {
-                    layer0[pixelIndex++] = (byte) color;
-                }
-            } else {
-                // Unpack 15 pixels
-                int remainingPixels = Math.min(15, area - pixelIndex);
-                for (int i = 0; i < remainingPixels; i++) {
-                    int pixel = (v >> (28 - i * 2)) & 0b11;
-                    layer0[pixelIndex++] = (byte) pixel;
-                }
-            }
-        }
     }
 
 
@@ -215,19 +153,6 @@ public class ScreenBuffer {
 
     public void render(Matrix4f matrix4f, int k, int l) {
         renderBuffer(matrix4f, k, l);
-//        for (int i = 0; i < width * height; i++) {
-//            int x = i % width;
-//            int y = i / width;
-//            int color = colorList[this.getPixel(i)] | 0xff000000;
-//            float minX = k + (x * scale);
-//            float maxX = minX + scale;
-//            float minY = l + (y * scale);
-//            float maxY = minY + scale;
-//            bufferBuilder.vertex(matrix4f, minX,  maxY, 0.0F).color(color).endVertex();
-//            bufferBuilder.vertex(matrix4f, maxX,  maxY, 0.0F).color(color).endVertex();
-//            bufferBuilder.vertex(matrix4f, maxX,  minY, 0.0F).color(color).endVertex();
-//            bufferBuilder.vertex(matrix4f, minX,  minY, 0.0F).color(color).endVertex();
-//        }
     }
 
     private void rect(int x0, int y0, int x1, int y1, int color, VertexConsumer bufferBuilder, Matrix4f matrix4f, int k, int l) {

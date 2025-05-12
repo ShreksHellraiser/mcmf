@@ -1,10 +1,8 @@
-package com.github.shrekshellraiser.serial.screen;
+package com.github.shrekshellraiser.serial.terminal;
 
 import com.github.shrekshellraiser.gui.ToggleSwitchButton;
 import com.github.shrekshellraiser.gui.ToggleSwitchType;
 import com.github.shrekshellraiser.network.KeyInputPacket;
-import com.github.shrekshellraiser.serial.TerminalFont;
-import com.github.shrekshellraiser.serial.block.entity.SerialTerminalContainerData;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;

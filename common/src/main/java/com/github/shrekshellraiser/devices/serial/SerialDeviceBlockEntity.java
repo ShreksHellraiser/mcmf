@@ -1,11 +1,11 @@
-package com.github.shrekshellraiser.serial.block.entity;
+package com.github.shrekshellraiser.devices.serial;
 
-import com.github.shrekshellraiser.devices.api.GenericDeviceBlockEntity;
-import com.github.shrekshellraiser.serial.ISerialPeer;
+import com.github.shrekshellraiser.api.devices.GenericDeviceBlockEntity;
+import com.github.shrekshellraiser.api.serial.ISerialPeer;
 import com.github.shrekshellraiser.core.uxn.UXNBus;
 import com.github.shrekshellraiser.core.uxn.KeyEvent;
-import com.github.shrekshellraiser.serial.SerialType;
-import com.github.shrekshellraiser.serial.block.SerialDeviceBlock;
+import com.github.shrekshellraiser.api.serial.SerialType;
+import com.github.shrekshellraiser.api.serial.SerialPeerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;

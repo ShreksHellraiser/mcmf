@@ -1,7 +1,7 @@
 package com.github.shrekshellraiser.devices.screen;
 
 import com.github.shrekshellraiser.ModBlockEntities;
-import com.github.shrekshellraiser.devices.api.GenericDeviceBlock;
+import com.github.shrekshellraiser.api.devices.GenericDeviceBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;

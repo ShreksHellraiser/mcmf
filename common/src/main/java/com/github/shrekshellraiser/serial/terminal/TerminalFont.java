@@ -1,4 +1,4 @@
-package com.github.shrekshellraiser.serial;
+package com.github.shrekshellraiser.serial.terminal;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.Screen;

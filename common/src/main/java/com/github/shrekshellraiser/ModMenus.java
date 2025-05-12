@@ -1,13 +1,13 @@
 package com.github.shrekshellraiser;
 
 import com.github.shrekshellraiser.computer.screen.*;
-import com.github.shrekshellraiser.devices.api.GenericDeviceMenu;
-import com.github.shrekshellraiser.devices.api.GenericDeviceScreen;
+import com.github.shrekshellraiser.api.devices.GenericDeviceMenu;
+import com.github.shrekshellraiser.api.devices.GenericDeviceScreen;
 import com.github.shrekshellraiser.devices.flasher.FlasherDeviceMenu;
 import com.github.shrekshellraiser.devices.flasher.FlasherDeviceScreen;
 import com.github.shrekshellraiser.devices.screen.*;
-import com.github.shrekshellraiser.serial.screen.SerialTerminalMenu;
-import com.github.shrekshellraiser.serial.screen.SerialTerminalScreen;
+import com.github.shrekshellraiser.serial.terminal.SerialTerminalMenu;
+import com.github.shrekshellraiser.serial.terminal.SerialTerminalScreen;
 import dev.architectury.platform.Platform;
 import dev.architectury.registry.menu.MenuRegistry;
 import dev.architectury.registry.registries.DeferredRegister;

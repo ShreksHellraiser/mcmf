@@ -1,6 +1,5 @@
-package com.github.shrekshellraiser.serial.block.entity;
+package com.github.shrekshellraiser.api.serial;
 
-import com.github.shrekshellraiser.serial.ISerialPeer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;

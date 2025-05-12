@@ -4,7 +4,7 @@ import com.github.shrekshellraiser.core.uxn.BasicUXNEvent;
 import com.github.shrekshellraiser.core.uxn.UXN;
 import com.github.shrekshellraiser.core.uxn.UXNBus;
 import com.github.shrekshellraiser.core.uxn.devices.IDevice;
-import com.github.shrekshellraiser.devices.api.GenericDeviceBlockEntity;
+import com.github.shrekshellraiser.api.devices.GenericDeviceBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
