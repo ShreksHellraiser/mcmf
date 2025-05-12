@@ -310,27 +310,6 @@ public class UXNBus {
 //        deviceEntities.clear();
     }
 
-    private void spawnEventParticle(boolean success) {
-        SimpleParticleType particleType = success ? ParticleTypes.ENCHANT : ParticleTypes.SMOKE;
-        if (blockEntity.getLevel() instanceof ServerLevel sLevel) {
-            BlockPos pos = blockEntity.getBlockPos();
-            Direction facing = blockEntity.getBlockState().getValue(ComputerBlock.FACING);
-            float offset = 0.51f;
-            float horizontalOffset = (float) ((Math.random() - 0.5f) * 0.8f);
-            int stepX = facing.getStepX();
-            int stepY = facing.getStepY();
-            int stepZ = facing.getStepZ();
-            float x = pos.getX() + 0.5f + stepX * offset + stepZ * horizontalOffset;
-            float y = pos.getY() + 0.5f + stepY * offset;
-            float z = pos.getZ() + 0.5f + stepZ * offset + stepX * horizontalOffset;
-            float x1 = (1 - stepX) * 0.0f;
-            float y1 = (1 - stepY) * 0.0f;
-            float z2 = (1 - stepZ) * 0.0f;
-            float speed = 0.5f;
-            sLevel.sendParticles(particleType, x, y, z, 0, x1,y1,z2, speed);
-        }
-    }
-
     public void queueEvent(UXNEvent event, UXNBus bus) {
         if (parent != null) {
             parent.queueEvent(event, this);
@@ -342,7 +321,9 @@ public class UXNBus {
                 if (ke.type == 0x04) uxn.paused = paused;
                 // of course as long as the user isn't asking for it to be paused.
             }
-            spawnEventParticle(uxn.queueEvent(event, this));
+            if (blockEntity instanceof ComputerBlockEntity ce) {
+                ce.spawnEventParticle(uxn.queueEvent(event, this));
+            }
         }
     }
     public void queueEvent(UXNEvent event) {

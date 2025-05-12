@@ -7,6 +7,9 @@ import com.github.shrekshellraiser.serial.block.entity.SerialPeerBlockEntity;
 import com.github.shrekshellraiser.core.uxn.UXNBus;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.BlockEvent;
+import dev.architectury.platform.Platform;
+import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
+import net.fabricmc.api.EnvType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -58,5 +61,9 @@ public final class ComputerMod {
         ModMenus.register();
         ModPackets.register();
         registerEvents();
+
+        if (Platform.getEnv() == EnvType.CLIENT) {
+            ModBlockEntityRenderers.register();
+        }
     }
 }

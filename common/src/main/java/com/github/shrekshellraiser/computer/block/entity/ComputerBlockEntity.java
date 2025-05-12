@@ -7,9 +7,12 @@ import com.github.shrekshellraiser.core.uxn.UXNBus;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -30,6 +33,16 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
     public static final int STRING_LENGTH = "WST 00 00 00 00 00 00 00 00 <".length(); // 29 characters
     public static final int DATA_START = STRING_LENGTH * 2;
     public static final int DATA_LENGTH = DATA_START + 5;
+    private static final int CIRCLE_ITERS = 256;
+    private static final float[] COS_LUT = new float[CIRCLE_ITERS];
+    private static final float[] SIN_LUT = new float[CIRCLE_ITERS];
+    static {
+        for (int i = 0; i < CIRCLE_ITERS; i++) {
+            float angle = (float) (i * 2 * Math.PI / CIRCLE_ITERS);
+            COS_LUT[i] = (float) Math.cos(angle);
+            SIN_LUT[i] = (float) Math.sin(angle);
+        }
+    }
     private final UXNBus bus;
     private final ContainerData data = new ContainerData() {
         private String rst = "RST 00 00 00 00 00 00 00 00|<";
@@ -103,6 +116,22 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
         if (bus.getUxn() == null) {
             // this will register the bus on this computer
             bus.startup();
+        }
+    }
+
+    private int particle = 0;
+    public void spawnEventParticle(boolean success) {
+        SimpleParticleType particleType = success ? ParticleTypes.ENCHANT : ParticleTypes.SMOKE;
+        if (getLevel() instanceof ServerLevel sLevel) {
+            BlockPos pos = getBlockPos();
+            float radius = 0.3f;
+            float y = pos.getY() + 1f;
+            particle %= CIRCLE_ITERS;
+            float x = pos.getX() + radius * COS_LUT[particle] + 0.5f;
+            float z = pos.getZ() + radius * SIN_LUT[particle] + 0.5f;
+            particle++;
+            float speed = 0.5f;
+            sLevel.sendParticles(particleType, x, y, z, 0, 0.0f, 0.0f, 0.0f, speed);
         }
     }
 
