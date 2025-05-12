@@ -1,7 +1,6 @@
 package com.github.shrekshellraiser.devices.screen;
 
 import com.github.shrekshellraiser.ModMenus;
-import com.github.shrekshellraiser.devices.block.entities.ScreenDeviceBlockEntity;
 import com.github.shrekshellraiser.network.KeyInputHandler;
 import com.github.shrekshellraiser.network.MouseInputHandler;
 import com.github.shrekshellraiser.network.ScreenBufferHandler;
@@ -10,7 +9,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.SimpleContainerData;
 
 public class ScreenDeviceMenu extends AbstractContainerMenu implements KeyInputHandler, MouseInputHandler, ScreenBufferHandler {
     private final ScreenDeviceBlockEntity blockEntity;

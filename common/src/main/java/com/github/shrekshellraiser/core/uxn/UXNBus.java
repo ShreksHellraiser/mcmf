@@ -1,18 +1,15 @@
 package com.github.shrekshellraiser.core.uxn;
 
-import com.github.shrekshellraiser.computer.block.ComputerBlock;
 import com.github.shrekshellraiser.computer.block.entity.ComputerBlockEntity;
 import com.github.shrekshellraiser.computer.block.entity.IBusProvider;
 import com.github.shrekshellraiser.core.uxn.devices.IAttachableDevice;
-import com.github.shrekshellraiser.devices.block.entities.ScreenDeviceBlockEntity;
+import com.github.shrekshellraiser.devices.screen.ScreenDeviceBlockEntity;
 import com.github.shrekshellraiser.item.memory.MemoryItem;
 import com.github.shrekshellraiser.core.uxn.devices.IDevice;
 import com.github.shrekshellraiser.serial.block.entity.SerialDeviceBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;

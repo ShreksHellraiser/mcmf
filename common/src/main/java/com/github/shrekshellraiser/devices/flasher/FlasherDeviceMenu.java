@@ -1,7 +1,7 @@
-package com.github.shrekshellraiser.devices.screen;
+package com.github.shrekshellraiser.devices.flasher;
 
 import com.github.shrekshellraiser.computer.screen.FlashableMemorySlot;
-import com.github.shrekshellraiser.devices.block.entities.FlasherDeviceBlockEntity;
+import com.github.shrekshellraiser.devices.api.GenericDeviceMenu;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;

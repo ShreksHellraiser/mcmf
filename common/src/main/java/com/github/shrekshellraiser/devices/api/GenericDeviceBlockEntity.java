@@ -1,7 +1,6 @@
-package com.github.shrekshellraiser.devices.block.entities;
+package com.github.shrekshellraiser.devices.api;
 
 import com.github.shrekshellraiser.core.uxn.devices.IAttachableDevice;
-import com.github.shrekshellraiser.devices.screen.GenericDeviceMenu;
 import com.github.shrekshellraiser.core.uxn.UXNBus;
 import com.github.shrekshellraiser.core.uxn.devices.IDevice;
 import net.minecraft.core.BlockPos;

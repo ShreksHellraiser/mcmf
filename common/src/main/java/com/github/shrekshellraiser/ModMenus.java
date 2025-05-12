@@ -1,6 +1,10 @@
 package com.github.shrekshellraiser;
 
 import com.github.shrekshellraiser.computer.screen.*;
+import com.github.shrekshellraiser.devices.api.GenericDeviceMenu;
+import com.github.shrekshellraiser.devices.api.GenericDeviceScreen;
+import com.github.shrekshellraiser.devices.flasher.FlasherDeviceMenu;
+import com.github.shrekshellraiser.devices.flasher.FlasherDeviceScreen;
 import com.github.shrekshellraiser.devices.screen.*;
 import com.github.shrekshellraiser.serial.screen.SerialTerminalMenu;
 import com.github.shrekshellraiser.serial.screen.SerialTerminalScreen;
@@ -11,8 +15,6 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.api.EnvType;
 import net.minecraft.core.Registry;
 import net.minecraft.world.inventory.MenuType;
-
-import java.awt.*;
 
 import static com.github.shrekshellraiser.ComputerMod.MOD_ID;
 

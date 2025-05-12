@@ -1,6 +1,6 @@
 package com.github.shrekshellraiser.serial.block.entity;
 
-import com.github.shrekshellraiser.devices.block.entities.GenericDeviceBlockEntity;
+import com.github.shrekshellraiser.devices.api.GenericDeviceBlockEntity;
 import com.github.shrekshellraiser.serial.ISerialPeer;
 import com.github.shrekshellraiser.core.uxn.UXNBus;
 import com.github.shrekshellraiser.core.uxn.KeyEvent;

@@ -2,7 +2,11 @@ package com.github.shrekshellraiser;
 
 import com.github.shrekshellraiser.computer.block.CableBlock;
 import com.github.shrekshellraiser.computer.block.ComputerBlock;
-import com.github.shrekshellraiser.devices.block.*;
+import com.github.shrekshellraiser.devices.datetime.DatetimeDeviceBlock;
+import com.github.shrekshellraiser.devices.flasher.FlasherDeviceBlock;
+import com.github.shrekshellraiser.devices.multiplexer.MultiplexerDeviceBlock;
+import com.github.shrekshellraiser.devices.redstone.RedstoneDeviceBlock;
+import com.github.shrekshellraiser.devices.screen.ScreenDeviceBlock;
 import com.github.shrekshellraiser.serial.block.SerialCableBlock;
 import com.github.shrekshellraiser.serial.block.SerialDeviceBlock;
 import com.github.shrekshellraiser.serial.block.SerialTerminalBlock;

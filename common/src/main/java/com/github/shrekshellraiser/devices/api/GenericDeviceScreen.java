@@ -1,4 +1,4 @@
-package com.github.shrekshellraiser.devices.screen;
+package com.github.shrekshellraiser.devices.api;
 
 import com.github.shrekshellraiser.gui.DevicePianoButtons;
 import com.github.shrekshellraiser.gui.PianoButtonGroup;

@@ -1,7 +1,11 @@
 package com.github.shrekshellraiser;
 
 import com.github.shrekshellraiser.computer.block.entity.ComputerBlockEntity;
-import com.github.shrekshellraiser.devices.block.entities.*;
+import com.github.shrekshellraiser.devices.datetime.DatetimeDeviceBlockEntity;
+import com.github.shrekshellraiser.devices.flasher.FlasherDeviceBlockEntity;
+import com.github.shrekshellraiser.devices.multiplexer.MultiplexerDeviceBlockEntity;
+import com.github.shrekshellraiser.devices.redstone.RedstoneDeviceBlockEntity;
+import com.github.shrekshellraiser.devices.screen.ScreenDeviceBlockEntity;
 import com.github.shrekshellraiser.serial.block.entity.SerialDeviceBlockEntity;
 import com.github.shrekshellraiser.serial.block.entity.SerialTerminalBlockEntity;
 import dev.architectury.registry.registries.DeferredRegister;

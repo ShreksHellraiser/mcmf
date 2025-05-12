@@ -1,8 +1,8 @@
-package com.github.shrekshellraiser.devices.block.entities;
+package com.github.shrekshellraiser.devices.multiplexer;
 
 import com.github.shrekshellraiser.computer.block.entity.IBusProvider;
 import com.github.shrekshellraiser.core.uxn.UXNBus;
-import com.github.shrekshellraiser.devices.block.MultiplexerDeviceBlock;
+import com.github.shrekshellraiser.devices.api.GenericDeviceBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;

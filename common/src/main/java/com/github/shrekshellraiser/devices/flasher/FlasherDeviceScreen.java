@@ -1,5 +1,6 @@
-package com.github.shrekshellraiser.devices.screen;
+package com.github.shrekshellraiser.devices.flasher;
 
+import com.github.shrekshellraiser.devices.api.GenericDeviceScreen;
 import com.github.shrekshellraiser.gui.DevicePianoButtons;
 import com.github.shrekshellraiser.gui.PianoButtonGroup;
 import com.github.shrekshellraiser.network.FileUploadPacket;

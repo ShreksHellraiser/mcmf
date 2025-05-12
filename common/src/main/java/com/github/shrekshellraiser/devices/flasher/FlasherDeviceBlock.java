@@ -1,7 +1,7 @@
-package com.github.shrekshellraiser.devices.block;
+package com.github.shrekshellraiser.devices.flasher;
 
 import com.github.shrekshellraiser.ModBlockEntities;
-import com.github.shrekshellraiser.devices.block.entities.FlasherDeviceBlockEntity;
+import com.github.shrekshellraiser.devices.api.GenericDeviceBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;

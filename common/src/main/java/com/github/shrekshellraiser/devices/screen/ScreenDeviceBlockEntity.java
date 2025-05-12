@@ -1,10 +1,8 @@
-package com.github.shrekshellraiser.devices.block.entities;
+package com.github.shrekshellraiser.devices.screen;
 
 import com.github.shrekshellraiser.core.uxn.*;
 import com.github.shrekshellraiser.core.uxn.devices.IAttachableDevice;
 import com.github.shrekshellraiser.core.uxn.devices.IDevice;
-import com.github.shrekshellraiser.devices.screen.ScreenBuffer;
-import com.github.shrekshellraiser.devices.screen.ScreenDeviceMenu;
 import com.github.shrekshellraiser.network.KeyInputHandler;
 import com.github.shrekshellraiser.network.MouseInputHandler;
 import com.github.shrekshellraiser.network.ScreenUpdatePacket;

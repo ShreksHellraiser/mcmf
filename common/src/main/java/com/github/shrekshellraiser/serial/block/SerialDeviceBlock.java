@@ -1,6 +1,6 @@
 package com.github.shrekshellraiser.serial.block;
 
-import com.github.shrekshellraiser.devices.block.GenericDeviceBlock;
+import com.github.shrekshellraiser.devices.api.GenericDeviceBlock;
 import com.github.shrekshellraiser.serial.block.entity.SerialDeviceBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;

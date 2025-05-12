@@ -1,7 +1,6 @@
-package com.github.shrekshellraiser.devices.screen;
+package com.github.shrekshellraiser.devices.api;
 
 import com.github.shrekshellraiser.ModMenus;
-import com.github.shrekshellraiser.devices.block.entities.GenericDeviceBlockEntity;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;

@@ -1,6 +1,6 @@
 package com.github.shrekshellraiser.network;
 
-import com.github.shrekshellraiser.devices.screen.FlasherDeviceMenu;
+import com.github.shrekshellraiser.devices.flasher.FlasherDeviceMenu;
 import com.github.shrekshellraiser.item.memory.FileManager;
 import com.github.shrekshellraiser.item.memory.MemoryItem;
 import dev.architectury.networking.NetworkManager;

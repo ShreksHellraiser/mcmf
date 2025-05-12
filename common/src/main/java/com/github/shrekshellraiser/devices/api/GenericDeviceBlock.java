@@ -1,4 +1,4 @@
-package com.github.shrekshellraiser.devices.block;
+package com.github.shrekshellraiser.devices.api;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
