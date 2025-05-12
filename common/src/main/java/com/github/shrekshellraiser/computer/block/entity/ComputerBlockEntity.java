@@ -12,6 +12,9 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
@@ -33,7 +36,7 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
     public static final int STRING_LENGTH = "WST 00 00 00 00 00 00 00 00 <".length(); // 29 characters
     public static final int DATA_START = STRING_LENGTH * 2;
     public static final int DATA_LENGTH = DATA_START + 5;
-    private static final int CIRCLE_ITERS = 256;
+    public static final int CIRCLE_ITERS = 256;
     private static final float[] COS_LUT = new float[CIRCLE_ITERS];
     private static final float[] SIN_LUT = new float[CIRCLE_ITERS];
     static {
@@ -120,6 +123,9 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
     }
 
     private int particle = 0;
+    public int getParticleCount() {
+        return particle;
+    }
     public void spawnEventParticle(boolean success) {
         SimpleParticleType particleType = success ? ParticleTypes.ENCHANT : ParticleTypes.SMOKE;
         if (getLevel() instanceof ServerLevel sLevel) {
@@ -248,7 +254,6 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
     public void clearContent() {
         this.items.clear();
     }
-
 
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);

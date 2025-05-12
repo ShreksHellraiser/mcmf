@@ -54,6 +54,10 @@ public class ScreenDeviceScreen extends AbstractContainerScreen<ScreenDeviceMenu
         if (i == InputConstants.KEY_ESCAPE) { // Might need to change this to not be hardcoded in the future
             this.onClose();
             return true;
+        } else if (i == InputConstants.KEY_BACKSPACE) {
+            KeyInputPacket.send('\b');
+        } else if (i == InputConstants.KEY_RETURN) { // why does ENTER not exist???
+            KeyInputPacket.send('\n');
         }
         return false;
     }

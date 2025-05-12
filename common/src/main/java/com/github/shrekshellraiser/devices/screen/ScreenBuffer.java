@@ -1,6 +1,5 @@
 package com.github.shrekshellraiser.devices.screen;
 
-import com.github.shrekshellraiser.ComputerMod;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
@@ -27,6 +26,9 @@ public class ScreenBuffer {
     private final byte[][] layers;
     private int[] colors = {0xffffff, 0x000000, 0x77ddbb, 0xff6622};
     public static final float scale = 0.6f;
+    private int[] lastPacketBuffer = new int[BUFFER_SIZE];
+    private boolean bufferChanged = true;
+    private int[] renderPacketBuffer;
     public ScreenBuffer() {
         layer0 = new byte[MAX_AREA];
         layer1 = new byte[MAX_AREA]; // Foreground
@@ -37,8 +39,8 @@ public class ScreenBuffer {
         width = buf.readInt();
         height = buf.readInt();
         colors = buf.readVarIntArray(4);
-        int[] buffer = buf.readVarIntArray(BUFFER_SIZE);
-        decodeRLE(buffer);
+        lastPacketBuffer = buf.readVarIntArray(BUFFER_SIZE);
+        bufferChanged = true;
     }
     public int getWidth() {
         return width;
@@ -212,6 +214,35 @@ public class ScreenBuffer {
     }
 
     public void render(Matrix4f matrix4f, int k, int l) {
+        renderBuffer(matrix4f, k, l);
+//        for (int i = 0; i < width * height; i++) {
+//            int x = i % width;
+//            int y = i / width;
+//            int color = colorList[this.getPixel(i)] | 0xff000000;
+//            float minX = k + (x * scale);
+//            float maxX = minX + scale;
+//            float minY = l + (y * scale);
+//            float maxY = minY + scale;
+//            bufferBuilder.vertex(matrix4f, minX,  maxY, 0.0F).color(color).endVertex();
+//            bufferBuilder.vertex(matrix4f, maxX,  maxY, 0.0F).color(color).endVertex();
+//            bufferBuilder.vertex(matrix4f, maxX,  minY, 0.0F).color(color).endVertex();
+//            bufferBuilder.vertex(matrix4f, minX,  minY, 0.0F).color(color).endVertex();
+//        }
+    }
+
+    private void rect(int x0, int y0, int x1, int y1, int color, VertexConsumer bufferBuilder, Matrix4f matrix4f, int k, int l) {
+        float minX = k + (x0 * scale);
+        float maxX = minX + ((x1 - x0) * scale);
+        float minY = l + (y0 * scale);
+        float maxY = minY + ((y1 - y0) * scale);
+        color |= 0xff000000;
+        bufferBuilder.vertex(matrix4f, minX,  maxY, 0.0F).color(color).endVertex();
+        bufferBuilder.vertex(matrix4f, maxX,  maxY, 0.0F).color(color).endVertex();
+        bufferBuilder.vertex(matrix4f, maxX,  minY, 0.0F).color(color).endVertex();
+        bufferBuilder.vertex(matrix4f, minX,  minY, 0.0F).color(color).endVertex();
+    }
+
+    private void renderBuffer(Matrix4f matrix4f, int k, int l) {
         BufferBuilder bufferBuilder = Tesselator.getInstance().getBuilder();
         RenderSystem.enableBlend();
         RenderSystem.disableTexture();
@@ -220,19 +251,46 @@ public class ScreenBuffer {
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         width = getWidth();
         height = getHeight();
+        int area = width * height;
         int[] colorList = this.getColors();
-        for (int i = 0; i < width * height; i++) {
-            int x = i % width;
-            int y = i / width;
-            int color = colorList[this.getPixel(i)] | 0xff000000;
-            float minX = k + (x * scale);
-            float maxX = minX + scale;
-            float minY = l + (y * scale);
-            float maxY = minY + scale;
-            bufferBuilder.vertex(matrix4f, minX,  maxY, 0.0F).color(color).endVertex();
-            bufferBuilder.vertex(matrix4f, maxX,  maxY, 0.0F).color(color).endVertex();
-            bufferBuilder.vertex(matrix4f, maxX,  minY, 0.0F).color(color).endVertex();
-            bufferBuilder.vertex(matrix4f, minX,  minY, 0.0F).color(color).endVertex();
+        int pixelIndex = 0;
+        int startX, startY, endX = 0, endY = 0;
+        if (bufferChanged) {
+            renderPacketBuffer = lastPacketBuffer.clone();
+        }
+        for (int i = 0; i < renderPacketBuffer.length && pixelIndex < area; i++) {
+            int v = renderPacketBuffer[i];
+            startX = pixelIndex % width;
+            startY = pixelIndex / width;
+            if ((v & 0x80000000) == 0x80000000) {
+                // RLE mode
+                int color = (v & 0x30000000) >> 28;
+                int length = v & 0x0FFFFFFF;
+                if (pixelIndex + length > area) {
+                    length = area - pixelIndex;
+                }
+                for (int j = 0; j < length; j++) {
+                    endX = pixelIndex % width;
+                    endY = pixelIndex / width;
+                    if (endY != startY) {
+                        rect(startX, startY, width, endY, colorList[color], bufferBuilder, matrix4f, k, l);
+                        startX = endX;
+                        startY = endY;
+                    }
+                    pixelIndex++;
+                }
+                rect(startX, startY, endX + 1, endY + 1, colorList[color], bufferBuilder, matrix4f, k, l);
+            } else {
+                // Unpack 15 pixels
+                int remainingPixels = Math.min(15, area - pixelIndex);
+                for (int j = 0; j < remainingPixels; j++) {
+                    int pixel = (v >> (28 - j * 2)) & 0b11;
+                    int x = pixelIndex % width;
+                    int y = pixelIndex / width;
+                    pixelIndex++;
+                    rect(x, y, x+1, y+1, colorList[pixel], bufferBuilder, matrix4f, k, l);
+                }
+            }
         }
         bufferBuilder.end();
         BufferUploader.end(bufferBuilder);
