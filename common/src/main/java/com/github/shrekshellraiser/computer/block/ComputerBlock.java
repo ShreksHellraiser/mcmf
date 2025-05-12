@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 public class ComputerBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING;
     private static final VoxelShape SHAPE =
-            Block.box(0.0F, 0.0F, 0.0F, 16.0F, 12.0F, 16.0F);
+            Block.box(0.0F, 0.0F, 0.0F, 16.0F, 11.0F, 16.0F);
 
     public ComputerBlock() {
         super(BlockBehaviour.Properties.of(Material.STONE));

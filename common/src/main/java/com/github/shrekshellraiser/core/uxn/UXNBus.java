@@ -238,7 +238,7 @@ public class UXNBus {
 
     public void tick() {
         if (uxn != null) {
-            uxn.runLimited(256000);
+            uxn.runLimited(4000);
         }
     }
 

@@ -257,6 +257,7 @@ public class ScreenBuffer {
         int startX, startY, endX = 0, endY = 0;
         if (bufferChanged) {
             renderPacketBuffer = lastPacketBuffer.clone();
+            bufferChanged = false;
         }
         for (int i = 0; i < renderPacketBuffer.length && pixelIndex < area; i++) {
             int v = renderPacketBuffer[i];

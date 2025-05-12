@@ -277,8 +277,16 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
         if (!(level instanceof ServerLevel)) return;
         ((ScreenDeviceBlockEntity)t).tick((ServerLevel) level, blockPos, blockState);
     }
+    private boolean mouseActive = false;
+    private int mouseX = 0;
+    private int mouseY = 0;
+    private int mouseButton = 0;
     private void tick(ServerLevel level, BlockPos pos, BlockState state) {
         if (this.bus != null && !this.bus.isPaused()) {
+            if (mouseActive) {
+                this.bus.queueEvent(new MouseEvent(mouseX, mouseY, mouseButton));
+                mouseActive = false;
+            }
             for (int i = 0; i < 3; i++) {
                 this.bus.queueEvent(new ScreenEvent(readWord(0x20), this));
             }
@@ -299,19 +307,27 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
     @Override
     public void handleMouseClick(int x, int y, int i) {
         if (this.bus == null) return;
-        this.bus.queueEvent(new MouseClickEvent(x, y, i, true));
+        mouseActive = true;
+        mouseX = x;
+        mouseY = y;
+        mouseButton |= 1 << i;
     }
 
     @Override
     public void handleMouseMove(int x, int y) {
         if (this.bus == null) return;
-        this.bus.queueEvent(new MouseMoveEvent(x, y));
+        mouseActive = true;
+        mouseX = x;
+        mouseY = y;
     }
 
     @Override
     public void handleMouseRelease(int x, int y, int i) {
         if (this.bus == null) return;
-        this.bus.queueEvent(new MouseClickEvent(x, y, i, false));
+        mouseActive = true;
+        mouseX = x;
+        mouseY = y;
+        mouseButton &= ~(1 << i);
     }
 
 }
@@ -336,46 +352,21 @@ class ScreenEvent implements UXNEvent {
     }
 }
 
-class MouseMoveEvent extends BasicUXNEvent {
+class MouseEvent extends BasicUXNEvent {
     private final int x;
     private final int y;
+    private final int state;
 
-    MouseMoveEvent(int x, int y) {
+    MouseEvent(int x, int y, int state) {
         this.x = x;
         this.y = y;
+        this.state = state;
     }
 
     @Override
     public void handle(UXNBus bus) {
         bus.writeDevWord(0x92, x);
         bus.writeDevWord(0x94, y);
-        bus.getUxn().pc = bus.readDevWord(0x90);
-    }
-}
-
-class MouseClickEvent extends BasicUXNEvent {
-    private final int x;
-    private final int y;
-    private final int button;
-    private final boolean press;
-
-    MouseClickEvent(int x, int y, int button, boolean press) {
-        this.x = x;
-        this.y = y;
-        this.button = button;
-        this.press = press;
-    }
-
-    @Override
-    public void handle(UXNBus bus) {
-        bus.writeDevWord(0x92, x);
-        bus.writeDevWord(0x94, y);
-        int state = bus.readDev(0x96);
-        if (press) {
-            state |= 1 << button;
-        } else {
-            state &= ~(1 << button);
-        }
         bus.writeDev(0x96, state);
         bus.getUxn().pc = bus.readDevWord(0x90);
     }

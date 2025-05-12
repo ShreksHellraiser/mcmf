@@ -123,11 +123,8 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
     }
 
     private int particle = 0;
-    public int getParticleCount() {
-        return particle;
-    }
     public void spawnEventParticle(boolean success) {
-        SimpleParticleType particleType = success ? ParticleTypes.ENCHANT : ParticleTypes.SMOKE;
+        SimpleParticleType particleType = success ? ParticleTypes.ELECTRIC_SPARK : ParticleTypes.SMOKE;
         if (getLevel() instanceof ServerLevel sLevel) {
             BlockPos pos = getBlockPos();
             float radius = 0.3f;
