@@ -24,6 +24,7 @@ public class UXN {
     public boolean paused = false;
     public boolean doStep = false;
     private final Queue<QueuedEvent> eventQueue = new LinkedList<>();
+    private int eventSurplus = 0;
 
     public boolean _enable_debug = false;
     public static final int MAX_QUEUE = 256;
@@ -62,9 +63,13 @@ public class UXN {
     public boolean queueEvent(UXNEvent event, UXNBus bus) {
         if (eventQueue.size() < MAX_QUEUE) {
             eventQueue.add(new QueuedEvent(event, bus));
+            eventSurplus++;
             return true;
         }
         return false;
+    }
+    public float getCongestion() {
+        return (float) Math.sqrt(eventSurplus / (float)MAX_QUEUE);
     }
     public boolean queueEvent(UXNEvent event) {
         return queueEvent(event, bus);
@@ -411,6 +416,7 @@ public class UXN {
                 // check for vector in the queue
                 var event = eventQueue.poll();
                 if (event == null) return;
+                eventSurplus--;
                 runningVector = event;
                 event.event.handle(event.bus);
                 running = true;

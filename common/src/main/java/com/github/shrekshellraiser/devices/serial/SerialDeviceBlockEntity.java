@@ -127,8 +127,8 @@ public class SerialDeviceBlockEntity extends GenericDeviceBlockEntity implements
         }
     }
 
-
-    private void writePeer(char data) {
+    @Override
+    public void writePeer(char data) {
         if (this.peer != null) {
             this.peer.write(data);
         }
@@ -144,11 +144,6 @@ public class SerialDeviceBlockEntity extends GenericDeviceBlockEntity implements
 
     @Override
     public void write(char ch) {
-        write(ch, SerialType.STDIN);
-    }
-
-    @Override
-    public void write(char ch, SerialType type) {
         if (argumentMode) {
             if (ch == '\n') {
                 argumentMode = false;
@@ -157,7 +152,7 @@ public class SerialDeviceBlockEntity extends GenericDeviceBlockEntity implements
                 parseArguments(ch);
             }
         } else {
-            rawWrite(ch, type);
+            rawWrite(ch, SerialType.STDIN);
         }
     }
 

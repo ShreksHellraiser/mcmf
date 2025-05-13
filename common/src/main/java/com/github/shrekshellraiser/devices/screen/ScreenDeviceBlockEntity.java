@@ -277,6 +277,8 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
     }
     private boolean mouseActive = false;
     private int mouseX = 0;
+    private int lastMouseX = -100;
+    private int lastMouseY = -100;
     private int mouseY = 0;
     private int mouseButton = 0;
     private void tick(ServerLevel level, BlockPos pos, BlockState state) {
@@ -302,30 +304,41 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
         }
     }
 
+    private static final int MIN_THINNING_THRESHOLD = 5;
+    private static final int MAX_THINNING_THRESHOLD = 50;
+    private static final int THINNING_DIFF = MAX_THINNING_THRESHOLD - MIN_THINNING_THRESHOLD;
+    private void queueMouseEvent(int x, int y, int state) {
+        if (mouseX == x && mouseY == y && mouseButton == state) return;
+        mouseX = x;
+        mouseY = y;
+        mouseButton = state;
+        mouseActive = true;
+        float congestion = this.bus.getCongestion();
+        int THINNING_THRESHOLD = MIN_THINNING_THRESHOLD + (int) (THINNING_DIFF * congestion);
+        if (congestion > 0.7f) return;
+        if (Math.abs(mouseX - lastMouseX) > THINNING_THRESHOLD || Math.abs(lastMouseY - mouseY) > THINNING_THRESHOLD) {
+            lastMouseX = mouseX;
+            lastMouseY = mouseY;
+            this.bus.queueEvent(new MouseEvent(x, y, mouseButton));
+        }
+    }
+
     @Override
     public void handleMouseClick(int x, int y, int i) {
         if (this.bus == null) return;
-        mouseActive = true;
-        mouseX = x;
-        mouseY = y;
-        mouseButton |= 1 << i;
+        queueMouseEvent(x, y, mouseButton | 1 << i);
     }
 
     @Override
     public void handleMouseMove(int x, int y) {
         if (this.bus == null) return;
-        mouseActive = true;
-        mouseX = x;
-        mouseY = y;
+        queueMouseEvent(x, y, mouseButton);
     }
 
     @Override
     public void handleMouseRelease(int x, int y, int i) {
         if (this.bus == null) return;
-        mouseActive = true;
-        mouseX = x;
-        mouseY = y;
-        mouseButton &= ~(1 << i);
+        queueMouseEvent(x, y, mouseButton & ~(1 << i));
     }
 
 }

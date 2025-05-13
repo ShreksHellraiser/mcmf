@@ -59,14 +59,15 @@ public class SerialTerminalBlockEntity extends SerialPeerBlockEntity implements 
         return new SerialTerminalMenu(i, inventory, this, this.data);
     }
 
-
     @Override
-    public void write(char ch) {
-        write(ch, SerialType.STDIN);
+    public void writePeer(char ch) {
+        if (getPeer() != null) {
+            getPeer().write(ch);
+        }
     }
 
     @Override
-    public void write(char ch, SerialType type) {
+    public void write(char ch) {
         if (ch == 0x07) {
             // TODO bell
         }
@@ -133,7 +134,7 @@ public class SerialTerminalBlockEntity extends SerialPeerBlockEntity implements 
     @Override
     public void handleKey(char ch) {
         if (echo || argumentMode) write(ch);
-        if (peer != null) peer.write(ch);
+        writePeer(ch);
         if (ch == '\n') {
             onLineEnd();
         }

@@ -7,7 +7,7 @@ public interface ISerialPeer {
     void detach(ISerialPeer device);
 
     void write(char ch); // Assumes STDIO type
-    void write(char ch, SerialType type);
+    void writePeer(char ch);
 
     void setConflicting(boolean b);
 
