@@ -1,5 +1,6 @@
 package com.github.shrekshellraiser.computer.block.entity;
 
+import com.github.shrekshellraiser.api.devices.GenericDeviceBlock;
 import com.github.shrekshellraiser.computer.block.ComputerBlock;
 import com.github.shrekshellraiser.computer.screen.ComputerMenu;
 import com.github.shrekshellraiser.core.uxn.UXN;
@@ -261,6 +262,11 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
     protected void saveAdditional(CompoundTag compoundTag) {
         super.saveAdditional(compoundTag);
         ContainerHelper.saveAllItems(compoundTag, this.items);
+    }
+
+    public boolean cableAttaches(Direction attachSide) {
+        Direction facing = this.getBlockState().getValue(ComputerBlock.FACING);
+        return facing.getOpposite().equals(attachSide);
     }
 
     public void toggleArgumentMode() {

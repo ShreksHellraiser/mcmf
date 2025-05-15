@@ -30,7 +30,7 @@ public class RAMItem extends MemoryItem {
     }
 
     @Override
-    public String getLabelForDirectory() {
+    public String getStorageDirectoryName() {
         return "ram";
     }
 }

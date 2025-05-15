@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "mcmf:block/screen_device",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "mcmf:block/screen_device"
+    },
+    "facing=south": {
+      "model": "mcmf:block/screen_device",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "mcmf:block/screen_device",
+      "y": 270
+    }
+  }
+}

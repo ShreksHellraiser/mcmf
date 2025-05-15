@@ -15,7 +15,7 @@ public class SROMItem extends MemoryItem {
     }
 
     @Override
-    public String getLabelForDirectory() {
+    public String getStorageDirectoryName() {
         return "srom";
     }
 

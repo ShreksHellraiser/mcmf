@@ -38,7 +38,7 @@ public class FileUploadPacket {
                 }
                 String uuid = item.getUUID(itemStack);
                 byte[] data = buf.readByteArray();
-                FileManager.saveFile(data, item.getLabelForDirectory(), uuid);
+                FileManager.saveFile(data, item.getStorageDirectoryName(), uuid);
                 item.setLabel(itemStack, fn);
                 player.displayClientMessage(new TextComponent(String.format("File %s successfully uploaded!", fn)),
                         false);

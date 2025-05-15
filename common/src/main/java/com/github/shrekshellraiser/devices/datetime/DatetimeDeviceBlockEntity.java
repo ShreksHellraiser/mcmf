@@ -22,11 +22,6 @@ public class DatetimeDeviceBlockEntity extends GenericDeviceBlockEntity {
     }
 
     @Override
-    public void attemptAttach(UXNBus bus, Direction attachSide) {
-        attach(bus);
-    }
-
-    @Override
     public void write(int address) {
     }
 

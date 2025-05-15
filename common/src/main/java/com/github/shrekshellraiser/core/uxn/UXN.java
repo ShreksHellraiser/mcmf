@@ -481,7 +481,7 @@ class SystemDevice extends Device {
         case 0x0e: // debug
             int data = bus.readDev(address);
             if (data == 0x01) {
-                System.out.println(uxn.wst);
+                System.out.println(uxn.wst); // TODO replace these
                 System.out.println(uxn.rst);
             }
             break;

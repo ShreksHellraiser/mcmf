@@ -1,8 +1,9 @@
 package com.github.shrekshellraiser.devices.screen;
 
+import com.github.shrekshellraiser.api.devices.GenericDeviceBlock;
 import com.github.shrekshellraiser.core.uxn.*;
-import com.github.shrekshellraiser.core.uxn.devices.IAttachableDevice;
-import com.github.shrekshellraiser.core.uxn.devices.IDevice;
+import com.github.shrekshellraiser.api.devices.IAttachableDevice;
+import com.github.shrekshellraiser.api.devices.IDevice;
 import com.github.shrekshellraiser.network.KeyInputHandler;
 import com.github.shrekshellraiser.network.MouseInputHandler;
 import com.github.shrekshellraiser.network.ScreenUpdatePacket;
@@ -102,8 +103,16 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
     }
 
     @Override
+    public boolean cableAttaches(Direction attachSide) {
+        Direction facing = this.getBlockState().getValue(ScreenDeviceBlock.FACING);
+        return facing.getOpposite().equals(attachSide);
+    }
+
+    @Override
     public void attemptAttach(UXNBus bus, Direction attachSide) {
-        attach(bus);
+        if (cableAttaches(attachSide)) {
+            attach(bus);
+        }
     }
 
     public void setColors(int[] colors) {

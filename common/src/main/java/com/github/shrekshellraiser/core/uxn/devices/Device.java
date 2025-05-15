@@ -1,5 +1,6 @@
 package com.github.shrekshellraiser.core.uxn.devices;
 
+import com.github.shrekshellraiser.api.devices.IDevice;
 import com.github.shrekshellraiser.core.uxn.UXNBus;
 
 public abstract class Device implements IDevice {

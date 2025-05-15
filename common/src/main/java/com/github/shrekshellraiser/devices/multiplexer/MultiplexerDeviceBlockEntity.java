@@ -81,6 +81,11 @@ public class MultiplexerDeviceBlockEntity extends GenericDeviceBlockEntity imple
     }
 
     @Override
+    public boolean cableAttaches(Direction attachSide) {
+        return super.cableAttaches(attachSide) || getBlockState().getValue(MultiplexerDeviceBlock.FACING).equals(attachSide);
+    }
+
+    @Override
     public void attemptAttach(UXNBus bus, Direction attachSide) {
         Direction facing = this.getBlockState().getValue(MultiplexerDeviceBlock.FACING);
         if (!facing.getOpposite().equals(attachSide)) {

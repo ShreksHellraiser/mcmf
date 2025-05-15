@@ -23,8 +23,8 @@ public abstract class MemoryItem extends Item {
         super(new Properties().tab(MOD_TAB));
     }
 
-    public String getUUID(ItemStack stack) {
-        String uuid;
+    public String getUUID(ItemStack stack, boolean createIfMissing) {
+        String uuid = null;
         if (stack.hasTag()) {
             CompoundTag tag = stack.getTag();
             assert tag != null;
@@ -35,13 +35,16 @@ public abstract class MemoryItem extends Item {
                 tag.putString(UUID_TAG, uuid);
                 stack.setTag(tag);
             }
-        } else {
+        } else if (createIfMissing) {
             CompoundTag tag = new CompoundTag();
             uuid = UUID.randomUUID().toString();
             tag.putString(UUID_TAG, uuid);
             stack.setTag(tag);
         }
         return uuid;
+    }
+    public String getUUID(ItemStack stack) {
+        return getUUID(stack, true);
     }
 
     public @Nullable String getLabel(ItemStack pStack) {
@@ -66,18 +69,18 @@ public abstract class MemoryItem extends Item {
 
     public abstract boolean isFlashable();
 
-    public abstract String getLabelForDirectory();
+    public abstract String getStorageDirectoryName();
 
     public abstract MemoryRegion getMemory(ItemStack stack);
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level level, List<Component> list, TooltipFlag tooltipFlag) {
-        if (pStack.hasTag() && pStack.getTag().contains(LABEL_TAG)) {
-            String label = pStack.getTag().getString(LABEL_TAG);
+        String label = getLabel(pStack);
+        if (label != null) {
             list.add(new TextComponent(label));
         }
-        if (Screen.hasShiftDown() && pStack.hasTag() && pStack.getTag().contains(UUID_TAG)) {
-            String uuid = pStack.getTag().getString(UUID_TAG);
+        String uuid = getUUID(pStack, false);
+        if (Screen.hasShiftDown() && uuid != null) {
             list.add(new TextComponent(uuid));
         }
         super.appendHoverText(pStack, level, list, tooltipFlag);

@@ -132,9 +132,4 @@ public class FlasherDeviceBlockEntity extends GenericDeviceBlockEntity {
         super.saveAdditional(compoundTag);
         ContainerHelper.saveAllItems(compoundTag, this.items);
     }
-
-    @Override
-    public void attemptAttach(UXNBus bus, Direction attachSide) {
-        attach(bus);
-    }
 }

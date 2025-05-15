@@ -3,7 +3,7 @@ package com.github.shrekshellraiser.devices.redstone;
 import com.github.shrekshellraiser.core.uxn.BasicUXNEvent;
 import com.github.shrekshellraiser.core.uxn.UXN;
 import com.github.shrekshellraiser.core.uxn.UXNBus;
-import com.github.shrekshellraiser.core.uxn.devices.IDevice;
+import com.github.shrekshellraiser.api.devices.IDevice;
 import com.github.shrekshellraiser.api.devices.GenericDeviceBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -115,11 +115,6 @@ public class RedstoneDeviceBlockEntity extends GenericDeviceBlockEntity implemen
     @Override
     protected Component getDefaultName() {
         return new TextComponent("Redstone Device");
-    }
-
-    @Override
-    public void attemptAttach(UXNBus bus, Direction attachSide) {
-        attach(bus);
     }
 }
 

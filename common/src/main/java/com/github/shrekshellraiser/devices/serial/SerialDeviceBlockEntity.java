@@ -24,14 +24,6 @@ public class SerialDeviceBlockEntity extends GenericDeviceBlockEntity implements
         deviceNumber = 1;
     }
 
-    @Override
-    public void attemptAttach(UXNBus bus, Direction attachSide) {
-        Direction facing = this.getBlockState().getValue(SerialDeviceBlock.FACING);
-        if (!facing.getOpposite().equals(attachSide)) {
-            return;
-        }
-        attach(bus);
-    }
 
     @Override
     protected Component getDefaultName() {

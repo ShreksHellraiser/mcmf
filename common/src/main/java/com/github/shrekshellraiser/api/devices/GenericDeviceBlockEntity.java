@@ -1,9 +1,9 @@
 package com.github.shrekshellraiser.api.devices;
 
-import com.github.shrekshellraiser.core.uxn.devices.IAttachableDevice;
 import com.github.shrekshellraiser.core.uxn.UXNBus;
-import com.github.shrekshellraiser.core.uxn.devices.IDevice;
+import com.github.shrekshellraiser.devices.serial.SerialDeviceBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -121,5 +121,18 @@ public abstract class GenericDeviceBlockEntity extends BaseContainerBlockEntity 
     @Override
     public void clearContent() {
 
+    }
+
+    @Override
+    public boolean cableAttaches(Direction attachSide) {
+        Direction facing = this.getBlockState().getValue(GenericDeviceBlock.FACING);
+        return facing.getOpposite().equals(attachSide);
+    }
+
+    @Override
+    public void attemptAttach(UXNBus bus, Direction attachSide) {
+        if (cableAttaches(attachSide)) {
+            attach(bus);
+        }
     }
 }

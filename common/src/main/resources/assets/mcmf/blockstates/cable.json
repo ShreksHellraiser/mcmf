@@ -1,7 +1,62 @@
 {
   "variants": {
-    "": {
-      "model": "mcmf:block/cable"
+    "cable_north=false,cable_east=false,cable_south=false,cable_west=false": {
+      "model": "mcmf:block/cable_a"
+    },
+    "cable_north=true,cable_east=false,cable_south=false,cable_west=false": {
+      "model": "mcmf:block/cable_n"
+    },
+    "cable_north=false,cable_east=true,cable_south=false,cable_west=false": {
+      "model": "mcmf:block/cable_n",
+      "y": 90
+    },
+    "cable_north=false,cable_east=false,cable_south=true,cable_west=false": {
+      "model": "mcmf:block/cable_n",
+      "y": 180
+    },
+    "cable_north=false,cable_east=false,cable_south=false,cable_west=true": {
+      "model": "mcmf:block/cable_n",
+      "y": 270
+    },
+    "cable_north=true,cable_east=true,cable_south=false,cable_west=false": {
+      "model": "mcmf:block/cable_ne"
+    },
+    "cable_north=false,cable_east=true,cable_south=true,cable_west=false": {
+      "model": "mcmf:block/cable_ne",
+      "y": 90
+    },
+    "cable_north=false,cable_east=false,cable_south=true,cable_west=true": {
+      "model": "mcmf:block/cable_ne",
+      "y": 180
+    },
+    "cable_north=true,cable_east=false,cable_south=false,cable_west=true": {
+      "model": "mcmf:block/cable_ne",
+      "y": 270
+    },
+    "cable_north=true,cable_east=false,cable_south=true,cable_west=false": {
+      "model": "mcmf:block/cable_ns"
+    },
+    "cable_north=false,cable_east=true,cable_south=false,cable_west=true": {
+      "model": "mcmf:block/cable_ns",
+      "y": 90
+    },
+    "cable_north=true,cable_east=true,cable_south=true,cable_west=false": {
+      "model": "mcmf:block/cable_nes"
+    },
+    "cable_north=false,cable_east=true,cable_south=true,cable_west=true": {
+      "model": "mcmf:block/cable_nes",
+      "y": 90
+    },
+    "cable_north=true,cable_east=false,cable_south=true,cable_west=true": {
+      "model": "mcmf:block/cable_nes",
+      "y": 180
+    },
+    "cable_north=true,cable_east=true,cable_south=false,cable_west=true": {
+      "model": "mcmf:block/cable_nes",
+      "y": 270
+    },
+    "cable_north=true,cable_east=true,cable_south=true,cable_west=true": {
+      "model": "mcmf:block/cable_a"
     }
   }
 }

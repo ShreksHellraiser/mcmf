@@ -2,10 +2,10 @@ package com.github.shrekshellraiser.core.uxn;
 
 import com.github.shrekshellraiser.computer.block.entity.ComputerBlockEntity;
 import com.github.shrekshellraiser.computer.block.entity.IBusProvider;
-import com.github.shrekshellraiser.core.uxn.devices.IAttachableDevice;
+import com.github.shrekshellraiser.api.devices.IAttachableDevice;
 import com.github.shrekshellraiser.devices.screen.ScreenDeviceBlockEntity;
 import com.github.shrekshellraiser.item.memory.MemoryItem;
-import com.github.shrekshellraiser.core.uxn.devices.IDevice;
+import com.github.shrekshellraiser.api.devices.IDevice;
 import com.github.shrekshellraiser.devices.serial.SerialDeviceBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,9 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static com.github.shrekshellraiser.ModBlocks.DEVICE_CABLE;
 
@@ -235,7 +233,7 @@ public class UXNBus {
 
     public void tick() {
         if (uxn != null) {
-            uxn.runLimited(4000);
+            uxn.runLimited(10000);
         }
     }
 
@@ -322,6 +320,15 @@ public class UXNBus {
                 ce.spawnEventParticle(uxn.queueEvent(event, this));
             }
         }
+    }
+    public float getCongestion() {
+        if (parent != null) {
+            return parent.getCongestion();
+        }
+        if (uxn != null) {
+            return uxn.getCongestion();
+        }
+        return 0;
     }
     public void queueEvent(UXNEvent event) {
         queueEvent(event, this);
