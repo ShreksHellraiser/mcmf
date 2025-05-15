@@ -77,8 +77,11 @@ public class UXNBus {
                     level.addAlwaysVisibleParticle(ParticleTypes.ANGRY_VILLAGER, d,e,f, 0.0,0.0,0.0);
                     continue;
                 }
-                visited.add(newPos);
                 BlockState state = level.getBlockState(newPos);
+                if (level.getBlockEntity(newPos) instanceof IAttachableDevice device) {
+                    if (!device.cableAttaches(direction.getOpposite())) continue;
+                }
+                visited.add(newPos);
                 if (state.is(DEVICE_CABLE)) {
                     toSearch.push(newPos);
                     continue;
@@ -346,6 +349,13 @@ public class UXNBus {
             return parent.isArgumentMode();
         }
         return argumentMode;
+    }
+
+    public boolean isExpectingArgument() {
+        if (parent != null) {
+            return parent.isExpectingArgument();
+        }
+        return expectingArgument;
     }
 
     public void setArgumentMode(boolean state) {

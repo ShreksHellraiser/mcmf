@@ -291,13 +291,15 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
     private int mouseY = 0;
     private int mouseButton = 0;
     private void tick(ServerLevel level, BlockPos pos, BlockState state) {
-        if (this.bus != null && !this.bus.isPaused()) {
+        if (this.bus != null && !this.bus.isPaused() && !this.bus.isExpectingArgument()) {
             if (mouseActive) {
                 this.bus.queueEvent(new MouseEvent(mouseX, mouseY, mouseButton));
                 mouseActive = false;
             }
-            for (int i = 0; i < 3; i++) {
-                this.bus.queueEvent(new ScreenEvent(readWord(0x20), this));
+            if (this.bus.getCongestion() < 0.7f) {
+                for (int i = 0; i < 3; i++) {
+                    this.bus.queueEvent(new ScreenEvent(readWord(0x20), this));
+                }
             }
             if (screenDirty & !runningScreenVector) refresh();
             if (screenRefreshed) {
