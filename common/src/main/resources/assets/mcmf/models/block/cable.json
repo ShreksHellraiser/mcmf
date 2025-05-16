@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "mcmf:block/cable",
-    "top": "mcmf:block/cable",
-    "side": "mcmf:block/cable"
-  }
-}

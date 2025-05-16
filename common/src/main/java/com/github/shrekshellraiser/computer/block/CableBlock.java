@@ -31,7 +31,12 @@ public class CableBlock extends Block {
     public static final BooleanProperty CABLE_EAST;
     public static final BooleanProperty CABLE_SOUTH;
     public static final BooleanProperty CABLE_WEST;
+    public static final BooleanProperty CONNECTOR_NORTH;
+    public static final BooleanProperty CONNECTOR_EAST;
+    public static final BooleanProperty CONNECTOR_SOUTH;
+    public static final BooleanProperty CONNECTOR_WEST;
     public static final Map<Direction,BooleanProperty> CABLE_PROPERTIES = new HashMap<>();
+    public static final Map<Direction,BooleanProperty> CONNECTOR_PROPERTIES = new HashMap<>();
     public CableBlock() {
         super(Properties.of(Material.STONE));
     }
@@ -46,6 +51,10 @@ public class CableBlock extends Block {
         builder.add(CABLE_EAST);
         builder.add(CABLE_SOUTH);
         builder.add(CABLE_WEST);
+        builder.add(CONNECTOR_NORTH);
+        builder.add(CONNECTOR_EAST);
+        builder.add(CONNECTOR_SOUTH);
+        builder.add(CONNECTOR_WEST);
     }
 
     @Override
@@ -59,13 +68,15 @@ public class CableBlock extends Block {
             BooleanProperty property = CableBlock.CABLE_PROPERTIES.get(direction);
             BlockPos offset = blockPos.relative(direction);
             boolean connected = level.getBlockState(blockPos.relative(direction)).is(DEVICE_CABLE);
+            boolean connector = false;
             BlockEntity blockEntity = level.getBlockEntity(offset);
             if (blockEntity instanceof IAttachableDevice attachableDevice) {
-                connected = connected || attachableDevice.cableAttaches(direction.getOpposite());
+                connector = attachableDevice.cableAttaches(direction.getOpposite());
             } else if (blockEntity instanceof ComputerBlockEntity computer) {
-                connected = connected || computer.cableAttaches(direction.getOpposite());
+                connector = computer.cableAttaches(direction.getOpposite());
             }
-            state = state.setValue(property, connected);
+            state = state.setValue(property, connected || connector);
+            state = state.setValue(CONNECTOR_PROPERTIES.get(direction), connector);
         }
         return state;
     }
@@ -91,5 +102,13 @@ public class CableBlock extends Block {
         CABLE_PROPERTIES.put(Direction.EAST, CABLE_EAST);
         CABLE_PROPERTIES.put(Direction.SOUTH, CABLE_SOUTH);
         CABLE_PROPERTIES.put(Direction.WEST, CABLE_WEST);
+        CONNECTOR_NORTH = BooleanProperty.create("connector_north");
+        CONNECTOR_EAST = BooleanProperty.create("connector_east");
+        CONNECTOR_SOUTH = BooleanProperty.create("connector_south");
+        CONNECTOR_WEST = BooleanProperty.create("connector_west");
+        CONNECTOR_PROPERTIES.put(Direction.NORTH, CONNECTOR_NORTH);
+        CONNECTOR_PROPERTIES.put(Direction.EAST, CONNECTOR_EAST);
+        CONNECTOR_PROPERTIES.put(Direction.SOUTH, CONNECTOR_SOUTH);
+        CONNECTOR_PROPERTIES.put(Direction.WEST, CONNECTOR_WEST);
     }
 }
