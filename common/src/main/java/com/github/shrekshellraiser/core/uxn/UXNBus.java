@@ -9,6 +9,7 @@ import com.github.shrekshellraiser.api.devices.IDevice;
 import com.github.shrekshellraiser.devices.serial.SerialDeviceBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -71,10 +72,6 @@ public class UXNBus {
                 double f = (double)newPos.getZ() + 0.5;
                 if (visited.contains(newPos)) continue;
                 if (newPos.equals(ignore)) {
-                    if (level instanceof ServerLevel sLevel) {
-                        sLevel.sendParticles(ParticleTypes.ANGRY_VILLAGER, d,e,f, 0, 0.0,0.0,0.0, 0.0);
-                    }
-                    level.addAlwaysVisibleParticle(ParticleTypes.ANGRY_VILLAGER, d,e,f, 0.0,0.0,0.0);
                     continue;
                 }
                 BlockState state = level.getBlockState(newPos);
@@ -86,10 +83,6 @@ public class UXNBus {
                     toSearch.push(newPos);
                     continue;
                 }
-                if (level instanceof ServerLevel sLevel) {
-                    sLevel.sendParticles(ParticleTypes.HEART, d,e,f, 0, 0.0,0.0,0.0, 0.0);
-                }
-                level.addAlwaysVisibleParticle(ParticleTypes.SMOKE, d,e,f, 0.0,0.0,0.0);
                 traversed.add(new TraversedBlock(newPos, direction.getOpposite()));
             }
         }
@@ -112,7 +105,14 @@ public class UXNBus {
         }
         return null;
     }
-
+    private void sendParticles(ServerLevel level, ArrayList<TraversedBlock> networkBlocks, ParticleOptions particle) {
+        for (TraversedBlock block : networkBlocks) {
+            double d = (double)block.pos.getX() + 0.5;
+            double e = (double)block.pos.getY() + 0.5;
+            double f = (double)block.pos.getZ() + 0.5;
+            level.sendParticles(particle, d,e,f, 0, 0.0,0.0,0.0, 0.0);
+        }
+    }
     private void refresh(Level level, BlockPos blockPos, Direction startDir, BlockPos ignore) {
         ArrayList<TraversedBlock> traversed = traverse(level, blockPos, startDir, ignore);
         this.conflicting = false;
@@ -126,14 +126,27 @@ public class UXNBus {
             devices[i] = null;
         }
         this.uxn = null;
+        ArrayList<TraversedBlock> networkBlocks = new ArrayList<>();
         for (TraversedBlock block : traversed) {
             BlockEntity entity = level.getBlockEntity(block.pos);
+            if (level.getBlockState(block.pos).is(DEVICE_CABLE)) {
+                networkBlocks.add(block);
+            }
             if (entity == null)
                 continue;
             if (entity instanceof IAttachableDevice attachableDevice) {
                 attachableDevice.attemptAttach(this, block.dir);
+                networkBlocks.add(block);
+            } else if (entity instanceof ComputerBlockEntity computer) {
+                UXNBus bus = computer.getBus(block.dir);
+                if (bus != this) {
+                    conflicting = true;
+                    bus.conflicting = true;
+                }
+                networkBlocks.add(block);
             }
         }
+        if (!level.isClientSide) sendParticles((ServerLevel)level, networkBlocks, conflicting ? ParticleTypes.LARGE_SMOKE : ParticleTypes.HEART);
     }
     private void refresh(Level level, BlockPos blockPos, Direction startDir) {
         refresh(level, blockPos, startDir, null);
@@ -202,20 +215,18 @@ public class UXNBus {
             deviceMemory[i] = 0;
         }
     }
-    public void startup() {
+    public boolean startup() {
         erase();
         if (parent != null) {
-            parent.startup();
-            return;
+            return parent.startup();
         }
-        if (executing || conflicting) {
-            return;
-        }
+        if (executing) return false;
         if (blockEntity instanceof ComputerBlockEntity ce) {
             ItemStack stack = ce.getItem(0);
             if (stack.getItem() instanceof MemoryItem item) {
                 MemoryRegion memory = item.getMemory(stack);
                 refresh();
+                if (conflicting) return false;
                 executing = true;
                 new UXN(this, memory);
                 uxn.paused = paused || argumentMode;
@@ -230,8 +241,10 @@ public class UXNBus {
                         }
                     }
                 }
+                return true;
             }
         }
+        return false;
     }
 
     public void tick() {
@@ -268,6 +281,9 @@ public class UXNBus {
     This should be called by IDevice::attach
      */
     public void setDevice(int index, IDevice device) {
+        if (devices[index] != null) {
+            conflicting = true;
+        }
         devices[index] = device;
     }
     /*

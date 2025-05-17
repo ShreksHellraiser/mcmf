@@ -25,7 +25,8 @@
 * Make the computer take beets to craft (credit to ctrlaltmilk)
   * Refine beetroots for higher tier computers
   * Add beetroot soup or borscht (or svekolnik) that gets easier to craft with higher tier beets
-  
+* Add smaller cables for 8-bit wide busses.
+
 # MVP Requirements
 * Fully functional device # selection
 * No computer execution leaks

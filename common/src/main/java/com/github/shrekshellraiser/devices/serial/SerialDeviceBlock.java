@@ -12,7 +12,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 public class SerialDeviceBlock extends GenericDeviceBlock {
-    public static final VoxelShape BOTTOM_SLAB = Block.box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0);
+    public static final VoxelShape BOTTOM_SLAB = Block.box(0.0, 0.0, 0.0, 16.0, 11.0, 16.0);
     public SerialDeviceBlock() {
         super(Properties.of(Material.STONE));
     }

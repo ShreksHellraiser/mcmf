@@ -41,10 +41,10 @@ public class ScreenDeviceBlock extends GenericDeviceBlock {
     @Override
     public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
         return switch (blockState.getValue(FACING)) {
-            default -> NORTH;
             case SOUTH -> SOUTH;
             case WEST -> WEST;
             case EAST -> EAST;
+            default -> NORTH;
         };
     }
 }

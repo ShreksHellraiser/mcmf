@@ -1,6 +1,5 @@
 package com.github.shrekshellraiser.computer.block.entity;
 
-import com.github.shrekshellraiser.api.devices.GenericDeviceBlock;
 import com.github.shrekshellraiser.computer.block.ComputerBlock;
 import com.github.shrekshellraiser.computer.screen.ComputerMenu;
 import com.github.shrekshellraiser.core.uxn.UXN;
@@ -13,9 +12,6 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
@@ -116,11 +112,12 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
         }
     }
 
-    public void startup() {
+    public boolean startup() {
         if (bus.getUxn() == null) {
             // this will register the bus on this computer
-            bus.startup();
+            return bus.startup();
         }
+        return false;
     }
 
     private int particle = 0;
@@ -149,13 +146,17 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
         bus.pause();
     }
 
-    public void togglePause() {
+    public void togglePause(Player player) {
         bus.pause(!bus.isPaused());
     }
 
-    public void togglePower() {
+    public void togglePower(Player player) {
         if (bus.isExecuting()) shutdown();
-        else startup();
+        else {
+            if (!startup()) {
+                player.sendMessage(new TextComponent("Unable to start computer"), player.getUUID());
+            }
+        }
     }
 
     public ComputerBlockEntity(BlockPos blockPos, BlockState blockState) {
@@ -193,7 +194,7 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
         ((ComputerBlockEntity)t).tick(level, blockPos, blockState);
     }
 
-    public void step() {
+    public void step(Player player) {
         if (bus.getUxn() == null) return;
         bus.getUxn().doStep = true;
     }

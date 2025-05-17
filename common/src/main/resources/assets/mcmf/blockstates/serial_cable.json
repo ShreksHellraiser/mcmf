@@ -1,7 +1,97 @@
 {
-  "variants": {
-    "": {
-      "model": "mcmf:block/serial_cable"
+  "multipart": [
+    {
+      "apply": {
+        "model": "mcmf:block/serial_cable/serial_cable_core"
+      }
+    },
+    {
+      "when": {
+        "cable_north": "true"
+      },
+      "apply": {
+        "model": "mcmf:block/serial_cable/serial_cable_wire"
+      }
+    },
+    {
+      "when": {
+        "cable_east": "true"
+      },
+      "apply": {
+        "model": "mcmf:block/serial_cable/serial_cable_wire",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "cable_south": "true"
+      },
+      "apply": {
+        "model": "mcmf:block/serial_cable/serial_cable_wire",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "cable_west": "true"
+      },
+      "apply": {
+        "model": "mcmf:block/serial_cable/serial_cable_wire",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "cable_up": "true"
+      },
+      "apply" : {
+        "model": "mcmf:block/serial_cable/serial_cable_wire",
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "cable_down": "true"
+      },
+      "apply" : {
+        "model": "mcmf:block/serial_cable/serial_cable_wire",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "connector_north": "true"
+      },
+      "apply": {
+        "model": "mcmf:block/serial_cable/serial_cable_connector"
+      }
+    },
+    {
+      "when": {
+        "connector_east": "true"
+      },
+      "apply": {
+        "model": "mcmf:block/serial_cable/serial_cable_connector",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "connector_south": "true"
+      },
+      "apply": {
+        "model": "mcmf:block/serial_cable/serial_cable_connector",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "connector_west": "true"
+      },
+      "apply": {
+        "model": "mcmf:block/serial_cable/serial_cable_connector",
+        "y": 270
+      }
     }
-  }
+  ]
 }

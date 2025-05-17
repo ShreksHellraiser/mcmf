@@ -5,18 +5,25 @@ import com.github.shrekshellraiser.network.ModPackets;
 import com.github.shrekshellraiser.api.serial.ISerialPeer;
 import com.github.shrekshellraiser.api.serial.SerialPeerBlockEntity;
 import com.github.shrekshellraiser.core.uxn.UXNBus;
+import com.google.common.base.Suppliers;
 import dev.architectury.event.EventResult;
+import dev.architectury.event.events.client.ClientLifecycleEvent;
 import dev.architectury.event.events.common.BlockEvent;
 import dev.architectury.platform.Platform;
+import dev.architectury.registry.registries.Registries;
 import net.fabricmc.api.EnvType;
+import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.function.Supplier;
 
 import static com.github.shrekshellraiser.ModBlocks.*;
 
 public final class ComputerMod {
     public static final String MOD_ID = "mcmf";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+    public static final Supplier<Registries> REGISTRIES = Suppliers.memoize(() -> Registries.get(MOD_ID));
 
     public static void registerEvents() {
         BlockEvent.BREAK.register(((level, pos, state, player, xp) -> {
@@ -49,6 +56,12 @@ public final class ComputerMod {
             }
             return EventResult.pass();
         }));
+        ClientLifecycleEvent.CLIENT_SETUP.register(ComputerMod::initClient);
+    }
+
+    public static void initClient(Minecraft client) {
+        ModBlockEntityRenderers.register();
+        ModMenus.registerClient();
     }
 
     public static void init() {
@@ -57,12 +70,8 @@ public final class ComputerMod {
         ModItems.register();
         ModBlockEntities.register();
         Commands.register();
-        ModMenus.register();
+        ModMenus.registerServer();
         ModPackets.register();
         registerEvents();
-
-        if (Platform.getEnv() == EnvType.CLIENT) {
-            ModBlockEntityRenderers.register();
-        }
     }
 }
