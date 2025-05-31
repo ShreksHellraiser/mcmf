@@ -9,6 +9,7 @@ import com.github.shrekshellraiser.devices.redstone.RedstoneDeviceBlock;
 import com.github.shrekshellraiser.devices.screen.ScreenDeviceBlock;
 import com.github.shrekshellraiser.serial.SerialCableBlock;
 import com.github.shrekshellraiser.devices.serial.SerialDeviceBlock;
+import com.github.shrekshellraiser.serial.infuser.InfuserBlock;
 import com.github.shrekshellraiser.serial.terminal.SerialTerminalBlock;
 import dev.architectury.registry.registries.Registrar;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -53,6 +54,8 @@ public class ModBlocks {
     public static RegistrySupplier<Item> SERIAL_CABLE_ITEM;
     public static RegistrySupplier<Block> SERIAL_TERMINAL_BLOCK;
     public static RegistrySupplier<Item> SERIAL_TERMINAL_ITEM;
+    public static RegistrySupplier<Block> INFUSER_BLOCK;
+    public static RegistrySupplier<Item> INFUSER_ITEM;
 
     public static TagKey<Block> DEVICE_CABLE;
     public static TagKey<Block> SERIAL_CABLE;
@@ -112,6 +115,9 @@ public class ModBlocks {
                 new Item.Properties().tab(MOD_TAB)));
         SERIAL_TERMINAL_BLOCK = registerBlock("serial_terminal", SerialTerminalBlock::new);
         SERIAL_TERMINAL_ITEM = registerItem("serial_terminal", () -> new BlockItem(SERIAL_TERMINAL_BLOCK.get(),
+                new Item.Properties().tab(MOD_TAB)));
+        INFUSER_BLOCK = registerBlock("infuser", InfuserBlock::new);
+        INFUSER_ITEM = registerItem("infuser", () -> new BlockItem(INFUSER_BLOCK.get(),
                 new Item.Properties().tab(MOD_TAB)));
 
     }

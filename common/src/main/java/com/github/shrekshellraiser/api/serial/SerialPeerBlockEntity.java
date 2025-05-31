@@ -2,6 +2,8 @@ package com.github.shrekshellraiser.api.serial;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -21,10 +23,58 @@ public abstract class SerialPeerBlockEntity extends BaseContainerBlockEntity imp
         super(blockEntityType, blockPos, blockState);
     }
 
+
+    @Override
+    public int getContainerSize() {
+        return 0;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
+    public ItemStack getItem(int i) {
+        return null;
+    }
+
+    @Override
+    public ItemStack removeItem(int i, int j) {
+        return null;
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int i) {
+        return null;
+    }
+
+    @Override
+    public void setItem(int i, ItemStack itemStack) {
+
+    }
+
+    @Override
+    public void clearContent() {
+
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return true;
+    }
+
+    @Override
+    public void writePeer(char ch) {
+        if (peer != null) {
+            peer.write(ch);
+        }
+    }
+
     /*
-    This returns a list of all blocks around the starting position
-    plus all blocks around any blocks tagged DEVICE_CABLE
-     */
+        This returns a list of all blocks around the starting position
+        plus all blocks around any blocks tagged DEVICE_CABLE
+         */
     public static ArrayList<BlockPos> traverse(Level level, BlockPos blockPos, BlockPos ignore) {
         Stack<BlockPos> toSearch = new Stack<>();
         toSearch.push(blockPos);

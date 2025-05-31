@@ -13,15 +13,14 @@ public class GenericDeviceMenu extends AbstractContainerMenu {
     public ContainerData data;
 
     public GenericDeviceMenu(int i, Inventory inventory) {
-        this(i, inventory, null, new SimpleContainerData(1),
-                new SimpleContainer(1));
+        this(i, inventory, null, new SimpleContainerData(1));
     }
 
-    public GenericDeviceMenu(int i, Inventory inventory, GenericDeviceBlockEntity bentity, ContainerData data, Container container) {
-        this(i, inventory, bentity, data, container, ModMenus.GENERIC_DEVICE_MENU.get());
+    public GenericDeviceMenu(int i, Inventory inventory, GenericDeviceBlockEntity bentity, ContainerData data) {
+        this(i, inventory, bentity, data, ModMenus.GENERIC_DEVICE_MENU.get());
     }
 
-    protected GenericDeviceMenu(int i, Inventory inventory, GenericDeviceBlockEntity bentity, ContainerData data, Container container, MenuType<?> menuType){
+    protected GenericDeviceMenu(int i, Inventory inventory, GenericDeviceBlockEntity bentity, ContainerData data, MenuType<?> menuType){
         super(menuType, i);
         blockEntity = bentity;
         this.data = data;

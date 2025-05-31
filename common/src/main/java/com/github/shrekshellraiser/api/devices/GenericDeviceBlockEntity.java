@@ -56,7 +56,7 @@ public abstract class GenericDeviceBlockEntity extends BaseContainerBlockEntity 
 
     @Override
     protected AbstractContainerMenu createMenu(int i, Inventory inventory) {
-        return new GenericDeviceMenu(i, inventory, this, this.data, this);
+        return new GenericDeviceMenu(i, inventory, this, this.data);
     }
 
     @Override

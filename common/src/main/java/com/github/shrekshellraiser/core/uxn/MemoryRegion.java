@@ -29,6 +29,12 @@ public class MemoryRegion {
         }
         writeByte(address, (byte)d);
     }
+    public void writeString(int address, String s) {
+        for (int i = 0; i < s.length(); i++) {
+            writeByte(address + i, (byte)s.charAt(i));
+        }
+        writeByte(address + s.length(), (byte)0);
+    }
 
     public int readByte(int address) {
         address = checkAddress(address);
@@ -45,6 +51,19 @@ public class MemoryRegion {
             return readShort(address);
         }
         return readByte(address);
+    }
+
+    public String readString(int address, int max, boolean nullTerminated) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < max; i++) {
+            int c = readByte(address++);
+            if (c == 0 && nullTerminated) break;
+            sb.append((char)c);
+        }
+        return sb.toString();
+    }
+    public String readString(int address) {
+        return readString(address, 255, true);
     }
 
     private int checkAddress(int address) {

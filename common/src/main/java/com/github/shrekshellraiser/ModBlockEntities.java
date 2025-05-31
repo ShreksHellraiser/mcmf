@@ -7,6 +7,7 @@ import com.github.shrekshellraiser.devices.multiplexer.MultiplexerDeviceBlockEnt
 import com.github.shrekshellraiser.devices.redstone.RedstoneDeviceBlockEntity;
 import com.github.shrekshellraiser.devices.screen.ScreenDeviceBlockEntity;
 import com.github.shrekshellraiser.devices.serial.SerialDeviceBlockEntity;
+import com.github.shrekshellraiser.serial.infuser.InfuserBlockEntity;
 import com.github.shrekshellraiser.serial.terminal.SerialTerminalBlockEntity;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.Registrar;
@@ -42,6 +43,7 @@ public class ModBlockEntities {
 
     // Serial Devices
     public static RegistrySupplier<BlockEntityType<SerialTerminalBlockEntity>> SERIAL_TERMINAL_BLOCK_ENTITY;
+    public static RegistrySupplier<BlockEntityType<InfuserBlockEntity>> INFUSER_BLOCK_ENTITY;
 
     private static <T extends BlockEntity> RegistrySupplier<BlockEntityType<T>> register(String name, Supplier<BlockEntityType<T>> blockEntityType) {
         return BLOCK_ENTITIES.register(new ResourceLocation(MOD_ID, name), blockEntityType);
@@ -70,5 +72,7 @@ public class ModBlockEntities {
         // Serial Devices
         SERIAL_TERMINAL_BLOCK_ENTITY = register("serial_terminal", () ->
                 new BlockEntityType<>(SerialTerminalBlockEntity::new, Set.of(SERIAL_TERMINAL_BLOCK.get()), null));
+        INFUSER_BLOCK_ENTITY = register("infuser", () ->
+                new BlockEntityType<>(InfuserBlockEntity::new, Set.of(INFUSER_BLOCK.get()), null));
     }
 }

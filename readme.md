@@ -42,11 +42,7 @@ The signature of this device is: `@Mux &device $1 &data $2`.
 These devices are both subject to change as the mod is developed more!
 
 ## Issues
-* There's a little bit of jank when placing down new cables where the network's status
-may not always update to contain all connected devices. Double-check the
-state of the network by use of the network debug stick.
 * Serial stuff is currently non-directional, so a terminal does not require the cable to enter the back
 this will be changed in the future.
 * The redstone device queues multiple redstone vectors for a single redstone update,
 this will eventually get fixed (hopefully).
-* When computers get unloaded their execution is not stopped. This is a **major** leak, and will be fixed eventually.

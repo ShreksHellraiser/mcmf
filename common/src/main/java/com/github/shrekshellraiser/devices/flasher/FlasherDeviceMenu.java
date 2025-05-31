@@ -16,7 +16,7 @@ public class FlasherDeviceMenu extends GenericDeviceMenu {
     }
 
     public FlasherDeviceMenu(int i, Inventory inventory, FlasherDeviceBlockEntity bentity, ContainerData data, Container container) {
-        super(i, inventory, bentity, data, container, FLASHER_DEVICE_MENU.get());
+        super(i, inventory, bentity, data, FLASHER_DEVICE_MENU.get());
         checkContainerSize(container, FlasherDeviceBlockEntity.INVENTORY_SIZE);
         addPlayerInventory(inventory);
         addPlayerHotbar(inventory);

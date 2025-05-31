@@ -35,6 +35,7 @@ public class UXNBus {
     private final BlockEntity blockEntity;
     private UXNBus parent;
     private final byte[] deviceMemory = new byte[256];
+    private final FileDeviceWrapper fileDeviceWrapper = new FileDeviceWrapper();
 
     public UXNBus(BlockEntity blockEntity) {
         this.blockEntity = blockEntity;
@@ -43,6 +44,10 @@ public class UXNBus {
     public void setParent(UXNBus bus) {
         if (bus == this) return;
         parent = bus;
+    }
+
+    public FileDeviceWrapper getFileDeviceWrapper() {
+        return this.fileDeviceWrapper;
     }
 
     public UXNBus getParent() {
@@ -116,6 +121,8 @@ public class UXNBus {
     private void refresh(Level level, BlockPos blockPos, Direction startDir, BlockPos ignore) {
         ArrayList<TraversedBlock> traversed = traverse(level, blockPos, startDir, ignore);
         this.conflicting = false;
+        fileDeviceWrapper.detach(this);
+        fileDeviceWrapper.clearDevices();
         for (IDevice device : deviceSet) {
             deviceSet.remove(device);
             device.detach(this);
@@ -146,6 +153,7 @@ public class UXNBus {
                 networkBlocks.add(block);
             }
         }
+        fileDeviceWrapper.attach(this);
         if (!level.isClientSide) sendParticles((ServerLevel)level, networkBlocks, conflicting ? ParticleTypes.LARGE_SMOKE : ParticleTypes.HEART);
     }
     private void refresh(Level level, BlockPos blockPos, Direction startDir) {
@@ -249,7 +257,7 @@ public class UXNBus {
 
     public void tick() {
         if (uxn != null) {
-            uxn.runLimited(10000);
+            uxn.runLimited(1000000);
         }
     }
 

@@ -1,9 +1,11 @@
 package com.github.shrekshellraiser.devices.flasher;
 
+import com.github.shrekshellraiser.core.uxn.FileDeviceWrapper;
 import com.github.shrekshellraiser.core.uxn.UXNBus;
 import com.github.shrekshellraiser.api.devices.GenericDeviceBlockEntity;
+import com.github.shrekshellraiser.item.memory.FileManager;
+import com.github.shrekshellraiser.item.memory.MemoryItem;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -17,11 +19,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.nio.charset.StandardCharsets;
+
 import static com.github.shrekshellraiser.ModBlockEntities.FLASHER_DEVICE_BLOCK_ENTITY;
 
 public class FlasherDeviceBlockEntity extends GenericDeviceBlockEntity {
     private NonNullList<ItemStack> items;
     public static final int INVENTORY_SIZE = 1;
+    private final SingleFileFilesystem filesystem = new SingleFileFilesystem();
 
     public FlasherDeviceBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(FLASHER_DEVICE_BLOCK_ENTITY.get(), blockPos, blockState);
@@ -91,6 +96,22 @@ public class FlasherDeviceBlockEntity extends GenericDeviceBlockEntity {
     }
 
     @Override
+    public void attach(UXNBus bus) {
+        bus.getFileDeviceWrapper().registerDevice(deviceNumber);
+        bus.getFileDeviceWrapper().registerFilesystem(filesystem);
+    }
+
+    @Override
+    public void detach(UXNBus bus) {
+    }
+
+    @Override
+    public void setDeviceNumber(int i) {
+        super.setDeviceNumber(i);
+        filesystem.setDeviceNumber(i);
+    }
+
+    @Override
     public ItemStack removeItemNoUpdate(int i) {
         return ContainerHelper.takeItem(this.items, i);
     }
@@ -100,6 +121,13 @@ public class FlasherDeviceBlockEntity extends GenericDeviceBlockEntity {
         this.items.set(i, itemStack);
         if (itemStack.getCount() > this.getMaxStackSize()) {
             itemStack.setCount(this.getMaxStackSize());
+        }
+
+        if (itemStack.getItem() instanceof MemoryItem item && item.isFlashable()) {
+            String fn = item.getLabel(itemStack);
+            byte[] data = FileManager.readFile("srom", item.getUUID(itemStack));
+            assert data != null;
+            filesystem.setContents(new String(data, StandardCharsets.UTF_8), fn);
         }
 
         this.setChanged();
