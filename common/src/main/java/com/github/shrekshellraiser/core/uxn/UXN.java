@@ -407,15 +407,16 @@ public class UXN {
         }
     }
 
-    public void runLimited(int limit) {
+    public int runLimited(int limit) {
         if (paused && !doStep) {
-            return;
+            return 0;
         }
-        for (int i = 0; i < limit; i++) {
+        int used;
+        for (used = 0; used < limit; used++) {
             if (!running) {
                 // check for vector in the queue
                 var event = eventQueue.poll();
-                if (event == null) return;
+                if (event == null) return used;
                 eventSurplus--;
                 runningVector = event;
                 event.event.handle(event.bus);
@@ -427,6 +428,7 @@ public class UXN {
                 break;
             }
         }
+        return used;
     }
 
     public boolean isRunning() {return running;}

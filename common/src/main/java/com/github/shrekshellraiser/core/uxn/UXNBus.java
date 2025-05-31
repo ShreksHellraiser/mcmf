@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -20,17 +21,21 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+import static com.github.shrekshellraiser.ComputerMod.LOGGER;
 import static com.github.shrekshellraiser.ModBlocks.DEVICE_CABLE;
 
 public class UXNBus {
     private UXN uxn;
     private final IDevice[] devices = new IDevice[16];
     private final Set<IDevice> deviceSet = new HashSet<>();
-    private boolean executing = false;
+    private boolean poweredOn = false;
     private boolean conflicting = false;
     private boolean paused = false;
     private boolean argumentMode = false;
     private boolean expectingArgument = false;
+    private boolean executing = false;
+    private static int executionBudget = 1000;
+    private int executionSpent = 0;
 
     private final BlockEntity blockEntity;
     private UXNBus parent;
@@ -228,14 +233,14 @@ public class UXNBus {
         if (parent != null) {
             return parent.startup();
         }
-        if (executing) return false;
+        if (poweredOn) return false;
         if (blockEntity instanceof ComputerBlockEntity ce) {
             ItemStack stack = ce.getItem(0);
             if (stack.getItem() instanceof MemoryItem item) {
                 MemoryRegion memory = item.getMemory(stack);
                 refresh();
                 if (conflicting) return false;
-                executing = true;
+                poweredOn = true;
                 new UXN(this, memory);
                 uxn.paused = paused || argumentMode;
                 uxn.queueEvent(new BootEvent());
@@ -255,9 +260,25 @@ public class UXNBus {
         return false;
     }
 
+    private boolean run() {
+        if (uxn != null && executionSpent < executionBudget) {
+            Level level = blockEntity.getLevel();
+            if (level == null) return false;
+            MinecraftServer server = level.getServer();
+            if (server == null) return false;
+            if (!server.isSameThread()) return false;
+            executing = true;
+            executionSpent += uxn.runLimited(executionBudget - executionSpent);
+            executing = false;
+            return true;
+        }
+        return false;
+    }
+
     public void tick() {
+        executionSpent = 0;
         if (uxn != null) {
-            uxn.runLimited(1000000);
+            if (!run()) LOGGER.warn("Main thread skipped execution!");
         }
     }
 
@@ -280,7 +301,7 @@ public class UXNBus {
             parent.shutdown();
             return;
         }
-        executing = false;
+        poweredOn = false;
         uxn = null;
     }
 
@@ -346,6 +367,7 @@ public class UXNBus {
             if (blockEntity instanceof ComputerBlockEntity ce) {
                 ce.spawnEventParticle(uxn.queueEvent(event, this));
             }
+            run(); // use up our remaining execution budget to run vectors as they are queued.
         }
     }
     public float getCongestion() {
@@ -361,11 +383,11 @@ public class UXNBus {
         queueEvent(event, this);
     }
 
-    public boolean isExecuting() {
+    public boolean isPoweredOn() {
         if (parent != null) {
-            return parent.isExecuting();
+            return parent.isPoweredOn();
         }
-        return executing;
+        return poweredOn;
     }
 
     public boolean isArgumentMode() {
@@ -409,7 +431,7 @@ public class UXNBus {
 
     public String dumpStatus() {
         StringBuilder s = new StringBuilder();
-        s.append(String.format("Paused: %s\nExecuting: %s\nDevices:\n", isPaused(), isExecuting()));
+        s.append(String.format("Paused: %s\nExecuting: %s\nDevices:\n", isPaused(), isPoweredOn()));
         for (int i = 0; i < 16; i++) {
             IDevice d = devices[i];
             if (d != null) {
