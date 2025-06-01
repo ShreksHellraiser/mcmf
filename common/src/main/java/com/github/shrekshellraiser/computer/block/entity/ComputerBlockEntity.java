@@ -17,6 +17,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -139,6 +141,17 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
             particle++;
             float speed = 0.5f;
             sLevel.sendParticles(particleType, x, y, z, 0, 0.0f, 0.0f, 0.0f, speed);
+        }
+    }
+
+    public void spawnFailureParticle() {
+        if (getLevel() instanceof ServerLevel sLevel) {
+            BlockPos pos = getBlockPos();
+            float x = pos.getX() + 0.5f;
+            float z = pos.getZ() + 0.5f;
+            float y = pos.getY() + 1f;
+            sLevel.sendParticles(ParticleTypes.EXPLOSION, x, y, z, 0, 0.0f, 0.0f, 0.0f, 0.5f);
+            sLevel.playSound(null, x, y, z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 1.0f, 1.0f);
         }
     }
 

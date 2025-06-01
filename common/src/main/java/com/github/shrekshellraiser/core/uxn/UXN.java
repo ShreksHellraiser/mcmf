@@ -23,6 +23,7 @@ public class UXN {
     private boolean running = false;
     public boolean paused = false;
     public boolean doStep = false;
+    private boolean estop = false;
     private final Queue<QueuedEvent> eventQueue = new LinkedList<>();
     private int eventSurplus = 0;
 
@@ -105,6 +106,9 @@ public class UXN {
             runningVector = null;
         }
         running = false;
+    }
+    public void stop() {
+        estop = true;
     }
     // execute 1 instruction
     private void step() {
@@ -413,6 +417,7 @@ public class UXN {
         }
         int used;
         for (used = 0; used < limit; used++) {
+            if (estop) break;
             if (!running) {
                 // check for vector in the queue
                 var event = eventQueue.poll();

@@ -36,8 +36,9 @@ public class UXNBus {
     private boolean argumentMode = false;
     private boolean expectingArgument = false;
     private boolean executing = false;
-    private static int executionBudget = 1000;
+    private int executionBudget = 1000;
     private int executionSpent = 0;
+    private int vectorOverflow = 0;
 
     private final BlockEntity blockEntity;
     private UXNBus parent;
@@ -286,6 +287,7 @@ public class UXNBus {
 
     public void tick() {
         executionSpent = 0;
+        vectorOverflow = 0;
         if (uxn != null) {
             if (!run()) LOGGER.warn("Main thread skipped execution!");
         }
@@ -311,6 +313,7 @@ public class UXNBus {
             return;
         }
         poweredOn = false;
+        if (uxn != null) uxn.stop();
         uxn = null;
     }
 
@@ -362,6 +365,16 @@ public class UXNBus {
 //        deviceEntities.clear();
     }
 
+    private void onVectorDropped() {
+        vectorOverflow++;
+        if (vectorOverflow > 128) {
+            LOGGER.warn("Computer generated excessive vectors!");
+            if (blockEntity instanceof ComputerBlockEntity ce) {
+                ce.spawnFailureParticle();
+            }
+            shutdown();
+        }
+    }
     public void queueEvent(UXNEvent event, UXNBus bus) {
         if (parent != null) {
             parent.queueEvent(event, this);
@@ -374,9 +387,12 @@ public class UXNBus {
                 // of course as long as the user isn't asking for it to be paused.
             }
             if (blockEntity instanceof ComputerBlockEntity ce) {
-                ce.spawnEventParticle(uxn.queueEvent(event, this));
+                boolean success = uxn.queueEvent(event, this);
+                ce.spawnEventParticle(success);
+                if (!success) onVectorDropped();
             }
-            run(); // use up our remaining execution budget to run vectors as they are queued.
+            // run(); // use up our remaining execution budget to run vectors as they are queued.
+            // bad idea
         }
     }
     public float getCongestion() {
