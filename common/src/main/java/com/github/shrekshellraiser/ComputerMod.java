@@ -56,7 +56,6 @@ public final class ComputerMod {
             }
             return EventResult.pass();
         }));
-        ClientLifecycleEvent.CLIENT_SETUP.register(ComputerMod::initClient);
     }
 
     public static void initClient(Minecraft client) {
@@ -73,5 +72,8 @@ public final class ComputerMod {
         ModMenus.registerServer();
         ModPackets.register();
         registerEvents();
+        if (Platform.getEnv() == EnvType.CLIENT) {
+            ClientLifecycleEvent.CLIENT_SETUP.register(ComputerMod::initClient);
+        }
     }
 }

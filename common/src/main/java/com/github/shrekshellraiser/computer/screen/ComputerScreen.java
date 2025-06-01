@@ -20,17 +20,18 @@ public class ComputerScreen extends AbstractContainerScreen<ComputerMenu> {
     public ToggleSwitchButton argumentButton;
     private final ResourceLocation texture = new ResourceLocation(MOD_ID, "textures/gui/computer.png");
     private final ComputerMenu computerMenu;
-    private final int powerSwitchX = 25;
-    private final int pauseSwitchX = 60;
-    private final int stepButtonX = 90;
-    private final int argumentButtonX = 120;
-    private final int switchY = 102;
-    private final TerminalFont segFont = TerminalFont.SEG7;
+    public static final int topOffset = 21;
+    private static final int powerSwitchX = 25;
+    private static final int pauseSwitchX = 60;
+    private static final int stepButtonX = 90;
+    private static final int argumentButtonX = 120;
+    private static final int switchY = 102 + topOffset;
 
     public ComputerScreen(ComputerMenu abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
         computerMenu = abstractContainerMenu;
-        this.imageHeight = 206;
+        this.imageHeight = 226;
+        this.titleLabelY += topOffset;
         this.inventoryLabelY = this.imageHeight - 94;
     }
 
@@ -104,14 +105,14 @@ public class ComputerScreen extends AbstractContainerScreen<ComputerMenu> {
         pauseButton.render(poseStack, i, j, f);
         stepButton.render(poseStack, i, j, f);
         argumentButton.render(poseStack, i, j, f);
-        drawString(poseStack, minecraft.font, computerMenu.getWst(), x + 8, y + 43, 16777215);
-        drawString(poseStack, minecraft.font, computerMenu.getRst(), x + 8, y + 61, 16777215);
+        drawString(poseStack, minecraft.font, computerMenu.getWst(), x + 8, y + 43 + topOffset, 16777215);
+        drawString(poseStack, minecraft.font, computerMenu.getRst(), x + 8, y + 61 + topOffset, 16777215);
 //        drawString(poseStack, minecraft.font, "WST", x + 8, y + 44, 16777215);
 //        drawString(poseStack, minecraft.font, "RST", x + 8, y + 62, 16777215);
         drawString(poseStack, minecraft.font, String.format("Vectors %d", computerMenu.getVectors()),
-                x + 69, y + 25, 16777215);
+                x + 69, y + 25 + topOffset, 16777215);
         drawString(poseStack, minecraft.font, String.format("PC %04x", computerMenu.getPc()),
-                x + 8, y + 26, 16777215);
+                x + 8, y + 26 + topOffset, 16777215);
 
         renderTooltip(poseStack, i, j);
     }

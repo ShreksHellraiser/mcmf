@@ -4,6 +4,7 @@ import com.github.shrekshellraiser.computer.block.entity.ComputerBlockEntity;
 import com.github.shrekshellraiser.computer.block.entity.IBusProvider;
 import com.github.shrekshellraiser.api.devices.IAttachableDevice;
 import com.github.shrekshellraiser.devices.screen.ScreenDeviceBlockEntity;
+import com.github.shrekshellraiser.item.BeetCPUItem;
 import com.github.shrekshellraiser.item.memory.MemoryItem;
 import com.github.shrekshellraiser.api.devices.IDevice;
 import com.github.shrekshellraiser.devices.serial.SerialDeviceBlockEntity;
@@ -23,6 +24,7 @@ import java.util.*;
 
 import static com.github.shrekshellraiser.ComputerMod.LOGGER;
 import static com.github.shrekshellraiser.ModBlocks.DEVICE_CABLE;
+import static com.github.shrekshellraiser.item.ModItems.UXN_CPU;
 
 public class UXNBus {
     private UXN uxn;
@@ -236,6 +238,13 @@ public class UXNBus {
         if (poweredOn) return false;
         if (blockEntity instanceof ComputerBlockEntity ce) {
             ItemStack stack = ce.getItem(0);
+            ItemStack beetStack = ce.getItem(1);
+            if (!beetStack.is(UXN_CPU)) return false;
+            int budget = 10; // Default budget (vanilla beetroot)
+            if (beetStack.getItem() instanceof BeetCPUItem item) {
+                budget = item.getBudget();
+            }
+            executionBudget = budget;
             if (stack.getItem() instanceof MemoryItem item) {
                 MemoryRegion memory = item.getMemory(stack);
                 refresh();

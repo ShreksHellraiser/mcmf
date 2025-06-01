@@ -62,7 +62,7 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
             } else if (i < DATA_START) {
                 return wst.charAt(i - STRING_LENGTH);
             } else if (i == DATA_START) {
-                return (bus.isExecuting()) ? 1 : 0;
+                return (bus.isPoweredOn()) ? 1 : 0;
             } else if (i == DATA_START + 1) {
                 if (uxn != null) {
                     return uxn.pc;
@@ -87,7 +87,7 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
         }
     };
 
-    public static final int CONTAINER_SIZE = 1;
+    public static final int CONTAINER_SIZE = 2;
     private NonNullList<ItemStack> items;
 
     @Override
@@ -137,7 +137,7 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
     }
 
     public void shutdown() {
-        if (bus.isExecuting()) {
+        if (bus.isPoweredOn()) {
             bus.shutdown();
         }
     }
@@ -151,7 +151,7 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
     }
 
     public void togglePower(Player player) {
-        if (bus.isExecuting()) shutdown();
+        if (bus.isPoweredOn()) shutdown();
         else {
             if (!startup()) {
                 player.sendMessage(new TextComponent("Unable to start computer"), player.getUUID());

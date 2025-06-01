@@ -7,14 +7,16 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.data.models.BlockModelGenerators;
 import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.models.model.ModelTemplates;
+import net.minecraft.world.item.Items;
 
 import static com.github.shrekshellraiser.ModBlocks.*;
-import static com.github.shrekshellraiser.item.ModItems.SROM_ITEM;
+import static com.github.shrekshellraiser.item.ModItems.*;
 
 public class DataGenerator implements DataGeneratorEntrypoint {
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator generator) {
         generator.addProvider(TagGenerator::new);
+        generator.addProvider(ItemTagGenerator::new);
         generator.addProvider(ItemModelGenerator::new);
     }
 
@@ -40,6 +42,22 @@ public class DataGenerator implements DataGeneratorEntrypoint {
             getOrCreateTagBuilder(SERIAL_DEVICE)
                     .add(SERIAL_DEVICE_BLOCK.get())
                     .add(SERIAL_TERMINAL_BLOCK.get());
+        }
+    }
+
+    private static class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
+        public ItemTagGenerator(FabricDataGenerator dataGenerator) {
+            super(dataGenerator);
+        }
+
+        @Override
+        protected void generateTags() {
+            getOrCreateTagBuilder(UXN_CPU)
+                    .add(Items.BEETROOT)
+                    .add(CPU_TIER_COPPER.get())
+                    .add(CPU_TIER_IRON.get())
+                    .add(CPU_TIER_GOLD.get())
+                    .add(CPU_TIER_DIAMOND.get());
         }
     }
 

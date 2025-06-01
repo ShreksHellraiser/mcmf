@@ -54,7 +54,8 @@ public class ComputerMenu extends AbstractContainerMenu {
         blockEntity = computerBlockEntity;
         this.data = data;
         addDataSlots(this.data);
-        this.addSlot(new MemorySlot(container, 0, 134, 88));
+        this.addSlot(new MemorySlot(container, 0, 134, 88 + ComputerScreen.topOffset));
+        this.addSlot(new BeetSlot(container, 1, 80, 4));
         addPlayerInventory(inventory);
         addPlayerHotbar(inventory);
     }
@@ -98,17 +99,19 @@ public class ComputerMenu extends AbstractContainerMenu {
         return true;
     }
 
+    private static final int invX = 8;
+    private static final int invY = 124 + ComputerScreen.topOffset;
     private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int l = 0; l < 9; ++l) {
-                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, 8 + l * 18, 124 + i * 18));
+                this.addSlot(new Slot(playerInventory, l + i * 9 + 9, invX + l * 18, invY + i * 18));
             }
         }
     }
 
     private void addPlayerHotbar(Inventory playerInventory) {
         for (int i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 124+58));
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 124+58+ComputerScreen.topOffset));
         }
     }
 
