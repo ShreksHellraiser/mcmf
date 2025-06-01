@@ -52,12 +52,11 @@ public class DataGenerator implements DataGeneratorEntrypoint {
 
         @Override
         protected void generateTags() {
-            getOrCreateTagBuilder(UXN_CPU)
-                    .add(Items.BEETROOT)
-                    .add(CPU_TIER_COPPER.get())
-                    .add(CPU_TIER_IRON.get())
-                    .add(CPU_TIER_GOLD.get())
-                    .add(CPU_TIER_DIAMOND.get());
+            var builder = getOrCreateTagBuilder(UXN_CPU)
+                    .add(Items.BEETROOT);
+            for (var provider : CPU_ITEMS) {
+                builder.add(provider.get());
+            }
         }
     }
 
@@ -74,6 +73,9 @@ public class DataGenerator implements DataGeneratorEntrypoint {
         @Override
         public void generateItemModels(ItemModelGenerators itemModelGenerator) {
             itemModelGenerator.generateFlatItem(SROM_ITEM.get(), ModelTemplates.FLAT_ITEM);
+            for (var provider : CPU_ITEMS) {
+                itemModelGenerator.generateFlatItem(provider.get(), ModelTemplates.FLAT_ITEM);
+            }
         }
     }
 }

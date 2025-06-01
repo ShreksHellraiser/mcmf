@@ -9,6 +9,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static com.github.shrekshellraiser.ComputerMod.MOD_ID;
@@ -21,10 +25,8 @@ public class ModItems {
     public static RegistrySupplier<Item> RAM_ITEM;
     public static RegistrySupplier<Item> NETWORK_DEBUG_ITEM;
 
-    public static RegistrySupplier<Item> CPU_TIER_COPPER;
-    public static RegistrySupplier<Item> CPU_TIER_IRON;
-    public static RegistrySupplier<Item> CPU_TIER_GOLD;
-    public static RegistrySupplier<Item> CPU_TIER_DIAMOND;
+    public static final List<RegistrySupplier<Item>> CPU_ITEMS = new ArrayList<>();
+    public static final Map<String,Integer> CPU_TIERS = new HashMap<>();
 
     public static TagKey<Item> UXN_CPU;
 
@@ -41,11 +43,17 @@ public class ModItems {
         RAM_ITEM = registerItem("ram", RAMItem::new);
         NETWORK_DEBUG_ITEM = registerItem("network_debug_stick", NetworkDebugItem::new);
 
-        CPU_TIER_COPPER = registerItem("cpu_copper", () -> new BeetCPUItem(1000));
-        CPU_TIER_IRON = registerItem("cpu_iron", () -> new BeetCPUItem(5000));
-        CPU_TIER_GOLD = registerItem("cpu_gold", () -> new BeetCPUItem(25000));
-        CPU_TIER_DIAMOND = registerItem("cpu_diamond", () -> new BeetCPUItem(100000));
-
         UXN_CPU = tag("uxn_cpu");
+    }
+
+    static {
+        CPU_TIERS.put("beet_copper", 1000);
+        CPU_TIERS.put("beet_iron", 5000);
+        CPU_TIERS.put("beet_gold", 25000);
+        CPU_TIERS.put("beet_diamond", 100000);
+
+        for (String tier : CPU_TIERS.keySet()) {
+            CPU_ITEMS.add(registerItem(tier, () -> new BeetCPUItem(CPU_TIERS.get(tier))));
+        }
     }
 }

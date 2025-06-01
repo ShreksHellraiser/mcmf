@@ -13,6 +13,7 @@ public class ModPackets {
     public static final ResourceLocation MOUSE_CLICK_ID = new ResourceLocation(MOD_ID, "mouse_click");
     public static final ResourceLocation MOUSE_MOVE_ID = new ResourceLocation(MOD_ID, "mouse_move");
     public static final ResourceLocation SCREEN_UPDATE_ID = new ResourceLocation(MOD_ID, "screen_update");
+    public static final ResourceLocation COMPUTER_CONTENT_ID = new ResourceLocation(MOD_ID, "computer_content");
 
     public static void register() {
         registerCommon();
@@ -30,5 +31,6 @@ public class ModPackets {
 
     private static void registerClient() {
         NetworkManager.registerReceiver(NetworkManager.Side.S2C, SCREEN_UPDATE_ID, ScreenUpdatePacket::handle);
+        NetworkManager.registerReceiver(NetworkManager.Side.S2C, COMPUTER_CONTENT_ID, ComputerContentPacket::receive);
     }
 }

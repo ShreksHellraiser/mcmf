@@ -12,7 +12,6 @@ import net.minecraft.world.item.Items;
 
 public class ComputerBlockEntityRenderer implements BlockEntityRenderer<ComputerBlockEntity> {
     BlockEntityRendererProvider.Context context;
-    private static final ItemStack stack = new ItemStack(Items.BEETROOT);
 
     public ComputerBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
         this.context = context;
@@ -23,6 +22,7 @@ public class ComputerBlockEntityRenderer implements BlockEntityRenderer<Computer
         poseStack.translate(0.5, 0.8, 0.5);
         assert blockEntity.getLevel() != null;
         long l = blockEntity.getLevel().getGameTime();
+        ItemStack stack = blockEntity.getItem(1);
         poseStack.mulPose(Quaternion.fromXYZ(0,  l / 20.0f, 0));
         Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, i, j,
                 poseStack, multiBufferSource, 0);

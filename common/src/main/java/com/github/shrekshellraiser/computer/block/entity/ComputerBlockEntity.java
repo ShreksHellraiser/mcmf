@@ -1,9 +1,12 @@
 package com.github.shrekshellraiser.computer.block.entity;
 
+import com.github.shrekshellraiser.ComputerMod;
 import com.github.shrekshellraiser.computer.block.ComputerBlock;
 import com.github.shrekshellraiser.computer.screen.ComputerMenu;
 import com.github.shrekshellraiser.core.uxn.UXN;
 import com.github.shrekshellraiser.core.uxn.UXNBus;
+import com.github.shrekshellraiser.devices.screen.ScreenDeviceMenu;
+import com.github.shrekshellraiser.network.ComputerContentPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -13,6 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -26,6 +30,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
 
 import static com.github.shrekshellraiser.ModBlockEntities.COMPUTER_BLOCK_ENTITY;
 
@@ -229,13 +235,21 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
         return ContainerHelper.takeItem(this.items, i);
     }
 
+    private double playerDistance(Player player) {
+        return player.distanceToSqr((double)this.worldPosition.getX() + 0.5, (double)this.worldPosition.getY() + 0.5, (double)this.worldPosition.getZ() + 0.5);
+    }
+
+    private void sendUpdatePacket() {
+        if (level != null && !level.isClientSide && level instanceof ServerLevel sLevel) {
+            ComputerMod.LOGGER.warn("Sent update packet!");
+            ComputerContentPacket.send(getItem(1), this.worldPosition, sLevel.players());
+        }
+    }
+
     @Override
     public void setItem(int i, ItemStack itemStack) {
         this.items.set(i, itemStack);
-        if (itemStack.getCount() > this.getMaxStackSize()) {
-            itemStack.setCount(this.getMaxStackSize());
-        }
-
+        if (i == 1) sendUpdatePacket();
         this.setChanged();
     }
 
@@ -245,7 +259,7 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
         if (this.level.getBlockEntity(this.worldPosition) != this) {
             return false;
         } else {
-            return !(player.distanceToSqr((double)this.worldPosition.getX() + 0.5, (double)this.worldPosition.getY() + 0.5, (double)this.worldPosition.getZ() + 0.5) > 64.0);
+            return !(playerDistance(player) > 64.0);
         }
     }
 
@@ -257,6 +271,7 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
         this.items = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY);
+        sendUpdatePacket();
         ContainerHelper.loadAllItems(compoundTag, this.items);
     }
 
