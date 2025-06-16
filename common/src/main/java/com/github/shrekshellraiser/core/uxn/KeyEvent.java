@@ -19,9 +19,9 @@ public class KeyEvent extends BasicUXNEvent {
 
     @Override
     public void handle(UXNBus bus) {
-        bus.getUxn().pc = (bus.readDev(device) << 8) | bus.readDev(device+1); //get the vector for PC at the time the event is handled
-        bus.writeDev(device + 0x02, (byte) ch);
-        bus.writeDev(device + 0x07, type);
+        bus.getUxn().pc = bus.readDevWord(device); //get the vector for PC at the time the event is handled
+        bus.writeDev(device | 0x02, (byte) ch);
+        bus.writeDev(device | 0x07, type);
     }
 
     @Override

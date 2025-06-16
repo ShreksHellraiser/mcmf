@@ -7,6 +7,7 @@ import com.github.shrekshellraiser.api.devices.IDevice;
 import com.github.shrekshellraiser.network.KeyInputHandler;
 import com.github.shrekshellraiser.network.MouseInputHandler;
 import com.github.shrekshellraiser.network.ScreenUpdatePacket;
+import com.google.common.primitives.UnsignedInteger;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -39,13 +40,12 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
     };
 
 
-    private int x = 0;
-    private int y = 0;
+    private short x = 0;
+    private short y = 0;
     private int spriteAddr = 0;
     private boolean autoX = false;
     private boolean autoY = false;
     private boolean autoAddr = false;
-    protected boolean runningScreenVector = false;
 
     private void writeWord(int address, int data) {
         bus.writeDev(address, data >> 8);
@@ -56,8 +56,8 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
     }
 
     private void readState() {
-        x = readWord(0x28);
-        y = readWord(0x2A);
+        x = (short) readWord(0x28);
+        y = (short) readWord(0x2A);
         spriteAddr = readWord(0x2c);
         int autoData = bus.readDev(0x26);
         autoX = (autoData & 0b1) > 0;
@@ -171,14 +171,14 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
         }
         return sprite;
     }
-    private void writeSpriteRaw(byte[] sprite, byte[] colMap, int layer, int x, int y, boolean flipX, boolean flipY) {
+    private void writeSpriteRaw(byte[] sprite, byte[] colMap, int layer, int x, int y, boolean flipX, boolean flipY, boolean opaque) {
         for (int dy = 0; dy < 8; dy++) {
             for (int dx = 0; dx < 8; dx++) {
                 int sourceX = flipX ? 7 - dx : dx;
                 int sourceY = flipY ? 7 - dy : dy;
                 int i = sourceY * 8 + sourceX;
                 byte color = colMap[sprite[i]];
-                buffer.setPixel(layer, x + dx, y + dy, color);
+                if (opaque || sprite[i] > 0) buffer.setPixel(layer, x + dx, y + dy, color);
             }
         }
     }
@@ -195,10 +195,10 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
         int address = spriteAddr;
         int addressInc = autoAddr ? (twoBpp ? 16 : 8) : 0;
         byte[] colMap = blending[colorIdx];
-
+        boolean opaque = colorIdx % 5 > 0;
         for (int i = 0; i <= length; i++) {
             byte[] sprite = readSprite(twoBpp, address);
-            writeSpriteRaw(sprite, colMap, layer, x + dyx * i, y + dxy * i, flipX, flipY);
+            writeSpriteRaw(sprite, colMap, layer, x + dyx * i, y + dxy * i, flipX, flipY, opaque);
             address += addressInc;
         }
         if (autoX) writeWord(0x28, x + dx * fx);
@@ -296,12 +296,16 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
                 this.bus.queueEvent(new MouseEvent(mouseX, mouseY, mouseButton));
                 mouseActive = false;
             }
-            if (this.bus.getCongestion() < 0.7f) {
-                for (int i = 0; i < 3; i++) {
+            float congestion = this.bus.getCongestion();
+            if (congestion < 0.50f) {
+                // This might be a terrible idea
+                // Any programs that count on this for timing may fault when the computer is heavily loaded.
+                int c = congestion > 0.4f ? 1 : (congestion > 0.3f ? 2 : 3);
+                for (int i = 0; i < c; i++) {
                     this.bus.queueEvent(new ScreenEvent(readWord(0x20), this));
                 }
             }
-            if (screenDirty & !runningScreenVector) refresh();
+            if (screenDirty) refresh();
             if (screenRefreshed) {
                 ArrayList<ServerPlayer> players = new ArrayList<>();
                 for (ServerPlayer p : level.players()) {
@@ -364,12 +368,10 @@ class ScreenEvent implements UXNEvent {
     @Override
     public void handle(UXNBus bus) {
         bus.getUxn().pc = address;
-        this.blockEntity.runningScreenVector = true;
     }
 
     @Override
     public void post(UXNBus bus) {
-        this.blockEntity.runningScreenVector = false;
         this.blockEntity.refresh();
     }
 }
