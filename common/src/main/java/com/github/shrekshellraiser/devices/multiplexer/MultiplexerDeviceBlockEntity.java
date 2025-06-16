@@ -21,6 +21,10 @@ public class MultiplexerDeviceBlockEntity extends GenericDeviceBlockEntity imple
         bus = new UXNBus(this);
     }
 
+    private void writeToMultiplexedDeviceAddress(UXNBus parent, int dev, int port, int data, int offset) {
+        int mAddress = parent.readDev(dev + offset - 1);
+        bus.deo(mAddress + port - offset, (byte)data);
+    }
     @Override
     public void write(int address) {
         UXNBus parent = bus.getParent();
@@ -29,18 +33,24 @@ public class MultiplexerDeviceBlockEntity extends GenericDeviceBlockEntity imple
         int port = address & 0x0F;
         int dev = address & 0xF0;
         switch (port) {
-            case 0x00 -> {
+            case 0x00, 0x03, 0x06, 0x09, 0x0c -> {
                 // Set the multiplexed device address (do nothing)
             }
-            case 0x01, 0x02 -> {
-                // Write to the multiplexed device address
-                int mAddress = parent.readDev(dev);
-                bus.deo(mAddress + port - 1, (byte)data);
-            }
+            case 0x01, 0x02 -> // Write to the multiplexed device address
+                    writeToMultiplexedDeviceAddress(parent, dev, port, data, 1);
+            case 0x04, 0x05 -> writeToMultiplexedDeviceAddress(parent, dev, port, data, 4);
+            case 0x07, 0x08 -> writeToMultiplexedDeviceAddress(parent, dev, port, data, 7);
+            case 0x0a, 0x0b -> writeToMultiplexedDeviceAddress(parent, dev, port, data, 0xa);
+            case 0x0d, 0x0e -> writeToMultiplexedDeviceAddress(parent, dev, port, data, 0xd);
         }
 
     }
 
+    private void readFromMultiplexedDeviceAddress(UXNBus parent, int dev, int port, int offset) {
+        int mAddress = parent.readDev(dev + offset - 1);
+        int data = bus.dei(mAddress + port - offset);
+        parent.writeDev(dev | port, data);
+    }
     @Override
     public void read(int address) {
         UXNBus parent = bus.getParent();
@@ -48,11 +58,11 @@ public class MultiplexerDeviceBlockEntity extends GenericDeviceBlockEntity imple
         int port = address & 0x0F;
         int dev = address & 0xF0;
         switch (port) {
-            case 0x01, 0x02 -> {
-                int mAddress = parent.readDev(dev);
-                int data = bus.dei(mAddress + port - 1);
-                parent.writeDev(address, data);
-            }
+            case 0x01, 0x02 -> readFromMultiplexedDeviceAddress(parent, dev, port, 1);
+            case 0x04, 0x05 -> readFromMultiplexedDeviceAddress(parent, dev, port, 4);
+            case 0x07, 0x08 -> readFromMultiplexedDeviceAddress(parent, dev, port, 7);
+            case 0x0a, 0x0b -> readFromMultiplexedDeviceAddress(parent, dev, port, 0xa);
+            case 0x0d, 0x0e -> readFromMultiplexedDeviceAddress(parent, dev, port, 0xd);
         }
     }
 
