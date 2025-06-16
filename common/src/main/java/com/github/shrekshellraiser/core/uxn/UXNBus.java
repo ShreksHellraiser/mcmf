@@ -254,14 +254,14 @@ public class UXNBus {
                 new UXN(this, memory);
                 uxn.paused = paused || argumentMode;
                 uxn.queueEvent(new BootEvent());
-                if (argumentMode) {
-                    for (int dev = 0x1; dev <= 0xf; dev++) {
-                        IDevice device = devices[dev];
-                        if (device instanceof SerialDeviceBlockEntity sDevice && sDevice.getPeer() != null) {
-                            sDevice.requestArgument();
-                            expectingArgument = true;
-                            break;
-                        }
+                int dev = 0x1;
+                IDevice device = devices[dev];
+                if (device instanceof SerialDeviceBlockEntity sDevice && sDevice.getPeer() != null) {
+                    writeDev(dev << 4 | 7, 0);
+                    if (argumentMode) {
+                        sDevice.requestArgument();
+                        writeDev(dev << 4 | 7, 1);
+                        expectingArgument = true;
                     }
                 }
                 return true;
@@ -315,6 +315,7 @@ public class UXNBus {
         poweredOn = false;
         if (uxn != null) uxn.stop();
         uxn = null;
+        expectingArgument = false;
     }
 
     /*
