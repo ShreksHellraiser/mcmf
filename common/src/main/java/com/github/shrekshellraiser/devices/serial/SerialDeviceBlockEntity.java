@@ -3,11 +3,10 @@ package com.github.shrekshellraiser.devices.serial;
 import com.github.shrekshellraiser.api.devices.GenericDeviceBlockEntity;
 import com.github.shrekshellraiser.api.serial.ISerialPeer;
 import com.github.shrekshellraiser.core.uxn.UXNBus;
-import com.github.shrekshellraiser.core.uxn.KeyEvent;
+import com.github.shrekshellraiser.core.uxn.ConsoleEvent;
 import com.github.shrekshellraiser.api.serial.SerialType;
 import com.github.shrekshellraiser.api.serial.SerialPeerBlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.level.block.state.BlockState;
@@ -130,7 +129,7 @@ public class SerialDeviceBlockEntity extends GenericDeviceBlockEntity implements
         if (bus != null) {
             byte typeB = (byte) type.value;
             int deviceB = deviceNumber << 4;
-            bus.queueEvent(new KeyEvent(ch, typeB, deviceB));
+            bus.queueEvent(new ConsoleEvent(ch, typeB, deviceB));
         }
     }
 
