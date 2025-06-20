@@ -19,7 +19,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -30,8 +32,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ComputerBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING;
-    private static final VoxelShape SHAPE =
-            Block.box(0.0F, 0.0F, 0.0F, 16.0F, 9.0F, 16.0F);
+    public static final EnumProperty<ComputerBlockPart> PART;
 
     public ComputerBlock() {
         super(BlockBehaviour.Properties.of(Material.STONE));
@@ -40,6 +41,7 @@ public class ComputerBlock extends BaseEntityBlock {
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING);
+        builder.add(PART);
     }
 
     public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
@@ -61,11 +63,6 @@ public class ComputerBlock extends BaseEntityBlock {
     @Override
     public @NotNull RenderShape getRenderShape(BlockState blockState) {
         return RenderShape.MODEL;
-    }
-
-    @Override
-    public @NotNull VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
-        return SHAPE;
     }
 
     @Override
@@ -103,5 +100,6 @@ public class ComputerBlock extends BaseEntityBlock {
 
     static {
         FACING = HorizontalDirectionalBlock.FACING;
+        PART = EnumProperty.create("computer_part", ComputerBlockPart.class);
     }
 }

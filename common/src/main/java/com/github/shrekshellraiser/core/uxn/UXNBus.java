@@ -382,9 +382,10 @@ public class UXNBus {
             return;
         }
         if (uxn != null) {
-            if (event instanceof KeyEvent ke && expectingArgument) {
+            if (event instanceof ConsoleEvent ke && expectingArgument) {
                 // If this is the last byte of an argument unpause the computer!
                 if (ke.type == 0x04) uxn.paused = paused;
+                expectingArgument = false;
                 // of course as long as the user isn't asking for it to be paused.
             }
             if (blockEntity instanceof ComputerBlockEntity ce) {

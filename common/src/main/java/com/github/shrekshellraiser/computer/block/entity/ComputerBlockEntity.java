@@ -128,16 +128,42 @@ public class ComputerBlockEntity extends BaseContainerBlockEntity implements Men
         return false;
     }
 
+    public double getRenderX() {
+        var facing = getBlockState().getValue(ComputerBlock.FACING);
+        if (facing.equals(Direction.WEST)) {
+            return 0.06;
+        } else if (facing.equals(Direction.EAST)) {
+            return 0.94;
+        }
+        return 0.5;
+    }
+
+    public double getRenderZ() {
+        var facing = getBlockState().getValue(ComputerBlock.FACING);
+        if (facing.equals(Direction.NORTH)) {
+            return 0.06;
+        } else if (facing.equals(Direction.SOUTH)) {
+            return 0.94;
+        }
+        return 0.5;
+    }
+
     private int particle = 0;
     public void spawnEventParticle(boolean success) {
         SimpleParticleType particleType = success ? ParticleTypes.ELECTRIC_SPARK : ParticleTypes.SMOKE;
         if (getLevel() instanceof ServerLevel sLevel) {
             BlockPos pos = getBlockPos();
-            float radius = 0.3f;
-            float y = pos.getY() + 1f;
+            float radius = 0.25f;
             particle %= CIRCLE_ITERS;
-            float x = pos.getX() + radius * COS_LUT[particle] + 0.5f;
-            float z = pos.getZ() + radius * SIN_LUT[particle] + 0.5f;
+            float y = pos.getY() + radius * COS_LUT[particle] + 0.5f;
+            var x = pos.getX() + getRenderX();
+            var z = pos.getZ() + getRenderZ();
+            var facing = getBlockState().getValue(ComputerBlock.FACING);
+            if (facing.equals(Direction.EAST) || facing.equals(Direction.WEST)) {
+                z += radius * SIN_LUT[particle];
+            } else {
+                x += radius * SIN_LUT[particle];
+            }
             particle++;
             float speed = 0.5f;
             sLevel.sendParticles(particleType, x, y, z, 0, 0.0f, 0.0f, 0.0f, speed);
