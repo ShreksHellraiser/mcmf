@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "mcmf:block/flasher_device_top",
+    "front": "mcmf:block/flasher_device_front",
+    "side": "mcmf:block/flasher_device_side"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:beetroot",
+    "mcmf:beet_gold",
+    "mcmf:beet_copper",
+    "mcmf:beet_iron",
+    "mcmf:beet_diamond"
+  ]
+}

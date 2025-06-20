@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "mcmf:block/datetime_device",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "mcmf:block/datetime_device"
+    },
+    "facing=south": {
+      "model": "mcmf:block/datetime_device",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "mcmf:block/datetime_device",
+      "y": 270
+    }
+  }
+}

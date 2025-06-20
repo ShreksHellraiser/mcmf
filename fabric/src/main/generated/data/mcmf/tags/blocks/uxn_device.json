@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "mcmf:computer",
+    "mcmf:serial_device",
+    "mcmf:flasher_device",
+    "mcmf:multiplexer_device",
+    "mcmf:redstone_device"
+  ]
+}

@@ -1,13 +1,11 @@
 package com.github.shrekshellraiser.devices.screen;
 
-import com.github.shrekshellraiser.api.devices.GenericDeviceBlock;
 import com.github.shrekshellraiser.core.uxn.*;
 import com.github.shrekshellraiser.api.devices.IAttachableDevice;
 import com.github.shrekshellraiser.api.devices.IDevice;
 import com.github.shrekshellraiser.network.KeyInputHandler;
 import com.github.shrekshellraiser.network.MouseInputHandler;
 import com.github.shrekshellraiser.network.ScreenUpdatePacket;
-import com.google.common.primitives.UnsignedInteger;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -27,11 +25,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 import static com.github.shrekshellraiser.ModBlockEntities.SCREEN_DEVICE_BLOCK_ENTITY;
+import static com.github.shrekshellraiser.devices.screen.ScreenDeviceBlockEntity.CONTROLLER_PORT;
 
 public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider, KeyInputHandler, IAttachableDevice, IDevice, MouseInputHandler {
-
     private final static int SCREEN_PORT = 0x2;
     private final static int MOUSE_PORT = 0x9;
+    protected final static int CONTROLLER_PORT = 0x8;
     private final static byte[][] blending = {
             {0, 0, 1, 2}, {0, 1, 2, 3}, {0, 2, 3, 1}, {0, 3, 1, 2},
             {1, 0, 1, 2}, {0, 1, 2, 3}, {1, 2, 3, 1}, {1, 3, 1, 2},
@@ -82,13 +81,6 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
 
     public ScreenDeviceBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(SCREEN_DEVICE_BLOCK_ENTITY.get(), blockPos, blockState);
-    }
-
-    @Override
-    public void handleKey(char ch) {
-        if (bus != null) {
-            bus.queueEvent(new KeyEvent(ch));
-        }
     }
 
     @Override
@@ -227,11 +219,15 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
     private void writeMouse(int address) {
 
     }
+    private void writeController(int address) {
+
+    }
     @Override
     public void write(int address) {
         int port = (address & 0xF0) >> 4;
         if (port == SCREEN_PORT) writeScreen(address);
         else if (port == MOUSE_PORT) writeMouse(address);
+        else if (port == CONTROLLER_PORT) writeController(address);
     }
     private void readScreen(int address) {
         switch (address) {
@@ -246,11 +242,15 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
     private void readMouse(int address) {
 
     }
+    private void readController(int address) {
+
+    }
     @Override
     public void read(int address) {
         int port = (address & 0xF0) >> 4;
         if (port == SCREEN_PORT) readScreen(address);
         else if (port == MOUSE_PORT) readMouse(address);
+        else if (port == CONTROLLER_PORT) readController(address);
     }
 
     @Override
@@ -356,6 +356,14 @@ public class ScreenDeviceBlockEntity extends BlockEntity implements MenuProvider
         queueMouseEvent(x, y, mouseButton & ~(1 << i));
     }
 
+
+    @Override
+    public void handleKey(char ch) {
+        if (bus != null) {
+            if (ch == '\n') ch = '\r';
+            bus.queueEvent(new KeyEvent(ch));
+        }
+    }
 }
 
 class ScreenEvent implements UXNEvent {
@@ -393,5 +401,23 @@ class MouseEvent extends BasicUXNEvent {
         bus.writeDevWord(0x94, y);
         bus.writeDev(0x96, state);
         bus.getUxn().pc = bus.readDevWord(0x90);
+    }
+}
+
+class KeyEvent extends BasicUXNEvent {
+    char ch;
+    public KeyEvent(char ch) {
+        this.ch = ch;
+    }
+
+    @Override
+    public void handle(UXNBus bus) {
+        bus.getUxn().pc = bus.readDevWord(0x80);
+        bus.writeDev(0x83, ch);
+    }
+
+    @Override
+    public void post(UXNBus bus) {
+        bus.writeDev(0x83, 0); // Zero out Controller/key
     }
 }

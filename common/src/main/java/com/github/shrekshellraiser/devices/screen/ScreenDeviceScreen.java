@@ -56,7 +56,7 @@ public class ScreenDeviceScreen extends AbstractContainerScreen<ScreenDeviceMenu
             return true;
         } else if (i == InputConstants.KEY_BACKSPACE) {
             KeyInputPacket.send('\b');
-        } else if (i == InputConstants.KEY_RETURN) { // why does ENTER not exist???
+        } else if (i == InputConstants.KEY_RETURN) {
             KeyInputPacket.send('\n');
         }
         return false;
